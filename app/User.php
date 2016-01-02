@@ -11,35 +11,39 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
-class User extends Model implements AuthenticatableContract,
-                                    AuthorizableContract,
-                                    CanResetPasswordContract
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword;
-    use EntrustUserTrait;
+    use Authenticatable, CanResetPassword, Authorizable, EntrustUserTrait {
+        EntrustUserTrait::can as may;
+        Authorizable::can insteadof EntrustUserTrait;
+    }
 
     /**
      * The database table used by the model.
-     *
      * @var string
      */
     protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.
-     *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
-     *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
-    public function setPasswordAttribute($value)
+    public function setPasswordAttribute ($value)
     {
         $this->attributes['password'] = bcrypt($value);
     }

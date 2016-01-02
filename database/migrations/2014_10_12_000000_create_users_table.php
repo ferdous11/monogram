@@ -20,6 +20,8 @@ class CreateUsersTable extends Migration
             $table->integer('vendor_id')->nullable();
             $table->integer('zip_code');
             $table->integer('state');
+            $table->enum('is_deleted', array(0, 1))->default(0);
+            $table->enum('is_suspended', array(0, 1))->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
