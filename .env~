@@ -4,8 +4,8 @@ APP_KEY=SeU9TgalaUyiqfViq0SnCEWmDrrCHJC5
 
 DB_HOST=localhost
 DB_DATABASE=monogram
-DB_USERNAME=homestead
-DB_PASSWORD=secret
+DB_USERNAME=root
+DB_PASSWORD=ssi-anik
 
 CACHE_DRIVER=file
 SESSION_DRIVER=file
