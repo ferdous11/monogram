@@ -32,6 +32,12 @@
             </div>
         </div>
         <div class = "col-xs-12">
+            <div class = "col-xs-3">Remember me:</div>
+            <div class = "col-xs-6">
+                {!! Form::checkbox('remember', 1, false, ['id' => 'remember']) !!} Remeber Me
+            </div>
+        </div>
+        <div class = "col-xs-12">
             <div class = "col-xs-6">
                 {!! Form::submit('Login') !!}
             </div>

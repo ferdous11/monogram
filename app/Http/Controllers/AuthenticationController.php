@@ -21,19 +21,32 @@ class AuthenticationController extends Controller
     {
         $email = $request->get('email');
         $password = $request->get('password');
+        $remember = $request->has('remember') ? true : false;
 
-        if(!Auth::attempt(['email' => $email, 'password' => $password], true)){
+        if ( !Auth::attempt([
+            'email'        => $email,
+            'password'     => $password,
+            'is_deleted'   => 0,
+            'is_suspended' => 0,
+        ], $remember)
+        ) {
             $message = new MessageBag([
-                'Username and password do not match'
+                'Username and password do not match',
             ]);
-            return redirect()->back()->withInput()->withErrors($message);
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($message);
         }
 
         return redirect(url('/'));
     }
 
-    public function getLogout(){
+    public function getLogout ()
+    {
         Auth::logout();
+
         return redirect(url('/login'));
     }
 }
