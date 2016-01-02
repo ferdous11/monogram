@@ -4,6 +4,7 @@ get('/', 'HomeController@index');
 
 Route::group(['middleware' => ['auth']], function(){
     get('logout', 'AuthenticationController@getLogout');
+    resource('customers', 'CustomerController');
 });
 
 Route::group(['middleware' => ['guest']], function(){

@@ -20,6 +20,12 @@
             <div class="col-xs-12 border">
                 <a href="/logout" >Logout</a>
             </div>
+            <div class="col-xs-12 border">
+                <a href="/customers" >Customers</a>
+            </div>
+            <div class="col-xs-12 border">
+                <a href="/customers/create" >Create Customer</a>
+            </div>
         </div>
     </body>
 </html>
