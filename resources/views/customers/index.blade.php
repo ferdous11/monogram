@@ -28,6 +28,9 @@
                     </tr>
                 @endforeach
             </table>
+            <div class="col-xs-12 text-center">
+                {!! $customers->render() !!}
+            </div>
         @else
             <div class = "alert alert-warning">No customer is registered</div>
         @endif

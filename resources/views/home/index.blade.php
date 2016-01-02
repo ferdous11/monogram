@@ -21,6 +21,12 @@
                 <a href="/logout" >Logout</a>
             </div>
             <div class="col-xs-12 border">
+                <a href="/users" >Users</a>
+            </div>
+            <div class="col-xs-12 border">
+                <a href="/users/create" >Create user</a>
+            </div>
+            <div class="col-xs-12 border">
                 <a href="/customers" >Customers</a>
             </div>
             <div class="col-xs-12 border">

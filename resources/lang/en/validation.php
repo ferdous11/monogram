@@ -87,6 +87,8 @@ return [
     |
     */
 
+    # 'username' => 'The :attribute must start alpha numeric values and can contain underscore and dot within.',
+
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
