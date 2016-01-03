@@ -27,7 +27,7 @@ class AuthenticationController extends Controller
             'email'        => $email,
             'password'     => $password,
             'is_deleted'   => 0,
-            'is_suspended' => 0,
+            #'is_suspended' => 0,
         ], $remember)
         ) {
             $message = new MessageBag([

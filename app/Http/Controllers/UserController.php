@@ -8,27 +8,30 @@ use App\Role;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserUpdateRequest;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index ()
     {
         $count = 1;
-        $users = User::paginate(10);
+        $users = User::where('is_deleted', 0)->paginate(10);
+
         return view('users.index', compact('users', 'count'));
     }
 
-    public function create()
+    public function create ()
     {
         $roles = Role::lists('display_name', 'id');
+
         return view('users.create', compact('roles'));
     }
 
-    public function store(UserRequest $request)
+    public function store (UserRequest $request)
     {
 
         $user = new User();
-        $user->username = $request->get('username');
+        $user->username = trim($request->get('username'));
         $user->email = $request->get('email');
         $user->password = $request->get('password');
         $user->vendor_id = $request->get('vendor_id');
@@ -43,23 +46,59 @@ class UserController extends Controller
 
     }
 
-    public function show($id)
+    public function show ($id)
     {
-        //
+        $user = User::where('is_deleted', 0)->find($id);
+        if ( !$user ) {
+            return view('errors.404');
+        }
+
+        return view('users.show', compact('user'));
     }
 
-    public function edit($id)
+    public function edit ($id)
     {
-        //
+        $user = User::where('is_deleted', 0)->find($id);
+        if ( !$user ) {
+            return view('errors.404');
+        }
+        $given_role = $user->roles[0]->id;
+        $roles = Role::lists('display_name', 'id');
+        return view('users.edit', compact('user', 'roles', 'given_role'));
     }
 
-    public function update(Request $request, $id)
+    public function update (UserUpdateRequest $request, $id)
     {
-        //
+        $user = User::where('is_deleted', 0)->find($id);
+        if ( !$user ) {
+            return view('errors.404');
+        }
+        $user->username = trim($request->get('username'));
+        if ( $request->has('email') ) {
+            $user->email = $request->get('email');
+        }
+        if ( $request->has('password') ) {
+            $user->password = $request->get('password');
+        }
+        $user->vendor_id = $request->get('vendor_id');
+        $user->zip_code = $request->get('zip_code');
+        $user->state = $request->get('state');
+
+        $user->save();
+
+        $user->roles()->sync([$request->get('role')]);
+        return redirect(url('/'));
     }
 
-    public function destroy($id)
+    public function destroy ($id)
     {
-        //
+        $user = User::where('is_deleted', 0)->find($id);
+        if ( !$user ) {
+            return view('errors.404');
+        }
+
+        $user->is_deleted = 1;
+        $user->save();
+        return redirect(url('/'));
     }
 }
