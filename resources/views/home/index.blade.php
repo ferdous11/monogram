@@ -6,6 +6,7 @@
         <style>
             .border{
                 border: 1px solid #245269;
+                padding: 5px 10px;
             }
         </style>
     </head>
@@ -37,6 +38,12 @@
             </div>
             <div class="col-xs-12 border">
                 <a href="/products/create" >Create Product</a>
+            </div>
+            <div class="col-xs-12 border">
+                <a href="/orders" >Orders</a>
+            </div>
+            <div class="col-xs-12 border">
+                <a href="/orders/create" >Create Order</a>
             </div>
         </div>
     </body>
