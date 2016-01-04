@@ -32,6 +32,12 @@
             <div class="col-xs-12 border">
                 <a href="/customers/create" >Create Customer</a>
             </div>
+            <div class="col-xs-12 border">
+                <a href="/products" >Products</a>
+            </div>
+            <div class="col-xs-12 border">
+                <a href="/products/create" >Create Product</a>
+            </div>
         </div>
     </body>
 </html>
