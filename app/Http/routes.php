@@ -11,6 +11,7 @@ Route::group(['middleware' => ['auth']], function(){
     resource('users', 'UserController');
     resource('products', 'ProductController');
     resource('orders', 'OrderController');
+    resource('stations', 'StationController');
 });
 
 Route::group(['middleware' => ['guest']], function(){

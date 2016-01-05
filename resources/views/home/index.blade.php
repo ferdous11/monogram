@@ -45,6 +45,12 @@
             <div class="col-xs-12 border">
                 <a href="/orders/create" >Create Order</a>
             </div>
+            <div class="col-xs-12 border">
+                <a href="/stations" >Stations</a>
+            </div>
+            <div class="col-xs-12 border">
+                <a href="/stations/create" >Create Station</a>
+            </div>
         </div>
     </body>
 </html>
