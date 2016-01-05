@@ -57,6 +57,7 @@ class CreateOrdersTable extends Migration
             $table->string('order_status')->nullable();
             $table->string('source')->nullable();
             $table->string('cancel_code')->nullable();
+            $table->enum('is_deleted', array(0, 1))->default(0);
             $table->timestamps();
         });
     }

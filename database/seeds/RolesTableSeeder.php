@@ -23,5 +23,6 @@ class RolesTableSeeder extends Seeder
 			
 			$index++;
 		}
+		User::find(1)->attachRole(1);
     }
 }

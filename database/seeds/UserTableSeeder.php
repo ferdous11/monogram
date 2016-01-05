@@ -19,7 +19,6 @@ class UserTableSeeder extends Seeder
         $user->zip_code = 121212;
         $user->state = 1;
         $user->save();
-        $user->attachRole(1);
 
     }
 }

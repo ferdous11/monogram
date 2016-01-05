@@ -12,27 +12,27 @@
             <table class = "table table-bordered">
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>Model</th>
-                    <th>Condition</th>
+                    <th>Email</th>
+                    <th>Market</th>
+                    <th>Paid</th>
                     <th>Action</th>
                 </tr>
                 @foreach($orders as $order)
                     <tr data-id="{{$order->id}}">
                         <td>{{ $count++ }}</td>
-                        <td>{{ $order->order_name }}</td>
-                        <td>{{ $order->model }}</td>
-                        <td>{{ $order->condition }}</td>
+                        <td>{{ $order->email }}</td>
+                        <td>{{ $order->market }}</td>
+                        <td>{{ $order->paid }}</td>
                         <td>
                             <a href = "{{ url(sprintf("/orders/%d", $order->id)) }}" class = "btn btn-success">View</a>
                             | <a href = "{{ url(sprintf("/orders/%d/edit", $order->id)) }}" class = "btn btn-info">Edit</a>
-                            {{--| <a href = "#" class = "btn btn-danger delete">Delete</a>--}}
+                            | <a href = "#" class = "btn btn-danger delete">Delete</a>
                         </td>
                     </tr>
                 @endforeach
             </table>
-            {{--{!! Form::open(['url' => url('/orders/id'), 'method' => 'delete', 'id' => 'delete-order']) !!}
-            {!! Form::close() !!}--}}
+            {!! Form::open(['url' => url('/orders/id'), 'method' => 'delete', 'id' => 'delete-order']) !!}
+            {!! Form::close() !!}
             <div class = "col-xs-12 text-center">
                 {!! $orders->render() !!}
             </div>
@@ -41,7 +41,7 @@
         @endif
     </div>
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-    {{--<script type="text/javascript">
+    <script type="text/javascript">
         var message = {
             delete: 'Are you sure you want to delete?',
         };
@@ -56,6 +56,6 @@
                 form.submit();
             }
         });
-    </script>--}}
+    </script>
 </body>
 </html>
