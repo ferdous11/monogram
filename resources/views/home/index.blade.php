@@ -51,6 +51,12 @@
             <div class="col-xs-12 border">
                 <a href="/stations/create" >Create Station</a>
             </div>
+            <div class="col-xs-12 border">
+                <a href="/categories" >Category</a>
+            </div>
+            <div class="col-xs-12 border">
+                <a href="/categories/create" >Create Category</a>
+            </div>
         </div>
     </body>
 </html>

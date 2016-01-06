@@ -2,26 +2,30 @@
 <html lang = "en">
 <head>
     <meta charset = "UTF-8">
-    <title>Station - {{$station->station_name}}</title>
+    <title>Category - {{$category->category_code}}</title>
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
 </head>
 <body>
     <div class = "container" style = "margin-top: 50px;">
-        <a href = "{{ url(sprintf("/stations/%d/edit", $station->id)) }}" class="btn btn-success">Edit this station</a>
+        <a href = "{{ url(sprintf("/categories/%d/edit", $category->id)) }}" class="btn btn-success">Edit this category</a>
         <table class = "table table-bordered">
-            <caption>Station details</caption>
+            <caption>Category details</caption>
             <tr>
-                <td>station_name</td>
-                <td>{{$station->station_name}}</td>
+                <td>category_code</td>
+                <td>{{$category->category_code}}</td>
             </tr>
             <tr>
                 <td>station_description</td>
-                <td>{{$station->station_description}}</td>
+                <td>{{$category->category_description}}</td>
+            </tr>
+            <tr>
+                <td>category_display_order</td>
+                <td>{{$category->category_display_order}}</td>
             </tr>
         </table>
-        {!! Form::open(['url' => url(sprintf('/stations/%d', $station->id)), 'method' => 'delete', 'id' => 'delete-station-form']) !!}
-        {!! Form::submit('Delete station', ['class'=> 'btn btn-danger', 'id' => 'delete-station-btn']) !!}
+        {!! Form::open(['url' => url(sprintf('/categories/%d', $category->id)), 'method' => 'delete', 'id' => 'delete-category-form']) !!}
+        {!! Form::submit('Delete category', ['class'=> 'btn btn-danger', 'id' => 'delete-category-btn']) !!}
         {!! Form::close() !!}
     </div>
     <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -29,12 +33,12 @@
         var message = {
             delete: 'Are you sure you want to delete?',
         };
-        $("input#delete-station-btn").on('click', function (event)
+        $("input#delete-category-btn").on('click', function (event)
         {
             event.preventDefault();
             var action = confirm(message.delete);
             if ( action ) {
-                var form = $("form#delete-station-form");
+                var form = $("form#delete-category-form");
                 form.submit();
             }
         });

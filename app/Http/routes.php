@@ -12,6 +12,7 @@ Route::group(['middleware' => ['auth']], function(){
     resource('products', 'ProductController');
     resource('orders', 'OrderController');
     resource('stations', 'StationController');
+    resource('categories', 'CategoryController');
 });
 
 Route::group(['middleware' => ['guest']], function(){
@@ -22,4 +23,8 @@ Route::group(['middleware' => ['guest']], function(){
 // Redefinition of routes
 get('home', function(){
     return redirect(url('/'));
+});
+Route::group(['prefix' => 'auth'], function(){
+    get('login', 'AuthenticationController@getLogin');
+    get('logout', 'AuthenticationController@getLogout');
 });
