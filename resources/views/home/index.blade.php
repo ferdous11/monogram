@@ -57,6 +57,12 @@
             <div class="col-xs-12 border">
                 <a href="/categories/create" >Create Category</a>
             </div>
+            <div class="col-xs-12 border">
+                <a href="/batch_routes" >Batch routes</a>
+            </div>
+            <div class="col-xs-12 border">
+                <a href="/batch_routes/create" >Create batch routes</a>
+            </div>
         </div>
     </body>
 </html>

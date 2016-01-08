@@ -13,6 +13,7 @@ Route::group(['middleware' => ['auth']], function(){
     resource('orders', 'OrderController');
     resource('stations', 'StationController');
     resource('categories', 'CategoryController');
+    resource('batch_routes', 'BatchRouteController');
 });
 
 Route::group(['middleware' => ['guest']], function(){
