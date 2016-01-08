@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 
 use App\Station;
-use Illuminate\Http\Request;
 
 use App\Http\Requests\StationCreateRequest;
 use App\Http\Requests\StationUpdateRequest;
@@ -15,8 +14,7 @@ class StationController extends Controller
     public function index ()
     {
         $count = 1;
-        $stations = Station::where('is_deleted', 0)
-                           ->paginate(10);
+        $stations = Station::where('is_deleted', 0)->get();#->paginate(10);
 
         return view('stations.index', compact('stations', 'count'));
     }
@@ -29,11 +27,11 @@ class StationController extends Controller
     public function store (StationCreateRequest $request)
     {
         $station = new Station();
-        $station->station_name = $request->get('station_name');
+        $station->station_name = trim($request->get('station_name'));
         $station->station_description = $request->get('station_description');
         $station->save();
 
-        return redirect(url('/'));
+        return redirect(url('stations'));
     }
 
     public function show ($id)
@@ -69,11 +67,11 @@ class StationController extends Controller
             return view('errors.404');
         }
 
-        $station->station_name = $request->get('station_name');
+        $station->station_name = trim($request->get('station_name'));
         $station->station_description = $request->get('station_description');
         $station->save();
 
-        return redirect(url('/'));
+        return redirect(url('stations'));
     }
 
     public function destroy ($id)
@@ -88,6 +86,6 @@ class StationController extends Controller
         $station->is_deleted = 1;
         $station->save();
 
-        return redirect(url('/'));
+        return redirect(url('stations'));
     }
 }

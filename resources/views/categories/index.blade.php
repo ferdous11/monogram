@@ -13,7 +13,7 @@
     <div class = "container">
         <div class = "col-xs-12 text-right" style = "margin: 10px 0;">
             <button class = "btn btn-success" type = "button" data-toggle = "collapse" data-target = "#collapsible-top"
-                    aria-expanded = "false" aria-controls = "collapsible">Create new batch route
+                    aria-expanded = "false" aria-controls = "collapsible">Create new category
             </button>
             <div class = "collapse text-left" id = "collapsible-top">
                 {!! Form::open(['url' => url('/categories'), 'method' => 'post']) !!}
@@ -41,8 +41,6 @@
                     </div>
                 </div>
                 {!! Form::close() !!}
-
-
             </div>
         </div>
         @if(count($categories) > 0)
@@ -79,6 +77,38 @@
         @else
             <div class = "alert alert-warning">No category found</div>
         @endif
+        <div class = "col-xs-12 text-right" style = "margin: 10px 0;">
+            <button class = "btn btn-success" type = "button" data-toggle = "collapse" data-target = "#collapsible-bottom"
+                    aria-expanded = "false" aria-controls = "collapsible">Create new category
+            </button>
+            <div class = "collapse text-left" id = "collapsible-bottom">
+                {!! Form::open(['url' => url('/categories'), 'method' => 'post']) !!}
+                <div class = "form-group col-xs-12">
+                    {!! Form::label('category_code', 'Category code', ['class' => 'col-xs-2 control-label']) !!}
+                    <div class = "col-sm-4">
+                        {!! Form::text('category_code', null, ['id' => 'category_code', 'class' => "form-control", 'placeholder' => "Enter category code"]) !!}
+                    </div>
+                </div>
+                <div class = "form-group col-xs-12">
+                    {!! Form::label('category_description', 'Description', ['class' => 'col-xs-2 control-label']) !!}
+                    <div class = "col-sm-4">
+                        {!! Form::text('category_description', null, ['id' => 'category_description', 'class' => "form-control", 'placeholder' => "Enter category description"]) !!}
+                    </div>
+                </div>
+                <div class = "form-group col-xs-12">
+                    {!! Form::label('category_display_order', 'Display order', ['class' => 'col-xs-2 control-label']) !!}
+                    <div class = "col-sm-4">
+                        {!! Form::text('category_display_order', null, ['id' => 'category_display_order', 'class' => "form-control", 'placeholder' => "Enter category display order"]) !!}
+                    </div>
+                </div>
+                <div class = "col-xs-12 apply-margin-top-bottom">
+                    <div class = "col-xs-offset-2 col-xs-6">
+                        {!! Form::submit('Create category', ['class' => 'btn btn-primary']) !!}
+                    </div>
+                </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
     </div>
     <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type = "text/javascript" src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
