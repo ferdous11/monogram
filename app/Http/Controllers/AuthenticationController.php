@@ -40,7 +40,7 @@ class AuthenticationController extends Controller
                 ->withErrors($message);
         }
 
-        return redirect(url('/'));
+        return redirect()->intended(url('/'));
     }
 
     public function getLogout ()

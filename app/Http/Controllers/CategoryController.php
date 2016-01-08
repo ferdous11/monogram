@@ -13,7 +13,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::where('is_deleted', 0)->paginate(10);
+        $categories = Category::where('is_deleted', 0)->get();//->paginate(10);
         $count = 1;
         return view('categories.index', compact('categories', 'count'));
     }
@@ -32,7 +32,7 @@ class CategoryController extends Controller
 
         $category->save();
 
-        return redirect(url('/'));
+        return redirect(url('categories'));
     }
 
     public function show($id)
@@ -67,7 +67,7 @@ class CategoryController extends Controller
 
         $category->save();
 
-        return redirect(url('/'));
+        return redirect(url('categories'));
     }
 
     public function destroy($id)
@@ -80,6 +80,6 @@ class CategoryController extends Controller
         $category->is_deleted = 1;
         $category->save();
 
-        return redirect(url('/'));
+        return redirect(url('categories'));
     }
 }

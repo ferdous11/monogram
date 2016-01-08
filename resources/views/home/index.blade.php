@@ -1,68 +1,70 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Laravel</title>
-        <link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-        <style>
-            .border{
-                border: 1px solid #245269;
-                padding: 5px 10px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class = "container" style="margin-top: 30px;">
-            <div class="col-xs-12 text-center">
-                User is: @if(Auth::check()) Logged In @else Not Logged In @endif
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/login" >Login</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/logout" >Logout</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/users" >Users</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/users/create" >Create user</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/customers" >Customers</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/customers/create" >Create Customer</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/products" >Products</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/products/create" >Create Product</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/orders" >Orders</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/orders/create" >Create Order</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/stations" >Stations</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/stations/create" >Create Station</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/categories" >Category</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/categories/create" >Create Category</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/batch_routes" >Batch routes</a>
-            </div>
-            <div class="col-xs-12 border">
-                <a href="/batch_routes/create" >Create batch routes</a>
-            </div>
+<head>
+    <title>Laravel</title>
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <style>
+        .border {
+            border: 1px solid #245269;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    @include('includes.header_menu')
+    <div class = "container" style = "margin-top: 30px;">
+        <div class = "col-xs-3">
+            <h5 class = "page-header">Users</h5>
+            <ul>
+                <li><a href = "/users">Users</a></li>
+                <li><a href = "/users/create">Create user</a></li>
+            </ul>
         </div>
-    </body>
+        <div class = "col-xs-3">
+            <h5 class = "page-header">Customer</h5>
+            <ul>
+                <li><a href = "/customers">Customer</a></li>
+                <li><a href = "/customers/create">Create Customer</a></li>
+            </ul>
+        </div>
+        <div class = "col-xs-3">
+            <h5 class = "page-header">Products</h5>
+            <ul>
+                <li><a href = "/products">Products</a></li>
+                <li><a href = "/products/create">Create Product</a></li>
+            </ul>
+        </div>
+        <div class = "col-xs-3">
+            <h5 class = "page-header">Orders</h5>
+            <ul>
+                <li><a href = "/orders">Orders</a></li>
+                <li><a href = "/orders/create">Create Order</a></li>
+            </ul>
+        </div>
+        <div class = "col-xs-3">
+            <h5 class = "page-header">Stations</h5>
+            <ul>
+                <li><a href = "/stations">Stations</a></li>
+                <li><a href = "/stations/create">Create Station</a></li>
+            </ul>
+        </div>
+        <div class = "col-xs-3">
+            <h5 class = "page-header">Category</h5>
+            <ul>
+                <li><a href = "/categories">Category</a></li>
+                <li><a href = "/categories/create">Create Category</a></li>
+            </ul>
+        </div>
+        <div class = "col-xs-3">
+            <h5 class = "page-header">Batch routes</h5>
+            <ul>
+                <li><a href = "/batch_routes">Batch routes</a></li>
+                <li><a href = "/batch_routes/create">Create batch routes</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
 </html>

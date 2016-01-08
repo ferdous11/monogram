@@ -2,11 +2,16 @@
 <html lang = "en">
 <head>
     <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1">
+
     <title>Login</title>
-    <link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    {!! Html::style('assets/css/signin.css') !!}
 </head>
 <body>
-    <div class = "container" style="margin-top: 30px;">
+    <div class = "container" style = "margin-top: 30px;">
+
         @if($errors->any())
             <div class = "col-xs-12">
                 <div class = "alert alert-danger">
@@ -18,30 +23,28 @@
                 </div>
             </div>
         @endif
-        {!! Form::open(['url' => url('/login'), 'method' => 'post']) !!}
-        <div class = "col-xs-12">
-            <div class = "col-xs-3">Email:</div>
-            <div class = "col-xs-6">
-                {!! Form::email('email', null, ['id' => 'email']) !!}
-            </div>
+
+        {!! Form::open(['url' => url('/login'), 'method' => 'post','class'=>'form-signin']) !!}
+        <h2 class = "form-signin-heading">Please Log in</h2>
+
+        {!!Form::label('email','Email :',['class'=>'sr-only'])!!}
+
+        {!! Form::email('email', null, ['id' => 'email', 'class' => 'form-control', 'placeholder' => 'Enter your email']) !!}
+
+
+        {!!Form::label('password','Password :',['class'=>'sr-only'])!!}
+
+        {!! Form::password('password', ['id' => 'password', 'class'=>'form-control','placeholder'=>'Enter your password']) !!}
+
+        <div class = "checkbox">
+            <label>
+                {!! Form::checkbox('remember', 1, true, ['id' => 'remember']) !!} Remember Me
+            </label>
         </div>
-        <div class = "col-xs-12">
-            <div class = "col-xs-3">Password:</div>
-            <div class = "col-xs-6">
-                {!! Form::password('password', ['id' => 'password']) !!}
-            </div>
-        </div>
-        <div class = "col-xs-12">
-            <div class = "col-xs-3">Remember me:</div>
-            <div class = "col-xs-6">
-                {!! Form::checkbox('remember', 1, false, ['id' => 'remember']) !!} Remeber Me
-            </div>
-        </div>
-        <div class = "col-xs-12">
-            <div class = "col-xs-6">
-                {!! Form::submit('Login') !!}
-            </div>
-        </div>
+
+
+        {!! Form::submit('Login',['class'=>'btn btn-lg btn-primary btn-block']) !!}
+
         {!! Form::close() !!}
     </div>
 </body>

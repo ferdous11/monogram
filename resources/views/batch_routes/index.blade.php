@@ -88,8 +88,8 @@
                         <td>{!! Form::textarea('batch_stations', implode(",\n", array_map(function($station) { return $station['station_name']; }, $batch_route->stations_list->toArray())), ['class' => 'form-control', 'rows' => 4]) !!}</td>
                         <td>{!! Form::textarea('batch_options', $batch_route->batch_options, ['class' => 'form-control', 'rows' => 4]) !!}</td>
                         <td>
-                            <a href = "#" class = "update"><i class = "fa fa-pencil-square-o text-success"></i></a>
-                            | <a href = "#" class = "delete"> <i class = "fa fa-times text-danger"></i> </a>
+                            <a href = "#" class = "update" data-toggle="tooltip" data-placement="top" title="Edit this item"><i class = "fa fa-pencil-square-o text-success"></i></a>
+                            | <a href = "#" class = "delete" data-toggle="tooltip" data-placement="top" title="Delete this item"> <i class = "fa fa-times text-danger"></i> </a>
                         </td>
                     </tr>
                 @endforeach
@@ -161,6 +161,9 @@
     <script type = "text/javascript"
             src = "//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
     <script type = "text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
         var message = {
             delete: 'Are you sure you want to delete?',
         };

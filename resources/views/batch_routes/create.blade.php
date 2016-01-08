@@ -14,7 +14,8 @@
     </style>
 </head>
 <body>
-    <div class = "container apply-margin-top-bottom">
+    @include('includes.header_menu')
+    <div class = "container">
         @if($errors->any())
             <div class = "col-xs-12">
                 <div class = "alert alert-danger">
@@ -27,43 +28,43 @@
             </div>
         @endif
 
-        {!! Form::open(['url' => url('/batch_routes'), 'method' => 'post']) !!}
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">batch_code</div>
-            <div class = "col-xs-6">
-                {!! Form::text('batch_code', null, ['id' => 'batch_code']) !!}
+            {!! Form::open(['url' => url('/batch_routes'), 'method' => 'post',]) !!}
+            <div class = "form-group col-xs-12">
+                {!! Form::label('batch_code', 'Batch code', ['class' => 'col-xs-2 control-label']) !!}
+                <div class = "col-sm-4">
+                    {!! Form::text('batch_code', null, ['id' => 'batch_code', 'class' => "form-control", 'placeholder' => "Enter batch code"]) !!}
+                </div>
             </div>
-        </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">batch_route_name</div>
-            <div class = "col-xs-6">
-                {!! Form::text('batch_route_name', null, ['id' => 'batch_route_name']) !!}
+            <div class = "form-group col-xs-12">
+                {!! Form::label('batch_route_name', 'Route name', ['class' => 'col-xs-2 control-label']) !!}
+                <div class = "col-sm-4">
+                    {!! Form::text('batch_route_name', null, ['id' => 'batch_route_name', 'class' => "form-control", 'placeholder' => "Enter batch route name"]) !!}
+                </div>
             </div>
-        </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">batch_max_units</div>
-            <div class = "col-xs-6">
-                {!! Form::text('batch_max_units', null, ['id' => 'batch_max_units']) !!}
+            <div class = "form-group col-xs-12">
+                {!! Form::label('batch_max_units', 'Max units', ['class' => 'col-xs-2 control-label']) !!}
+                <div class = "col-sm-4">
+                    {!! Form::text('batch_max_units', null, ['id' => 'batch_max_units', 'class' => "form-control", 'placeholder' => "Enter batch max units"]) !!}
+                </div>
             </div>
-        </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">batch_stations</div>
-            <div class = "col-xs-6">
-                {!! Form::select('batch_stations', $stations, null, ['id' => 'batch_stations', 'multiple' => true, 'class' => 'selectpicker', "data-live-search" => "true"]) !!}
+            <div class = "form-group col-xs-12">
+                {!! Form::label('batch_stations', 'Stations', ['class' => 'col-xs-2 control-label']) !!}
+                <div class = "col-sm-4">
+                    {!! Form::select('batch_stations[]', $stations, null, ['id' => 'batch_stations', 'multiple' => true, 'class' => 'selectpicker form-control', "data-live-search" => "true"]) !!}
+                </div>
             </div>
-        </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">batch_options</div>
-            <div class = "col-xs-6">
-                {!! Form::text('batch_options', null, ['id' => 'batch_options']) !!}
+            <div class = "form-group col-xs-12">
+                {!! Form::label('batch_options', 'Options', ['class' => 'col-xs-2 control-label']) !!}
+                <div class = "col-sm-4">
+                    {!! Form::textarea('batch_options', null, ['id' => 'batch_options', 'rows' => 4, 'class' => "form-control", 'placeholder' => "Enter batch options"]) !!}
+                </div>
             </div>
-        </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-6">
-                {!! Form::submit('Create batch route') !!}
+            <div class = "form-group col-xs-12">
+                <div class = "col-sm-offset-2 col-sm-10">
+                    {!! Form::submit('Create batch route', ['class' => 'btn btn-primary']) !!}
+                </div>
             </div>
-        </div>
-        {!! Form::close() !!}
+            {!! Form::close() !!}
     </div>
     <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
