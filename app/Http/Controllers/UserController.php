@@ -42,7 +42,7 @@ class UserController extends Controller
         $role = Role::find($request->get('role'));
         $user->attachRole($role);
 
-        return redirect(url('/'));
+        return redirect(url('users'));
 
     }
 
@@ -87,7 +87,7 @@ class UserController extends Controller
         $user->save();
 
         $user->roles()->sync([$request->get('role')]);
-        return redirect(url('/'));
+        return redirect(url('users'));
     }
 
     public function destroy ($id)
@@ -99,6 +99,6 @@ class UserController extends Controller
 
         $user->is_deleted = 1;
         $user->save();
-        return redirect(url('/'));
+        return redirect(url('users'));
     }
 }

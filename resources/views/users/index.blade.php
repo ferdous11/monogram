@@ -5,10 +5,14 @@
     <title>Users</title>
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-    <div class = "container" style = "margin-top: 50px;">
+    @include('includes.header_menu')
+    <div class = "container">
         @if(count($users) > 0)
+            <h3 class="page-header">Users</h3>
             <table class = "table table-bordered">
                 <tr>
                     <th>#</th>
@@ -18,15 +22,20 @@
                     <th>Action</th>
                 </tr>
                 @foreach($users as $user)
-                    <tr data-id="{{$user->id}}">
+                    <tr data-id = "{{$user->id}}">
                         <td>{{ $count++ }}</td>
                         <td>{{ substr($user->username, 0, 30) }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->state }} ( Foreign key for Location )</td>
+                        <td>{{ $user->state }}</td>
                         <td>
-                            <a href = "{{ url(sprintf("/users/%d", $user->id)) }}" class = "btn btn-success">View</a>
-                            | <a href = "{{ url(sprintf("/users/%d/edit", $user->id)) }}" class = "btn btn-info">Edit</a>
-                            | <a href = "#" class = "btn btn-danger delete">Delete</a>
+                            <a href = "{{ url(sprintf("/users/%d", $user->id)) }}" data-toggle = "tooltip"
+                               data-placement = "top"
+                               title = "View this user"><i class = 'fa fa-eye text-primary'></i></a>
+                            | <a href = "{{ url(sprintf("/users/%d/edit", $user->id)) }}" data-toggle = "tooltip"
+                                 data-placement = "top"
+                                 title = "View this user"><i class = 'fa fa-pencil-square-o text-success'></i></a>
+                            | <a href = "#" class = "delete" data-toggle = "tooltip" data-placement = "top"
+                                 title = "Delete this user"><i class = 'fa fa-times text-danger'></i></a>
                         </td>
                     </tr>
                 @endforeach
@@ -40,16 +49,22 @@
             <div class = "alert alert-warning">No user found</div>
         @endif
     </div>
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript">
+    <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type = "text/javascript" src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type = "text/javascript">
+        $(function ()
+        {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
         var message = {
             delete: 'Are you sure you want to delete?',
         };
-        $("a.delete").on('click', function (event){
+        $("a.delete").on('click', function (event)
+        {
             event.preventDefault();
             var id = $(this).closest('tr').attr('data-id');
             var action = confirm(message.delete);
-            if(action){
+            if ( action ) {
                 var form = $("form#delete-user");
                 var url = form.attr('action');
                 form.attr('action', url.replace('id', id));

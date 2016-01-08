@@ -5,10 +5,15 @@
     <title>Customers</title>
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-    <div class = "container" style = "margin-top: 50px;">
+
+    @include('includes.header_menu')
+    <div class = "container">
         @if(count($customers) > 0)
+            <h3 class="page-header">Customers</h3>
             <table class = "table table-bordered">
                 <tr>
                     <th>#</th>
@@ -22,8 +27,10 @@
                         <td>{{ substr($customer->ship_full_name, 0, 30) }}</td>
                         <td>{{ sprintf("%s, %s, %s, %s, %s - %s", $customer->shipping_address_1, $customer->shipping_address_2, $customer->ship_city, $customer->ship_state, $customer->ship_country, $customer->ship_zip) }}</td>
                         <td>
-                            <a href = "{{ url(sprintf("/customers/%d", $customer->id)) }}">View</a>
-                            <a href = "{{ url(sprintf("/customers/%d/edit", $customer->id)) }}">Edit</a>
+                            <a href = "{{ url(sprintf("/customers/%d", $customer->id)) }}" data-toggle = "tooltip" data-placement = "top"
+                                     title = "View this customer"><i class='fa fa-eye text-primary'></i></a>
+                            | <a href = "{{ url(sprintf("/customers/%d/edit", $customer->id)) }}" data-toggle = "tooltip" data-placement = "top"
+                                     title = "Edit this customer"><i class='fa fa-pencil-square-o text-success'></i></a>
                         </td>
                     </tr>
                 @endforeach
@@ -35,5 +42,13 @@
             <div class = "alert alert-warning">No customer is registered</div>
         @endif
     </div>
+    <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type = "text/javascript" src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type='text/javascript'>
+        $(function ()
+        {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 </body>
 </html>

@@ -30,8 +30,8 @@
                     </div>
                 </div>
                 <div class = "col-xs-12 apply-margin-top-bottom">
-                    <div class = "col-xs-6">
-                        {!! Form::submit('Create station',['class' => 'btn btn-primary']) !!}
+                    <div class = "col-xs-offset-2 col-xs-4">
+                        {!! Form::submit('Create station',['class' => 'btn btn-primary btn-block']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}
@@ -89,8 +89,8 @@
                     </div>
                 </div>
                 <div class = "col-xs-12 apply-margin-top-bottom">
-                    <div class = "col-xs-6">
-                        {!! Form::submit('Create station',['class' => 'btn btn-primary']) !!}
+                    <div class = "col-xs-offset-2 col-xs-4">
+                        {!! Form::submit('Create station',['class' => 'btn btn-primary btn-block']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}

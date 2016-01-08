@@ -35,7 +35,7 @@ class CreateProductsTable extends Migration
             $table->string('ASIN');
             $table->string('su_code');
             $table->string('acct_code');
-            $table->string('condition');
+            $table->string('product_condition');
             $table->string('image_url_4P');
             $table->string('inset_url');
             $table->timestamps();

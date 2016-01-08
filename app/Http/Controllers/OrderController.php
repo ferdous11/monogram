@@ -73,7 +73,7 @@ class OrderController extends Controller
         $order->cancel_code = $request->get('cancel_code');
         $order->save();
 
-        return redirect(url('/'));
+        return redirect(url('orders'));
     }
 
     public function show ($id)
@@ -148,7 +148,7 @@ class OrderController extends Controller
         $order->cancel_code = $request->get('cancel_code');
         $order->save();
 
-        return redirect(url('/'));
+        return redirect(url('orders'));
     }
 
     public function destroy ($id)
@@ -161,7 +161,7 @@ class OrderController extends Controller
         $order->is_deleted = 1;
         $order->save();
 
-        return redirect(url('/'));
+        return redirect(url('orders'));
 
     }
 }

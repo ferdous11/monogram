@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laravel</title>
+    <title>{{env('APPLICATION_NAME')}} - Home</title>
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <link type = "text/css" rel = "stylesheet"
@@ -26,7 +26,7 @@
         <div class = "col-xs-3">
             <h5 class = "page-header">Customer</h5>
             <ul>
-                <li><a href = "/customers">Customer</a></li>
+                <li><a href = "/customers">Customers</a></li>
                 <li><a href = "/customers/create">Create Customer</a></li>
             </ul>
         </div>

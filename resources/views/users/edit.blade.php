@@ -5,13 +5,12 @@
     <title>Edit User - {{$user->username}}</title>
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-    <style>
-        div.apply-margin-top-bottom {
-            margin: 5px;
-        }
-    </style>
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
 </head>
 <body>
+    @include('includes.header_menu')
     <div class = "container apply-margin-top-bottom">
         @if($errors->any())
             <div class = "col-xs-12">
@@ -25,60 +24,64 @@
             </div>
         @endif
 
-        {!! Form::open(['url' => url(sprintf("/users/%d", $user->id)), 'method' => 'put']) !!}
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">username</div>
-            <div class = "col-xs-6">
-                {!! Form::text('username', $user->username, ['id' => 'username']) !!}
+        {!! Form::open(['url' => url(sprintf("/users/%d", $user->id)), 'method' => 'put','class'=>'form-horizontal','role'=>'form']) !!}
+        <div class = "form-group">
+            {!!Form::label('username','Username :',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
+            <div class = "col-xs-5">
+                {!! Form::text('username', $user->username, ['id' => 'username','class'=>'form-control']) !!}
             </div>
         </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">email</div>
-            <div class = "col-xs-6">
-                {!! Form::email('email', null, ['id' => 'email', 'placeholder' => 'Insertion will update the email']) !!}
+        <div class = "form-group">
+            {!!Form::label('email','Email :',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
+            <div class = "col-xs-5">
+                {!! Form::email('email', null, ['id' => 'email', 'placeholder' => 'Insertion will update the email','class'=>'form-control']) !!}
             </div>
         </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">password</div>
-            <div class = "col-xs-6">
-                {!! Form::password('password', ['id' => 'password', 'placeholder' => 'Insertion will set new password']) !!}
+        <div class = "form-group">
+            {!!Form::label('password','Password :',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
+            <div class = "col-xs-5">
+                {!! Form::password('password', ['id' => 'password', 'placeholder' => 'Insertion will set new password','class'=>'form-control']) !!}
             </div>
         </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">role</div>
-            <div class = "col-xs-6">
-                {!! Form::select('role', $roles, $given_role, ['id' => 'role']) !!}
+        <div class = "form-group">
+            {!!Form::label('vendor_id','Role :',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
+            <div class = "col-xs-5">
+                {!! Form::select('role', $roles, $given_role, ['id' => 'role','class'=>'form-control']) !!}
             </div>
         </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">vendor_id(TODO: SELECT TYPE)</div>
-            <div class = "col-xs-6">
-                {!! Form::text('vendor_id', $user->vendor_id, ['id' => 'vendor_id']) !!}
+        <div class = "form-group">
+            {!!Form::label('vendor_id','Vendor ID :',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
+            <div class = "col-xs-5">
+                {!! Form::text('vendor_id', $user->vendor_id, ['id' => 'vendor_id','class'=>'form-control']) !!}
             </div>
         </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">zip_code</div>
-            <div class = "col-xs-6">
-                {!! Form::text('zip_code', $user->zip_code, ['id' => 'zip_code']) !!}
+        <div class = "form-group">
+            {!!Form::label('zip_code','Zip Code :',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
+            <div class = "col-xs-5">
+                {!! Form::text('zip_code', $user->zip_code, ['id' => 'zip_code','class'=>'form-control']) !!}
             </div>
         </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-3">state(TODO: SELECT TYPE)</div>
-            <div class = "col-xs-6">
-                {!! Form::text('state', $user->state, ['id' => 'state']) !!}
+        <div class = "form-group">
+            {!!Form::label('state','State :',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
+            <div class = "col-xs-5">
+                {!! Form::text('state', $user->state, ['id' => 'state','class'=>'form-control']) !!}
             </div>
         </div>
-        <div class = "col-xs-12 apply-margin-top-bottom">
-            <div class = "col-xs-6">
-                {!! Form::submit('Update') !!}
+        <div class = "form-group">
+            <div class = "col-xs-offset-4 col-xs-5">
+                {!! Form::submit('Update this user',['class'=>'btn btn-primary btn-block']) !!}
             </div>
         </div>
-
         {!! Form::close() !!}
 
-        {!! Form::open(['url' => url(sprintf('/users/%d', $user->id)), 'method' => 'delete', 'id' => 'delete-user-form']) !!}
-        {!! Form::submit('Delete user', ['class'=> 'btn btn-danger', 'id' => 'delete-user-btn']) !!}
+        {!! Form::open(['url' => url(sprintf('/users/%d', $user->id)), 'method' => 'delete', 'id' => 'delete-user-form', 'class'=>'form-horizontal','role'=>'form']) !!}
+        <div class = "form-group">
+            <div class = "col-xs-offset-4 col-xs-5">
+                {!! Form::submit('Delete user', ['class'=> 'btn btn-primary btn-block btn-danger', 'id' => 'delete-user-btn']) !!}
+            </div>
+        </div>
         {!! Form::close() !!}
+
     </div>
     <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type = "text/javascript">

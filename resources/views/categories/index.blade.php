@@ -36,15 +36,16 @@
                     </div>
                 </div>
                 <div class = "col-xs-12 apply-margin-top-bottom">
-                    <div class = "col-xs-offset-2 col-xs-6">
-                        {!! Form::submit('Create category', ['class' => 'btn btn-primary']) !!}
+                    <div class = "col-xs-offset-2 col-xs-4">
+                        {!! Form::submit('Create category', ['class' => 'btn btn-primary btn-block']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}
             </div>
         </div>
         @if(count($categories) > 0)
-            <table class = "table table-bordered">
+            <div class = "col-xs-12">
+                <table class = "table table-bordered">
                 <tr>
                     <th>#</th>
                     <th>category_code</th>
@@ -65,7 +66,7 @@
                         </td>
                     </tr>
                 @endforeach
-            </table>
+            </table></div>
             {!! Form::open(['url' => url('/categories/id'), 'method' => 'delete', 'id' => 'delete-category']) !!}
             {!! Form::close() !!}
 
@@ -102,8 +103,8 @@
                     </div>
                 </div>
                 <div class = "col-xs-12 apply-margin-top-bottom">
-                    <div class = "col-xs-offset-2 col-xs-6">
-                        {!! Form::submit('Create category', ['class' => 'btn btn-primary']) !!}
+                    <div class = "col-xs-offset-2 col-xs-4">
+                        {!! Form::submit('Create category', ['class' => 'btn btn-primary btn-block']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}

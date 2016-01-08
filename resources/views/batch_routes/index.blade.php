@@ -61,39 +61,43 @@
                     </div>
                 </div>
                 <div class = "form-group col-xs-12">
-                    <div class = "col-sm-offset-2 col-sm-10">
-                        {!! Form::submit('Create batch route', ['class' => 'btn btn-primary']) !!}
+                    <div class = "col-sm-offset-2 col-sm-4">
+                        {!! Form::submit('Create batch route', ['class' => 'btn btn-primary btn-block']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}
             </div>
         </div>
         @if(count($batch_routes) > 0)
-            <table class = "table table-bordered">
-                <tr>
-                    <th>#</th>
-                    <th>Batch code</th>
-                    <th>Route name</th>
-                    <th>Max unit</th>
-                    <th>Stations</th>
-                    <th>Options ( Comma delimited )</th>
-                    <th>Action</th>
-                </tr>
-                @foreach($batch_routes as $batch_route)
-                    <tr data-id = "{{$batch_route->id}}">
-                        <td>{{ $count++ }}</td>
-                        <td>{!! Form::text('batch_code', $batch_route->batch_code, ['class' => 'form-control']) !!}</td>
-                        <td>{!! Form::text('batch_route_name', $batch_route->batch_route_name, ['class' => 'form-control']) !!}</td>
-                        <td>{!! Form::text('batch_max_units', $batch_route->batch_max_units, ['class' => 'form-control']) !!}</td>
-                        <td>{!! Form::textarea('batch_stations', implode(",\n", array_map(function($station) { return $station['station_name']; }, $batch_route->stations_list->toArray())), ['class' => 'form-control', 'rows' => 4]) !!}</td>
-                        <td>{!! Form::textarea('batch_options', $batch_route->batch_options, ['class' => 'form-control', 'rows' => 4]) !!}</td>
-                        <td>
-                            <a href = "#" class = "update" data-toggle="tooltip" data-placement="top" title="Edit this item"><i class = "fa fa-pencil-square-o text-success"></i></a>
-                            | <a href = "#" class = "delete" data-toggle="tooltip" data-placement="top" title="Delete this item"> <i class = "fa fa-times text-danger"></i> </a>
-                        </td>
+            <div class = "col-xs-12">
+                <table class = "table table-bordered">
+                    <tr>
+                        <th>#</th>
+                        <th>Batch code</th>
+                        <th>Route name</th>
+                        <th>Max unit</th>
+                        <th>Stations</th>
+                        <th>Options ( Comma delimited )</th>
+                        <th>Action</th>
                     </tr>
-                @endforeach
-            </table>
+                    @foreach($batch_routes as $batch_route)
+                        <tr data-id = "{{$batch_route->id}}">
+                            <td>{{ $count++ }}</td>
+                            <td>{!! Form::text('batch_code', $batch_route->batch_code, ['class' => 'form-control']) !!}</td>
+                            <td>{!! Form::text('batch_route_name', $batch_route->batch_route_name, ['class' => 'form-control']) !!}</td>
+                            <td>{!! Form::text('batch_max_units', $batch_route->batch_max_units, ['class' => 'form-control']) !!}</td>
+                            <td>{!! Form::textarea('batch_stations', implode(",\n", array_map(function($station) { return $station['station_name']; }, $batch_route->stations_list->toArray())), ['class' => 'form-control', 'rows' => 4]) !!}</td>
+                            <td>{!! Form::textarea('batch_options', $batch_route->batch_options, ['class' => 'form-control', 'rows' => 4]) !!}</td>
+                            <td>
+                                <a href = "#" class = "update" data-toggle = "tooltip" data-placement = "top"
+                                   title = "Edit this item"><i class = "fa fa-pencil-square-o text-success"></i></a>
+                                | <a href = "#" class = "delete" data-toggle = "tooltip" data-placement = "top"
+                                     title = "Delete this item"> <i class = "fa fa-times text-danger"></i> </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
             {!! Form::open(['url' => url('/batch_routes/id'), 'method' => 'delete', 'id' => 'delete-batch-route']) !!}
             {!! Form::close() !!}
 
@@ -143,8 +147,8 @@
                     </div>
                 </div>
                 <div class = "form-group col-xs-12">
-                    <div class = "col-sm-offset-2 col-sm-10">
-                        {!! Form::submit('Create batch route', ['class' => 'btn btn-primary']) !!}
+                    <div class = "col-sm-offset-2 col-sm-4">
+                        {!! Form::submit('Create batch route', ['class' => 'btn btn-primary btn-block']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}
@@ -161,7 +165,8 @@
     <script type = "text/javascript"
             src = "//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
     <script type = "text/javascript">
-        $(function () {
+        $(function ()
+        {
             $('[data-toggle="tooltip"]').tooltip();
         });
         var message = {

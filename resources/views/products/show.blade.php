@@ -5,112 +5,124 @@
     <title>Product - {{$product->product_name}}</title>
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
 </head>
 <body>
-    <div class = "container" style = "margin-top: 50px;">
-        <a href = "{{ url(sprintf("/products/%d/edit", $product->id)) }}" class="btn btn-success">Edit this product</a>
-        <table class = "table table-bordered">
-            <caption>Product details</caption>
-            <tr>
-                <td>storeId</td>
-                <td>{{$product->storeId}}</td>
-            </tr>
-            <tr>
-                <td>idCatalog</td>
-                <td>{{$product->idCatalog}}</td>
-            </tr>
-            <tr>
-                <td>vendorId</td>
-                <td>{{$product->vendorId}}</td>
-            </tr>
-            <tr>
-                <td>model</td>
-                <td>{{$product->model}}</td>
-            </tr>
-            <tr>
-                <td>product_url</td>
-                <td><a href="{{$product->product_url}}">{{$product->product_url}}</a></td>
-            </tr>
-            <tr>
-                <td>product_name</td>
-                <td>{{$product->product_name}}</td>
-            </tr>
-            <tr>
-                <td>ship_weight</td>
-                <td>{{$product->ship_weight}}</td>
-            </tr>
-            <tr>
-                <td>productCost</td>
-                <td>{{$product->productCost}}</td>
-            </tr>
-            <tr>
-                <td>mcategory</td>
-                <td>{{$product->mcategory}}</td>
-            </tr>
-            <tr>
-                <td>cat</td>
-                <td>{{$product->cat}}</td>
-            </tr>
-            <tr>
-                <td>sub</td>
-                <td>{{$product->sub}}</td>
-            </tr>
-            <tr>
-                <td>price</td>
-                <td>{{$product->price}}</td>
-            </tr>
-            <tr>
-                <td>sale_price</td>
-                <td>{{$product->sale_price}}</td>
-            </tr>
-            <tr>
-                <td>wPrice</td>
-                <td>{{$product->wPrice}}</td>
-            </tr>
-            <tr>
-                <td>active</td>
-                <td>{{$product->active == 0 ? "Inactive" : "Active" }}</td>
-            </tr>
-            <tr>
-                <td>taxable</td>
-                <td>{{$product->taxable}}</td>
-            </tr>
-            <tr>
-                <td>upc</td>
-                <td>{{$product->upc}}</td>
-            </tr>
-            <tr>
-                <td>brand</td>
-                <td>{{$product->brand}}</td>
-            </tr>
-            <tr>
-                <td>ASIN</td>
-                <td>{{$product->ASIN}}</td>
-            </tr>
-            <tr>
-                <td>su_code</td>
-                <td>{{$product->su_code}}</td>
-            </tr>
-            <tr>
-                <td>acct_code</td>
-                <td>{{$product->acct_code}}</td>
-            </tr>
-            <tr>
-                <td>condition</td>
-                <td>{{$product->condition}}</td>
-            </tr>
-            <tr>
-                <td>image_url_4P</td>
-                <td><a href="{{$product->image_url_4P}}">{{$product->image_url_4P}}</a></td>
-            </tr>
-            <tr>
-                <td>inset_url</td>
-                <td><a href="{{$product->inset_url}}">{{$product->inset_url}}</a></td>
-            </tr>
-        </table>
-        {!! Form::open(['url' => url(sprintf('/products/%d', $product->id)), 'method' => 'delete', 'id' => 'delete-product-form']) !!}
-        {!! Form::submit('Delete product', ['class'=> 'btn btn-danger', 'id' => 'delete-product-btn']) !!}
-        {!! Form::close() !!}
+    @include('includes.header_menu')
+    <div class = "container">
+        <div class = "col-xs-offset-1 col-xs-10 col-xs-offset-1">
+            <h4 class = "page-header">Product details</h4>
+            <table class = "table table-hover table-bordered">
+                <tr class = "success">
+                    <td>Store Id</td>
+                    <td>{{$product->storeId}}</td>
+                </tr>
+                <tr>
+                    <td>ID Catalog</td>
+                    <td>{{$product->idCatalog}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>Vendor Id</td>
+                    <td>{{$product->vendorId}}</td>
+                </tr>
+                <tr>
+                    <td>Model</td>
+                    <td>{{$product->model}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>Product url</td>
+                    <td><a href = "{{$product->product_url}}">{{$product->product_url}}</a></td>
+                </tr>
+                <tr>
+                    <td>Product Name</td>
+                    <td>{{$product->product_name}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>Ship Weight</td>
+                    <td>{{$product->ship_weight}}</td>
+                </tr>
+                <tr>
+                    <td>Product Cost</td>
+                    <td>{{$product->productCost}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>M category</td>
+                    <td>{{$product->mcategory}}</td>
+                </tr>
+                <tr>
+                    <td>Cat</td>
+                    <td>{{$product->cat}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>Sub</td>
+                    <td>{{$product->sub}}</td>
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td>{{$product->price}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>Sale Price</td>
+                    <td>{{$product->sale_price}}</td>
+                </tr>
+                <tr>
+                    <td>W Price</td>
+                    <td>{{$product->wPrice}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>Active</td>
+                    <td>{{$product->active == 0 ? "Inactive" : "Active" }}</td>
+                </tr>
+                <tr>
+                    <td>Taxable</td>
+                    <td>{{$product->taxable}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>UPC</td>
+                    <td>{{$product->upc}}</td>
+                </tr>
+                <tr>
+                    <td>Brand</td>
+                    <td>{{$product->brand}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>ASIN</td>
+                    <td>{{$product->ASIN}}</td>
+                </tr>
+                <tr>
+                    <td>SU Code</td>
+                    <td>{{$product->su_code}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>Acct Code</td>
+                    <td>{{$product->acct_code}}</td>
+                </tr>
+                <tr>
+                    <td>Condition</td>
+                    <td>{{$product->product_condition}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>Image url 4P</td>
+                    <td><a href = "{{$product->image_url_4P}}">{{$product->image_url_4P}}</a></td>
+                </tr>
+                <tr>
+                    <td>Inset url</td>
+                    <td><a href = "{{$product->inset_url}}">{{$product->inset_url}}</a></td>
+                </tr>
+            </table>
+        </div>
+        <div class = "col-xs-12" style = "margin-bottom: 30px;">
+            <div class = "col-xs-offset-1 col-xs-10" style="margin-bottom: 10px;">
+                <a href = "{{ url(sprintf("/products/%d/edit", $product->id)) }}" class = "btn btn-success btn-block">Edit this
+                                                                                                            product</a>
+            </div>
+            <div class = "col-xs-offset-1 col-xs-10">
+                {!! Form::open(['url' => url(sprintf('/products/%d', $product->id)), 'method' => 'delete', 'id' => 'delete-product-form']) !!}
+                {!! Form::submit('Delete product', ['class'=> 'btn btn-danger btn-block', 'id' => 'delete-product-btn']) !!}
+                {!! Form::close() !!}
+            </div>
+        </div>
     </div>
     <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type = "text/javascript">

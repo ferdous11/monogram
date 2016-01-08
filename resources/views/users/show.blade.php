@@ -5,36 +5,49 @@
     <title>User - {{$user->username}}</title>
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-    <div class = "container" style = "margin-top: 50px;">
-        <a href = "{{ url(sprintf("/users/%d/edit", $user->id)) }}" class="btn btn-success">Edit this user</a>
-        <table class = "table table-bordered">
-            <caption>User details</caption>
-            <tr>
-                <td>Username</td>
-                <td>{{$user->username}}</td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td>{{$user->email}}</td>
-            </tr>
-            <tr>
-                <td>vendor_id</td>
-                <td>{{$user->vendor_id}}</td>
-            </tr>
-            <tr>
-                <td>zip_code</td>
-                <td>{{$user->zip_code}}</td>
-            </tr>
-            <tr>
-                <td>state</td>
-                <td>{{$user->state}}</td>
-            </tr>
-        </table>
-        {!! Form::open(['url' => url(sprintf('/users/%d', $user->id)), 'method' => 'delete', 'id' => 'delete-user-form']) !!}
-        {!! Form::submit('Delete user', ['class'=> 'btn btn-danger', 'id' => 'delete-user-btn']) !!}
-        {!! Form::close() !!}
+    @include('includes.header_menu')
+    <div class = "container ">
+        <div class = "col-xs-offset-1 col-xs-10 col-xs-offset-1">
+            <h4 class = "page-header">User details</h4>
+            <table class = "table table-hover table-bordered">
+                <tr class = "success">
+                    <td>Username</td>
+                    <td>{{$user->username}}</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>{{$user->email}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>Vendor Id</td>
+                    <td>{{$user->vendor_id}}</td>
+                </tr>
+                <tr>
+                    <td>Zip Code</td>
+                    <td>{{$user->zip_code}}</td>
+                </tr>
+                <tr class = "success">
+                    <td>State</td>
+                    <td>{{$user->state}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class = "col-xs-12" style = "margin-bottom: 30px;">
+            <div class = "col-xs-offset-1 col-xs-10" style = "margin-bottom: 10px;">
+                <a href = "{{ url(sprintf("/users/%d/edit", $user->id)) }}" class = "btn btn-success btn-block">Edit
+                                                                                                                this
+                                                                                                                user</a>
+            </div>
+            <div class = "col-xs-offset-1 col-xs-10">
+                {!! Form::open(['url' => url(sprintf('/users/%d', $user->id)), 'method' => 'delete', 'id' => 'delete-user-form']) !!}
+                {!! Form::submit('Delete user', ['class'=> 'btn btn-danger btn-block', 'id' => 'delete-user-btn']) !!}
+                {!! Form::close() !!}
+            </div>
+        </div>
     </div>
     <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type = "text/javascript">

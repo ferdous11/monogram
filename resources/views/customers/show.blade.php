@@ -3,102 +3,117 @@
 <head>
     <meta charset = "UTF-8">
     <title>Customer - {{$customer->ship_full_name}}</title>
-    <link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-    <div class="container" style="margin-top: 40px;">
-        <a class="btn btn-success" href="{{ url(sprintf("/customers/%d/edit", $customer->id)) }}">Edit this customer</a>
-        <table class="table table-bordered">
-            <caption>Shipping address</caption>
-            <tr>
-                <td>ship_full_name</td>
-                <td>{{$customer->ship_full_name}}</td>
-            </tr>
-            <tr>
-                <td>company_name</td>
-                <td>{{$customer->company_name}}</td>
-            </tr>
-            <tr>
-                <td>first_name</td>
-                <td>{{$customer->first_name}}</td>
-            </tr>
-            <tr>
-                <td>last_name</td>
-                <td>{{$customer->last_name}}</td>
-            </tr>
-            <tr>
-                <td>shipping_address_1</td>
-                <td>{{$customer->shipping_address_1}}</td>
-            </tr>
-            <tr>
-                <td>shipping_address_2</td>
-                <td>{{$customer->shipping_address_2}}</td>
-            </tr>
-            <tr>
-                <td>ship_city</td>
-                <td>{{$customer->ship_city}}</td>
-            </tr>
-            <tr>
-                <td>ship_state</td>
-                <td>{{$customer->ship_state}}</td>
-            </tr>
-            <tr>
-                <td>ship_country</td>
-                <td>{{$customer->ship_country}}</td>
-            </tr>
-            <tr>
-                <td>ship_zip</td>
-                <td>{{$customer->ship_zip}}</td>
-            </tr>
-            <tr>
-                <td>ship_phone</td>
-                <td>{{$customer->ship_phone}}</td>
-            </tr>
-            </table>
-
-        <table class="table table-bordered">
-            <caption>Billing address</caption>
-            <tr>
-                <td>bill_company_name</td>
-                <td>{{$customer->bill_company_name}}</td>
-            </tr>
-            <tr>
-                <td>bill_first_name</td>
-                <td>{{$customer->bill_first_name}}</td>
-            </tr>
-            <tr>
-                <td>bill_last_name</td>
-                <td>{{$customer->bill_last_name}}</td>
-            </tr>
-            <tr>
-                <td>bill_address_1</td>
-                <td>{{$customer->bill_address_1}}</td>
-            </tr>
-            <tr>
-                <td>bill_address_2</td>
-                <td>{{$customer->bill_address_2}}</td>
-            </tr>
-            <tr>
-                <td>bill_city</td>
-                <td>{{$customer->bill_city}}</td>
-            </tr>
-            <tr>
-                <td>bill_state</td>
-                <td>{{$customer->bill_state}}</td>
-            </tr>
-            <tr>
-                <td>bill_country</td>
-                <td>{{$customer->bill_country}}</td>
-            </tr>
-            <tr>
-                <td>bill_zip</td>
-                <td>{{$customer->bill_zip}}</td>
-            </tr>
-            <tr>
-                <td>bill_phone</td>
-                <td>{{$customer->bill_phone}}</td>
-            </tr>
-        </table>
+    @include('includes.header_menu')
+    <div class = "container">
+        <div class = "row">
+            <div class = "col-xs-6">
+                <table class = "table table-hover table-bordered">
+                    <caption>SHIPPING ADDRESS</caption>
+                    <tr class = "success">
+                        <td>Ship Full Name</td>
+                        <td>{{$customer->ship_full_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>{{$customer->company_name}}</td>
+                    </tr>
+                    <tr class = "success">
+                        <td>First Name</td>
+                        <td>{{$customer->first_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Last Name</td>
+                        <td>{{$customer->last_name}}</td>
+                    </tr>
+                    <tr class = "success">
+                        <td>Shipping Address 1</td>
+                        <td>{{$customer->shipping_address_1}}</td>
+                    </tr>
+                    <tr>
+                        <td>Shipping Address 2</td>
+                        <td>{{$customer->shipping_address_2}}</td>
+                    </tr>
+                    <tr class = "success">
+                        <td>Ship City</td>
+                        <td>{{$customer->ship_city}}</td>
+                    </tr>
+                    <tr>
+                        <td>Ship State</td>
+                        <td>{{$customer->ship_state}}</td>
+                    </tr>
+                    <tr class = "success">
+                        <td>Ship Country</td>
+                        <td>{{$customer->ship_country}}</td>
+                    </tr>
+                    <tr>
+                        <td>Ship Zip</td>
+                        <td>{{$customer->ship_zip}}</td>
+                    </tr>
+                    <tr class = "success">
+                        <td>Ship Phone</td>
+                        <td>{{$customer->ship_phone}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class = "col-xs-6">
+                <table class = "table table-hover table-bordered">
+                    <caption>BILLING ADDRESS</caption>
+                    <tr class = "success">
+                        <td>Bill Company Name</td>
+                        <td>{{$customer->bill_company_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bill First Name</td>
+                        <td>{{$customer->bill_first_name}}</td>
+                    </tr>
+                    <tr class = "success">
+                        <td>Bill Last Name</td>
+                        <td>{{$customer->bill_last_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bill Address 1</td>
+                        <td>{{$customer->bill_address_1}}</td>
+                    </tr>
+                    <tr class = "success">
+                        <td>Bill Address 2</td>
+                        <td>{{$customer->bill_address_2}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bill City</td>
+                        <td>{{$customer->bill_city}}</td>
+                    </tr>
+                    <tr class = "success">
+                        <td>Bill State</td>
+                        <td>{{$customer->bill_state}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bill Country</td>
+                        <td>{{$customer->bill_country}}</td>
+                    </tr>
+                    <tr class = "success">
+                        <td>Bill Zip</td>
+                        <td>{{$customer->bill_zip}}</td>
+                    </tr>
+                    <tr>
+                        <td>Bill Phone</td>
+                        <td>{{$customer->bill_phone}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class = "row">
+            <div class = "col-xs-12">
+                <a class = "btn btn-success btn-block" href = "{{ url(sprintf("/customers/%d/edit", $customer->id)) }}">Edit
+                                                                                                                        this
+                                                                                                                        customer</a>
+            </div>
+        </div>
     </div>
 </body>
 </html>

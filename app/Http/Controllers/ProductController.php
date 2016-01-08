@@ -50,12 +50,12 @@ class ProductController extends Controller
         $product->ASIN = $request->get('ASIN');
         $product->su_code = $request->get('su_code');
         $product->acct_code = $request->get('acct_code');
-        $product->condition = $request->get('condition');
+        $product->product_condition = $request->get('product_condition');
         $product->image_url_4P = $request->get('image_url_4P');
         $product->inset_url = $request->get('inset_url');
         $product->save();
 
-        return redirect(url('/'));
+        return redirect(url('products'));
     }
 
     public function show ($id)
@@ -110,12 +110,12 @@ class ProductController extends Controller
         $product->ASIN = $request->get('ASIN');
         $product->su_code = $request->get('su_code');
         $product->acct_code = $request->get('acct_code');
-        $product->condition = $request->get('condition');
+        $product->product_condition = $request->get('product_condition');
         $product->image_url_4P = $request->get('image_url_4P');
         $product->inset_url = $request->get('inset_url');
         $product->save();
 
-        return redirect(url('/'));
+        return redirect(url('products'));
     }
 
     public function destroy ($id)
@@ -129,6 +129,6 @@ class ProductController extends Controller
         $product->active = 0;
         $product->save();
 
-        return redirect(url('/'));
+        return redirect(url('products'));
     }
 }
