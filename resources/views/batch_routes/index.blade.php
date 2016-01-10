@@ -3,6 +3,7 @@
 <head>
     <meta charset = "UTF-8">
     <title>Batch routes</title>
+    <meta name = "viewport" content = "width=device-width, initial-scale=1">
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <link type = "text/css" rel = "stylesheet"
@@ -12,7 +13,7 @@
 </head>
 <body>
     @include('includes.header_menu')
-    <div class = "container" style = "margin-top: 50px;">
+    <div class = "container">
         @if($errors->any())
             <div class = "col-xs-12">
                 <div class = "alert alert-danger">
@@ -98,6 +99,9 @@
                     @endforeach
                 </table>
             </div>
+            <div class = "col-xs-12 text-center">
+                {!! $batch_routes->render() !!}
+            </div>
             {!! Form::open(['url' => url('/batch_routes/id'), 'method' => 'delete', 'id' => 'delete-batch-route']) !!}
             {!! Form::close() !!}
 
@@ -110,11 +114,11 @@
             {!! Form::close() !!}
 
         @else
-                <div class = "col-xs-12">
-                    <div class = "alert alert-warning text-center">
-                        <h3>No batch route found.</h3>
-                    </div>
+            <div class = "col-xs-12">
+                <div class = "alert alert-warning text-center">
+                    <h3>No batch route found.</h3>
                 </div>
+            </div>
         @endif
 
         <div class = "col-xs-12 text-right" style = "margin: 10px 0;">

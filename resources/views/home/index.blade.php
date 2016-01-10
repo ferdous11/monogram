@@ -2,20 +2,15 @@
 <html>
 <head>
     <title>{{env('APPLICATION_NAME')}} - Home</title>
+    <meta name = "viewport" content = "width=device-width, initial-scale=1">
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <style>
-        .border {
-            border: 1px solid #245269;
-            padding: 5px 10px;
-        }
-    </style>
 </head>
 <body>
     @include('includes.header_menu')
-    <div class = "container" style = "margin-top: 30px;">
+    <div class = "container">
         <div class = "col-xs-3">
             <h5 class = "page-header">Users</h5>
             <ul>

@@ -5,24 +5,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     * @return void
-     */
+    private $models = [
+        RolesTableSeeder::class,
+        UsersTableSeeder::class,
+        StationsTableSeeder::class,
+        CustomersTableSeeder::class,
+        OrdersTableSeeder::class,
+        ProductsTableSeeder::class,
+        BatchRoutesTableSeeder::class,
+        CategoriesTableSeeder::class,
+
+    ];
     public function run ()
     {
-        Artisan::call('migrate:rollback');
-        Artisan::call('migrate');
-
         Model::unguard();
-
-        $this->call(RolesTableSeeder::class);
-        $this->call(UsersTableSeeder::class);
-        $this->call(StationsTableSeeder::class);
-        $this->call(CustomersTableSeeder::class);
-        $this->call(OrdersTableSeeder::class);
-        $this->call(ProductsTableSeeder::class);
-
+        foreach($this->models as $table => $model){
+            $this->call($model);
+        }
         Model::reguard();
     }
 }

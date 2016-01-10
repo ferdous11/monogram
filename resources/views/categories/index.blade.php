@@ -3,6 +3,7 @@
 <head>
     <meta charset = "UTF-8">
     <title>Categories</title>
+    <meta name = "viewport" content = "width=device-width, initial-scale=1">
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <link type = "text/css" rel = "stylesheet"
@@ -69,6 +70,9 @@
                         </tr>
                     @endforeach
                 </table>
+            </div>
+            <div class="col-xs-12 text-center">
+                {!! $categories->render() !!}
             </div>
             {!! Form::open(['url' => url('/categories/id'), 'method' => 'delete', 'id' => 'delete-category']) !!}
             {!! Form::close() !!}

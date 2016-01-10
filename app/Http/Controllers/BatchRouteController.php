@@ -16,7 +16,7 @@ class BatchRouteController extends Controller
     {
         $count = 1;
         $stations = Station::where('is_deleted', 0)->lists('station_description', 'id');
-        $batch_routes = BatchRoute::with('stations_list')->where('is_deleted', 0)->get();/*->paginate(10);*/
+        $batch_routes = BatchRoute::with('stations_list')->where('is_deleted', 0)->paginate(50);
         return view('batch_routes.index', compact('batch_routes', 'count', 'stations'));
     }
 

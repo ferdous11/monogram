@@ -14,7 +14,7 @@ class StationController extends Controller
     public function index ()
     {
         $count = 1;
-        $stations = Station::where('is_deleted', 0)->get();#->paginate(10);
+        $stations = Station::where('is_deleted', 0)->paginate(50);
 
         return view('stations.index', compact('stations', 'count'));
     }

@@ -13,7 +13,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::where('is_deleted', 0)->get();//->paginate(10);
+        $categories = Category::where('is_deleted', 0)->paginate(50);
         $count = 1;
         return view('categories.index', compact('categories', 'count'));
     }

@@ -3,6 +3,7 @@
 <head>
     <meta charset = "UTF-8">
     <title>Stations</title>
+    <meta name = "viewport" content = "width=device-width, initial-scale=1">
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <link type = "text/css" rel = "stylesheet"
@@ -10,7 +11,7 @@
 </head>
 <body>
     @include('includes.header_menu')
-    <div class = "container" style = "margin-top: 50px;">
+    <div class = "container">
         <div class = "col-xs-12 text-right" style = "margin: 10px 0;">
             <button class = "btn btn-success" type = "button" data-toggle = "collapse" data-target = "#collapsible-top"
                     aria-expanded = "false" aria-controls = "collapsible">Create new station
@@ -59,6 +60,9 @@
                         </tr>
                     @endforeach
                 </table>
+            </div>
+            <div class="col-xs-12 text-center">
+                {!! $stations->render() !!}
             </div>
             {!! Form::open(['url' => url('/stations/id'), 'method' => 'delete', 'id' => 'delete-station']) !!}
             {!! Form::close() !!}

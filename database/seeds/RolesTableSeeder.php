@@ -6,44 +6,26 @@ use App\User;
 
 class RolesTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     * @return void
-     */
+    private $roles = [
+        'OWNER'  => 'Store Owner',
+        'SUPR'   => 'Supervisor',
+        'INVM'   => 'Inventory Manager',
+        'OPER'   => 'Customer Service',
+        'VEND'   => 'Drop/Shipper',
+        'ACCT'   => 'Accountant',
+        'CSR'    => 'Call center/no update',
+        'OWNERX' => 'Store owner excluding user management',
+        'USERM'  => 'Only manage users',
+    ];
+
     public function run ()
     {
-        $roleDescriptions = [
-            'Store Owner',
-            'Supervisor',
-            'Inventory Manager',
-            'Customer Service',
-            'Drop/Shipper',
-            'Accountant',
-            'Call center/no update',
-            'Store owner excluding user management',
-            'Only manage users',
-        ];
-        $roleNames = [
-            'OWNER',
-            'SUPR',
-            'INVM',
-            'OPER',
-            'VEND',
-            'ACCT',
-            'CSR',
-            'OWNERX',
-            'USERM',
-        ];
-        $index = 0;
-        foreach ( $roleDescriptions as $roleDescription ) {
+        foreach ( $this->roles as $name => $display_name ) {
             $role = new Role();
-            $role->name = $roleNames[$index];
-            $role->display_name = $roleDescription;
+            $role->name = $name;
+            $role->display_name = $display_name;
+            $role->description = $display_name;
             $role->save();
-
-            $index++;
         }
-        /*User::find(1)
-            ->attachRole(1);*/
     }
 }

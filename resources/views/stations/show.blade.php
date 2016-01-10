@@ -3,11 +3,12 @@
 <head>
     <meta charset = "UTF-8">
     <title>Station - {{$station->station_name}}</title>
+    <meta name = "viewport" content = "width=device-width, initial-scale=1">
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
 </head>
 <body>
-    <div class = "container" style = "margin-top: 50px;">
+    <div class = "container">
         <a href = "{{ url(sprintf("/stations/%d/edit", $station->id)) }}" class="btn btn-success">Edit this station</a>
         <table class = "table table-bordered">
             <caption>Station details</caption>

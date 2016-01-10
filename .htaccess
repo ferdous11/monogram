@@ -5,6 +5,9 @@
 
     RewriteEngine On
 
+	# files that shouldn't be loaded on request
+    RewriteRule ^(server\.php|gulpfile\.js|\.env|composer.*|package.*) - [F,L,NC]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)/$ /$1 [L,R=301]
