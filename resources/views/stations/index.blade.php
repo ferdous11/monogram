@@ -68,10 +68,15 @@
             {!! Form::hidden('station_description', null, ['id' => 'update_station_description']) !!}
             {!! Form::close() !!}
         @else
-            <div class = "alert alert-warning">No station found</div>
+            <div class = "col-xs-12">
+                <div class = "alert alert-warning text-center">
+                    <h3>No station found.</h3>
+                </div>
+            </div>
         @endif
         <div class = "col-xs-12 text-right" style = "margin: 10px 0;">
-            <button class = "btn btn-success" type = "button" data-toggle = "collapse" data-target = "#collapsible-bottom"
+            <button class = "btn btn-success" type = "button" data-toggle = "collapse"
+                    data-target = "#collapsible-bottom"
                     aria-expanded = "false" aria-controls = "collapsible">Create new station
             </button>
             <div class = "collapse text-left" id = "collapsible-bottom">

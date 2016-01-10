@@ -18,6 +18,7 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Role</th>
                     <th>Location</th>
                     <th>Action</th>
                 </tr>
@@ -26,6 +27,7 @@
                         <td>{{ $count++ }}</td>
                         <td>{{ substr($user->username, 0, 30) }}</td>
                         <td>{{ $user->email }}</td>
+                        <td>{{ $user->roles[0]->display_name }}</td>
                         <td>{{ $user->state }}</td>
                         <td>
                             <a href = "{{ url(sprintf("/users/%d", $user->id)) }}" data-toggle = "tooltip"
@@ -46,7 +48,11 @@
                 {!! $users->render() !!}
             </div>
         @else
-            <div class = "alert alert-warning">No user found</div>
+            <div class = "col-xs-12">
+                <div class = "alert alert-warning text-center">
+                    <h3>No user found.</h3>
+                </div>
+            </div>
         @endif
     </div>
     <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>

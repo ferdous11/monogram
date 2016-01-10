@@ -14,7 +14,7 @@ class OrderController extends Controller
 {
     public function index ()
     {
-        $orders = Order::where('is_deleted', 0)->paginate(10);
+        $orders = Order::where('is_deleted', 0)->paginate(50);
         $count = 1;
 
         return view('orders.index', compact('orders', 'count'));

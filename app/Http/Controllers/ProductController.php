@@ -16,7 +16,7 @@ class ProductController extends Controller
     {
         $products = Product::where('active', 1)
                            ->latest()
-                           ->paginate(10);
+                           ->paginate(50);
         $count = 1;
 
         return view('products.index', compact('products', 'count'));

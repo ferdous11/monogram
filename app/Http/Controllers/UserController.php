@@ -15,8 +15,7 @@ class UserController extends Controller
     public function index ()
     {
         $count = 1;
-        $users = User::where('is_deleted', 0)->paginate(10);
-
+        $users = User::with('roles')->where('is_deleted', 0)->paginate(50);
         return view('users.index', compact('users', 'count'));
     }
 

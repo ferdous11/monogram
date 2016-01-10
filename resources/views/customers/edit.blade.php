@@ -143,7 +143,7 @@
         </div>
         <div class = 'form-group'>
             <div class = "col-xs-offset-4 col-xs-5">
-                {!! Form::submit('Update customer',['class'=>'btn btn-lg btn-primary btn-block']) !!}
+                {!! Form::submit('Update customer',['class'=>'btn btn-primary btn-block']) !!}
             </div>
         </div>
         {!! Form::close() !!}

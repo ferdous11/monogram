@@ -46,27 +46,30 @@
         @if(count($categories) > 0)
             <div class = "col-xs-12">
                 <table class = "table table-bordered">
-                <tr>
-                    <th>#</th>
-                    <th>category_code</th>
-                    <th>category_description</th>
-                    <th>category_display_order</th>
-                    <th>Action</th>
-                </tr>
-                @foreach($categories as $category)
-                    <tr data-id = "{{$category->id}}">
-                        <td>{{ $count++ }}</td>
-                        <td>{!! Form::text('category_code', $category->category_code, ['class' => 'form-control']) !!}</td>
-                        <td>{!! Form::text('category_description', $category->category_description, ['class' => 'form-control']) !!}</td>
-                        <td>{!! Form::text('category_display_order', $category->category_display_order, ['class' => 'form-control']) !!}</td>
-                        <td>
-                            {{--<a href = "{{ url(sprintf("/categories/%d", $category->id)) }}" class = "btn btn-success">View</a> | --}}
-                            <a href = "#" class = "update" data-toggle="tooltip" data-placement="top" title="Edit this item"><i class="fa fa-pencil-square-o text-success"></i> </a>
-                            | <a href = "#" class = "delete" data-toggle="tooltip" data-placement="top" title="Delete this item"><i class="fa fa-times text-danger"></i> </a>
-                        </td>
+                    <tr>
+                        <th>#</th>
+                        <th>category_code</th>
+                        <th>category_description</th>
+                        <th>category_display_order</th>
+                        <th>Action</th>
                     </tr>
-                @endforeach
-            </table></div>
+                    @foreach($categories as $category)
+                        <tr data-id = "{{$category->id}}">
+                            <td>{{ $count++ }}</td>
+                            <td>{!! Form::text('category_code', $category->category_code, ['class' => 'form-control']) !!}</td>
+                            <td>{!! Form::text('category_description', $category->category_description, ['class' => 'form-control']) !!}</td>
+                            <td>{!! Form::text('category_display_order', $category->category_display_order, ['class' => 'form-control']) !!}</td>
+                            <td>
+                                {{--<a href = "{{ url(sprintf("/categories/%d", $category->id)) }}" class = "btn btn-success">View</a> | --}}
+                                <a href = "#" class = "update" data-toggle = "tooltip" data-placement = "top"
+                                   title = "Edit this item"><i class = "fa fa-pencil-square-o text-success"></i> </a>
+                                | <a href = "#" class = "delete" data-toggle = "tooltip" data-placement = "top"
+                                     title = "Delete this item"><i class = "fa fa-times text-danger"></i> </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
             {!! Form::open(['url' => url('/categories/id'), 'method' => 'delete', 'id' => 'delete-category']) !!}
             {!! Form::close() !!}
 
@@ -76,10 +79,15 @@
             {!! Form::hidden('category_display_order', null, ['id' => 'update_category_display_order']) !!}
             {!! Form::close() !!}
         @else
-            <div class = "alert alert-warning">No category found</div>
+            <div class = "col-xs-12">
+                <div class = "alert alert-warning text-center">
+                    <h3>No category found.</h3>
+                </div>
+            </div>
         @endif
         <div class = "col-xs-12 text-right" style = "margin: 10px 0;">
-            <button class = "btn btn-success" type = "button" data-toggle = "collapse" data-target = "#collapsible-bottom"
+            <button class = "btn btn-success" type = "button" data-toggle = "collapse"
+                    data-target = "#collapsible-bottom"
                     aria-expanded = "false" aria-controls = "collapsible">Create new category
             </button>
             <div class = "collapse text-left" id = "collapsible-bottom">
@@ -114,7 +122,8 @@
     <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type = "text/javascript" src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script type = "text/javascript">
-        $(function () {
+        $(function ()
+        {
             $('[data-toggle="tooltip"]').tooltip();
         });
 

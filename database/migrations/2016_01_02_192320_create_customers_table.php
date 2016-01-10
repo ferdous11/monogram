@@ -14,6 +14,7 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
+            $table->bigInteger('customer_id')->nullable(); // todo: delete this field.
             $table->string('ship_full_name')->nullable();
             $table->string('company_name')->nullable();
             $table->string('first_name')->nullable();

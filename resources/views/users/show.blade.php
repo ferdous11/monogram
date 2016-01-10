@@ -23,14 +23,18 @@
                     <td>{{$user->email}}</td>
                 </tr>
                 <tr class = "success">
+                    <td>Role</td>
+                    <td>{{ $user->roles[0]->display_name }}</td>
+                </tr>
+                <tr>
                     <td>Vendor Id</td>
                     <td>{{$user->vendor_id}}</td>
                 </tr>
-                <tr>
+                <tr class = "success">
                     <td>Zip Code</td>
                     <td>{{$user->zip_code}}</td>
                 </tr>
-                <tr class = "success">
+                <tr>
                     <td>State</td>
                     <td>{{$user->state}}</td>
                 </tr>

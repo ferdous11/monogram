@@ -110,7 +110,11 @@
             {!! Form::close() !!}
 
         @else
-            <div class = "alert alert-warning">No batch route found.</div>
+                <div class = "col-xs-12">
+                    <div class = "alert alert-warning text-center">
+                        <h3>No batch route found.</h3>
+                    </div>
+                </div>
         @endif
 
         <div class = "col-xs-12 text-right" style = "margin: 10px 0;">

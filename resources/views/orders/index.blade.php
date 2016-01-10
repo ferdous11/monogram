@@ -46,7 +46,11 @@
                 {!! $orders->render() !!}
             </div>
         @else
-            <div class = "alert alert-warning">No order found</div>
+            <div class = "col-xs-12">
+                <div class = "alert alert-warning text-center">
+                    <h3>No order found.</h3>
+                </div>
+            </div>
         @endif
     </div>
     <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>

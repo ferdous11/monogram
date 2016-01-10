@@ -39,7 +39,11 @@
                 {!! $customers->render() !!}
             </div>
         @else
-            <div class = "alert alert-warning">No customer is registered</div>
+            <div class = "col-xs-12">
+                <div class = "alert alert-warning text-center">
+                    <h3>No customer is registered.</h3>
+                </div>
+            </div>
         @endif
     </div>
     <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
