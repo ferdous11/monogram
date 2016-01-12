@@ -3,18 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Status;
+use App\Store;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
     public function index ()
     {
-        $orders = Order::where('is_deleted', 0)->paginate(50);
+        $orders = Order::where('is_deleted', 0)
+                       ->paginate(50);
         $count = 1;
 
         return view('orders.index', compact('orders', 'count'));
@@ -163,5 +168,83 @@ class OrderController extends Controller
 
         return redirect(url('orders'));
 
+    }
+
+    public function getList (Request $request)
+    {
+        $orders = Order::with('customer')
+                       ->where('is_deleted', 0)
+                       ->groupBy('order_id')
+                       ->paginate(50, [
+                           'order_id',
+                           'customer_id',
+                           'order_date',
+                           'order_status',
+                           'shipping_method',
+                           DB::raw('COUNT( 1 ) AS item, SUM(sub_total) AS cost'),
+                       ]);
+        $statuses = Status::where('is_deleted', 0)
+                          ->lists('status_name', 'status_code');
+        $statuses->prepend('All', 'all');
+
+        $stores = Store::where('is_deleted', 0)
+                       ->lists('store_name', 'store_id');
+        $stores->prepend('All', 'all');
+
+        $shipping_methods = Order::groupBy('shipping_method')
+                                 ->lists('shipping_method', 'shipping_method');
+        $shipping_methods->prepend('All', 'all');
+
+        $search_in = [
+            'order'         => 'Order',
+            'five_p'        => '5P#',
+            'ebay-item'     => 'Ebay-item',
+            'ebay-user'     => 'Ebay-user',
+            'ebay-sale-rec' => 'Ebay-sale-rec',
+            'shipper-po'    => 'Shipper-PO',
+        ];
+
+        return view('orders.lists', compact('orders', 'stores', 'statuses', 'shipping_methods', 'search_in', 'request'));
+    }
+
+    public function search (Request $request)
+    {
+        $orders = Order::with('customer')
+                       ->where('is_deleted', 0)
+                       ->storeId($request->get('store'))
+                       ->shippingMethod($request->get('shipping_method'))
+                       ->status($request->get('status'))
+                       ->search($request->get('search_for'), $request->get('search_in'))
+                       ->groupBy('order_id')
+                       ->paginate(50, [
+                           'order_id',
+                           'customer_id',
+                           'order_date',
+                           'order_status',
+                           'shipping_method',
+                           DB::raw('COUNT( 1 ) AS item, SUM(sub_total) AS cost'),
+                       ]);
+        $statuses = Status::where('is_deleted', 0)
+                          ->lists('status_name', 'status_code');
+        $statuses->prepend('All', 'all');
+
+        $stores = Store::where('is_deleted', 0)
+                       ->lists('store_name', 'store_id');
+        $stores->prepend('All', 'all');
+
+        $shipping_methods = Order::groupBy('shipping_method')
+                                 ->lists('shipping_method', 'shipping_method');
+        $shipping_methods->prepend('All', 'all');
+
+        $search_in = [
+            'order'         => 'Order',
+            'five_p'        => '5P#',
+            'ebay-item'     => 'Ebay-item',
+            'ebay-user'     => 'Ebay-user',
+            'ebay-sale-rec' => 'Ebay-sale-rec',
+            'shipper-po'    => 'Shipper-PO',
+        ];
+
+        return view('orders.lists', compact('orders', 'stores', 'statuses', 'shipping_methods', 'search_in', 'request'));
     }
 }

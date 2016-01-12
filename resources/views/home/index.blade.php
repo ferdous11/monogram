@@ -37,7 +37,7 @@
             <ul>
                 <li><a href = "/orders">Orders</a></li>
                 <li><a href = "/orders/create">Create Order</a></li>
-                <li><a href = "/orders/list">Order list</a></li>
+                <li><a href = "/orders/list">Orders list</a></li>
             </ul>
         </div>
         <div class = "col-xs-3">

@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
         ProductsTableSeeder::class,
         BatchRoutesTableSeeder::class,
         CategoriesTableSeeder::class,
-
+        StoresTableSeeder::class,
+        StatusesTableSeeder::class,
     ];
     public function run ()
     {
