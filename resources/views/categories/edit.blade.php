@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <div class = "container apply-margin-top-bottom">
+    <div class = "container">
         @if($errors->any())
             <div class = "col-xs-12">
                 <div class = "alert alert-danger">

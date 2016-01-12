@@ -14,6 +14,11 @@
 <body>
     @include('includes.header_menu')
     <div class = "container">
+        <ol class="breadcrumb">
+            <li><a href="{{url('/')}}">Home</a></li>
+            <li><a href="{{url('customers')}}">Customers</a></li>
+            <li class="active">Create customer</li>
+        </ol>
         {!! Form::open(['url' => url('/customers'), 'method' => 'post','class'=>'form-horizontal','role'=>'form']) !!}
         <div class = 'form-group'>
             {!!Form::label('ship_full_name','Ship Full Name :',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}

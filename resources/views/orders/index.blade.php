@@ -12,8 +12,15 @@
 <body>
     @include('includes.header_menu')
     <div class = "container">
+        <ol class="breadcrumb">
+            <li><a href="{{url('/')}}">Home</a></li>
+            <li class="active">Orders</li>
+        </ol>
         @if(count($orders) > 0)
-            <h3 class = "page-header">Orders</h3>
+            <h3 class="page-header">
+                Orders
+                <a class="btn btn-success btn-sm pull-right" href="{{url('/orders/create')}}">Create order</a>
+            </h3>
             <table class = "table table-bordered">
                 <tr>
                     <th>#</th>

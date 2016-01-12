@@ -12,6 +12,11 @@
 <body>
     @include('includes.header_menu')
     <div class = "container">
+        <ol class="breadcrumb">
+            <li><a href="{{url('/')}}">Home</a></li>
+            <li><a href="{{url('customers')}}">Customers</a></li>
+            <li class="active">View customer</li>
+        </ol>
         <div class = "row">
             <div class = "col-xs-6">
                 <table class = "table table-hover table-bordered">

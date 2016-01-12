@@ -14,6 +14,10 @@
 <body>
     @include('includes.header_menu')
     <div class = "container">
+        <ol class="breadcrumb">
+            <li><a href="{{url('/')}}">Home</a></li>
+            <li class="active">Batch rotes</li>
+        </ol>
         @if($errors->any())
             <div class = "col-xs-12">
                 <div class = "alert alert-danger">

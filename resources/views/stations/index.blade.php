@@ -12,6 +12,10 @@
 <body>
     @include('includes.header_menu')
     <div class = "container">
+        <ol class="breadcrumb">
+            <li><a href="{{url('/')}}">Home</a></li>
+            <li class="active">Stations</li>
+        </ol>
         <div class = "col-xs-12 text-right" style = "margin: 10px 0;">
             <button class = "btn btn-success" type = "button" data-toggle = "collapse" data-target = "#collapsible-top"
                     aria-expanded = "false" aria-controls = "collapsible">Create new station
