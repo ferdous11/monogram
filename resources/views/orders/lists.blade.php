@@ -68,7 +68,7 @@
                 </tr>
                 @foreach($orders as $order)
                     <tr data-id = "{{$order->id}}">
-                        <td><a href="{{ url($order->order_id) }}" class="btn btn-link">{{explode("-", $order->order_id)[2]}}</a></td>
+                        <td><a href="{{ url("orders/details/".$order->order_id) }}" class="btn btn-link">{{explode("-", $order->order_id)[2]}}</a></td>
                         <td><a href="{{ url("customers/".$order->customer_id) }}" title="This is customer id" class="btn btn-link">{{$order->customer_id}}</a></td>
                         <td>{{$order->customer->ship_full_name}}</td>
                         <td>{{$order->customer->ship_state}}, {{$order->customer->ship_country}}</td>
@@ -81,7 +81,7 @@
                 @endforeach
             </table>
             <div class = "col-xs-12 text-center">
-                {!! $orders->render() !!}
+                {!! $orders->appends($request->all())->render() !!}
             </div>
         @else
             <div class = "col-xs-12">

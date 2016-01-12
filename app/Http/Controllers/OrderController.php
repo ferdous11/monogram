@@ -181,7 +181,7 @@ class OrderController extends Controller
                            'order_date',
                            'order_status',
                            'shipping_method',
-                           DB::raw('COUNT( 1 ) AS item, SUM(sub_total) AS cost'),
+                           DB::raw('COUNT( 1 ) AS item, SUM(order_total) AS cost'),
                        ]);
         $statuses = Status::where('is_deleted', 0)
                           ->lists('status_name', 'status_code');
@@ -222,7 +222,7 @@ class OrderController extends Controller
                            'order_date',
                            'order_status',
                            'shipping_method',
-                           DB::raw('COUNT( 1 ) AS item, SUM(sub_total) AS cost'),
+                           DB::raw('COUNT( 1 ) AS item, SUM(order_total) AS cost'),
                        ]);
         $statuses = Status::where('is_deleted', 0)
                           ->lists('status_name', 'status_code');
@@ -246,5 +246,23 @@ class OrderController extends Controller
         ];
 
         return view('orders.lists', compact('orders', 'stores', 'statuses', 'shipping_methods', 'search_in', 'request'));
+    }
+
+    public function details ($order_id)
+    {
+        $order = Order::with('customer')
+                      ->where('is_deleted', 0)
+                      ->where('order_id', $order_id)
+                      ->first([ DB::raw('orders.*, COUNT( 1 ) AS item, order_total AS cost') ]);
+                      #->groupBy('order_id')
+                      #->first([ DB::raw('orders.*, COUNT( 1 ) AS item, SUM(order_total) AS cost') ]);
+
+        $statuses = Status::where('is_deleted', 0)
+                          ->lists('status_name', 'status_code');
+
+        $shipping_methods = Order::groupBy('shipping_method')
+                                 ->lists('shipping_method', 'shipping_method');
+        #return compact('order', 'order_id', 'shipping_methods', 'statuses');
+        return view('orders.details', compact('order', 'order_id', 'shipping_methods', 'statuses'));
     }
 }
