@@ -62,6 +62,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->string('order_id')->nullable();
+            $table->string('short_order')->nullable();
             $table->string('item_count')->nullable();
             $table->string('coupon_description')->nullable();
             $table->string('coupon_id')->nullable();
@@ -85,6 +86,7 @@ class CreateOrdersTable extends Migration
             $table->string('batch_number')->nullable();
             $table->string('current_station')->nullable();
             $table->string('order_status')->nullable();
+            $table->double('sub_total')->default(0);
             $table->enum('is_filtered', array(0, 1))->default(0);
             $table->enum('is_deleted', array(0, 1))->default(0);
             $table->timestamps();

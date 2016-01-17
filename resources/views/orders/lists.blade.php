@@ -57,7 +57,7 @@
             <table class = "table table-bordered">
                 <tr>
                     <th>Order#</th>
-                    <th>5P#</th>
+                    <th>Customer#</th>
                     <th>Name</th>
                     <th>State/Country</th>
                     <th>Item</th>
@@ -69,14 +69,14 @@
                 @foreach($orders as $order)
                     <tr data-id = "{{$order->id}}">
                         <td><a href="{{ url("orders/details/".$order->order_id) }}" class="btn btn-link">{{explode("-", $order->order_id)[2]}}</a></td>
-                        <td><a href="{{ url("customers/".$order->customer_id) }}" title="This is customer id" class="btn btn-link">{{$order->customer_id}}</a></td>
+                        <td><a href="{{ url("customers/".$order->customer->id) }}" title="This is customer id" class="btn btn-link">{{$order->customer->id}}</a></td>
                         <td>{{$order->customer->ship_full_name}}</td>
                         <td>{{$order->customer->ship_state}}, {{$order->customer->ship_country}}</td>
-                        <td>{{$order->item}}</td>
-                        <td><i class="fa fa-usd"></i>{{$order->cost}}</td>
-                        <td>{{explode(" ", $order->order_date)[0]}}</td>
-                        <td>{{$order->shipping_method}}</td>
-                        <td>{!! Form::select('status', $statuses, App\Status::where('status_name', $order->order_status)->first()->status_code) !!}</td>
+                        <td>{{$order->item_count}}</td>
+                        <td><i class="fa fa-usd"></i>{{$order->total}}</td>
+                        <td>{{$order->order_date}}</td>
+                        <td>{{$order->customer->shipping}}</td>
+                        <td>{!! Form::select('status', $statuses, App\Status::find($order->order_status)->status_code) !!}</td>
                     </tr>
                 @endforeach
             </table>

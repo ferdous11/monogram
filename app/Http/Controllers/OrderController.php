@@ -16,6 +16,7 @@ use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\MessageBag;
 use Monogram\ApiClient;
@@ -185,11 +186,10 @@ class OrderController extends Controller
                        ->groupBy('order_id')
                        ->paginate(50, [
                            'order_id',
-                           'customer_id',
+                           'item_count',
                            'order_date',
                            'order_status',
-                           'shipping_method',
-                           DB::raw('COUNT( 1 ) AS item, SUM(order_total) AS cost'),
+                           'total',
                        ]);
         $statuses = Status::where('is_deleted', 0)
                           ->lists('status_name', 'status_code');
@@ -199,8 +199,8 @@ class OrderController extends Controller
                        ->lists('store_name', 'store_id');
         $stores->prepend('All', 'all');
 
-        $shipping_methods = Order::groupBy('shipping_method')
-                                 ->lists('shipping_method', 'shipping_method');
+        $shipping_methods = Customer::groupBy('shipping')
+                                    ->lists('shipping', 'shipping');
         $shipping_methods->prepend('All', 'all');
 
         $search_in = [
@@ -220,17 +220,16 @@ class OrderController extends Controller
         $orders = Order::with('customer')
                        ->where('is_deleted', 0)
                        ->storeId($request->get('store'))
-                       ->shippingMethod($request->get('shipping_method'))
                        ->status($request->get('status'))
+                       ->shipping($request->get('shipping_method'))
                        ->search($request->get('search_for'), $request->get('search_in'))
                        ->groupBy('order_id')
                        ->paginate(50, [
                            'order_id',
-                           'customer_id',
+                           'item_count',
                            'order_date',
                            'order_status',
-                           'shipping_method',
-                           DB::raw('COUNT( 1 ) AS item, SUM(order_total) AS cost'),
+                           'total',
                        ]);
         $statuses = Status::where('is_deleted', 0)
                           ->lists('status_name', 'status_code');
@@ -240,8 +239,8 @@ class OrderController extends Controller
                        ->lists('store_name', 'store_id');
         $stores->prepend('All', 'all');
 
-        $shipping_methods = Order::groupBy('shipping_method')
-                                 ->lists('shipping_method', 'shipping_method');
+        $shipping_methods = Customer::groupBy('shipping')
+                                    ->lists('shipping', 'shipping');
         $shipping_methods->prepend('All', 'all');
 
         $search_in = [
@@ -258,18 +257,19 @@ class OrderController extends Controller
 
     public function details ($order_id)
     {
-        $order = Order::with('customer')
+        $order = Order::with('customer', 'items', 'order_sub_total')
                       ->where('is_deleted', 0)
                       ->where('order_id', $order_id)
-                      ->first([ DB::raw('orders.*, COUNT( 1 ) AS item, order_total AS cost') ]);
-        #->groupBy('order_id')
-        #->first([ DB::raw('orders.*, COUNT( 1 ) AS item, SUM(order_total) AS cost') ]);
+                      ->first();
+        if(!$order){
+            return view('errors.404');
+        }
 
         $statuses = Status::where('is_deleted', 0)
                           ->lists('status_name', 'status_code');
 
-        $shipping_methods = Order::groupBy('shipping_method')
-                                 ->lists('shipping_method', 'shipping_method');
+        $shipping_methods = Customer::groupBy('shipping')
+                                    ->lists('shipping', 'shipping');
 
         #return compact('order', 'order_id', 'shipping_methods', 'statuses');
         return view('orders.details', compact('order', 'order_id', 'shipping_methods', 'statuses'));
@@ -325,9 +325,9 @@ class OrderController extends Controller
 
             $order_id = $order->OrderID;
             $full_order_id = sprintf("%s-%d", $this->store_id, $order_id);
-            $insertOrder->order_id = $full_order_id;
-
+            $insertOrder->short_order = $order_id;
             $insertOrder->store_id = $this->store_id;
+            $insertOrder->order_id = $full_order_id;
             $insertOrder->store_name = strtolower(Store::where('store_id', $this->store_id)
                                                        ->first()->store_name);
 
@@ -346,8 +346,11 @@ class OrderController extends Controller
             $customer = new Customer();
             $customer->order_id = $full_order_id;
 
-            $customer->ship_first_name = $order->ShipToInfo->GeneralInfo->FirstName;
-            $customer->ship_last_name = $order->ShipToInfo->GeneralInfo->LastName;
+            $ship_first_name = $order->ShipToInfo->GeneralInfo->FirstName;
+            $ship_last_name = $order->ShipToInfo->GeneralInfo->LastName;
+            $customer->ship_full_name = sprintf("%s %s", $ship_first_name, $ship_last_name);
+            $customer->ship_first_name = $ship_first_name;
+            $customer->ship_last_name = $ship_last_name;
             $customer->ship_company_name = $order->ShipToInfo->GeneralInfo->Company;
             $customer->ship_address_1 = $order->ShipToInfo->AddressInfo->Address1;
             $customer->ship_address_2 = $order->ShipToInfo->AddressInfo->Address2;
@@ -359,6 +362,10 @@ class OrderController extends Controller
             $customer->ship_email = $order->ShipToInfo->GeneralInfo->Email;
             $customer->shipping = $shipping_method;
 
+            $bill_first_name = $order->BillToInfo->GeneralInfo->FirstName;
+            $bill_last_name = $order->BillToInfo->GeneralInfo->LastName;
+
+            $customer->bill_full_name = sprintf("%s %s", $bill_first_name, $bill_last_name);
             $customer->bill_first_name = $order->BillToInfo->GeneralInfo->FirstName;
             $customer->bill_last_name = $order->BillToInfo->GeneralInfo->LastName;
             $customer->bill_company_name = $order->BillToInfo->GeneralInfo->Company;
@@ -439,6 +446,7 @@ class OrderController extends Controller
                 $product->save();
             }
             $sub_total = $order->OrderTotals->Subtotal;
+            $insertOrder->sub_total = $sub_total;
 
             $shipping = $order->OrderTotals->Shipping;
             $insertOrder->shipping_charge = $shipping;
@@ -471,21 +479,16 @@ class OrderController extends Controller
             $ip_address = $order->BuyerIP;
             $insertOrder->order_ip = $ip_address;
 
-            $Vwoidc = $order->Vwoidc;
-            $card_auth = "";
-            foreach ( $order->CardEvents[0]->CardAuth[0]->children() as $a ) {
-                $card_auth .= $a->getName() . " = " . $a . ", ";
-            }
-            $card_event = "";
-            foreach ( $order->CardEvents[0]->CardEvent[0]->children() as $event ) {
-                switch ( $event ) {
-                    case $event->getName() == 'PaypalTxId':
-                        $insertOrder->paypal_txid = $event->getName();
-                        break;
-                    default:
-                        break;
+            if ( $order->CardEvents->count() != 0 && $order->CardEvents[0]->CardEvent->count() != 0 ) {
+                foreach ( $order->CardEvents[0]->CardEvent[0]->children() as $event ) {
+                    switch ( $event ) {
+                        case $event->getName() == 'PaypalTxId':
+                            $insertOrder->paypal_txid = $event;
+                            break;
+                        default:
+                            break;
+                    }
                 }
-                $card_event .= $a->getName() . " = " . $a . ", ";
             }
             $insertOrder->order_status = 4;
             $insertOrder->save();
@@ -582,7 +585,7 @@ class OrderController extends Controller
                 $item->item_unit_price = $item_unit_price;
                 $item->item_url = $item_url;
                 $item->save();
-                
+
                 $product = Product::where('model', $item_code)
                                   ->first();
                 if ( !$product ) {

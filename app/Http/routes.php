@@ -36,3 +36,7 @@ Route::group([ 'prefix' => 'auth' ], function () {
     get('login', 'AuthenticationController@getLogin');
     get('logout', 'AuthenticationController@getLogout');
 });
+
+/*Event::listen('illuminate.query', function($q){
+    Log::info($q);
+});*/

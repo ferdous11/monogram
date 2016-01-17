@@ -24,7 +24,7 @@
             </div>
             <div class = "form-group col-xs-3">
                 <label class = "control-label" for = "status">Status:</label>
-                {!! Form::select('status', $statuses, App\Status::where('status_name', $order->order_status)->first()->status_code, ['class' => 'form-control']) !!}
+                {!! Form::select('status', $statuses, \App\Status::find($order->order_status)->status_code, ['class' => 'form-control']) !!}
             </div>
             <div class = "form-group col-xs-3">
                 <label class = "control-label" for = "order">Order#: {{$order->short_order}}</label>
@@ -42,7 +42,7 @@
             </div>
             <div class = "form-group col-xs-3">
                 <label class = "control-label" for = "customer">Customer #:</label>
-                {!! Form::text('customer_id', $order->customer_id, ['id' => 'customer', 'class' => 'form-control']) !!}
+                {!! Form::text('customer_id', $order->customer->id, ['id' => 'customer', 'class' => 'form-control']) !!}
             </div>
         </div>
         <div class = "row">
@@ -52,31 +52,31 @@
                     <div class = "form-group">
                         <label class = "control-label col-xs-3" for = "company_name">Company Name:</label>
                         <div class = "col-xs-6">
-                            {!! Form::text('company_name', $order->customer->company_name, ['id' => 'company_name', 'class' => 'form-control']) !!}
+                            {!! Form::text('company_name', $order->customer->ship_company_name, ['id' => 'company_name', 'class' => 'form-control']) !!}
                         </div>
                     </div>
                     <div class = "form-group">
                         <label class = "control-label col-xs-3" for = "first_name">First Name:</label>
                         <div class = "col-xs-6">
-                            {!! Form::text('first_name', $order->customer->first_name, ['id' => 'first_name', 'class' => 'form-control']) !!}
+                            {!! Form::text('first_name', $order->customer->ship_first_name, ['id' => 'first_name', 'class' => 'form-control']) !!}
                         </div>
                     </div>
                     <div class = "form-group">
                         <label class = "control-label col-xs-3" for = "last_name">Last Name:</label>
                         <div class = "col-xs-6">
-                            {!! Form::text('last_name', $order->customer->last_name, ['id' => 'last_name', 'class' => 'form-control']) !!}
+                            {!! Form::text('last_name', $order->customer->ship_last_name, ['id' => 'last_name', 'class' => 'form-control']) !!}
                         </div>
                     </div>
                     <div class = "form-group">
                         <label class = "control-label col-xs-3" for = "shipping_address_1">Address 1:</label>
                         <div class = "col-xs-6">
-                            {!! Form::text('shipping_address_1', $order->customer->shipping_address_1, ['id' => 'shipping_address_1', 'class' => 'form-control']) !!}
+                            {!! Form::text('shipping_address_1', $order->customer->ship_address_1, ['id' => 'shipping_address_1', 'class' => 'form-control']) !!}
                         </div>
                     </div>
                     <div class = "form-group">
                         <label class = "control-label col-xs-3" for = "shipping_address_2">Address 2:</label>
                         <div class = "col-xs-6">
-                            {!! Form::text('shipping_address_2', $order->customer->shipping_address_2, ['id' => 'shipping_address_2', 'class' => 'form-control']) !!}
+                            {!! Form::text('shipping_address_2', $order->customer->ship_address_2, ['id' => 'shipping_address_2', 'class' => 'form-control']) !!}
                         </div>
                     </div>
                     <div class = "form-group">
@@ -108,6 +108,13 @@
                         <label class = "control-label col-xs-3" for = "Phone">Phone:</label>
                         <div class = "col-xs-6">
                             {!! Form::text('ship_phone', $order->customer->ship_phone, ['id' => 'company_name', 'class' => 'form-control']) !!}
+                        </div>
+                    </div>
+
+                    <div class = "form-group">
+                        <label class = "control-label col-xs-3" for = "Phone">Email:</label>
+                        <div class = "col-xs-6">
+                            {!! Form::text('ship_email', $order->customer->ship_email, ['id' => 'ship_email', 'class' => 'form-control']) !!}
                         </div>
                     </div>
                 </form>
@@ -176,13 +183,20 @@
                             {!! Form::text('bill_phone', $order->customer->bill_phone, ['id' => 'bill_phone', 'class' => 'form-control']) !!}
                         </div>
                     </div>
+
+                    <div class = "form-group">
+                        <label class = "control-label col-xs-3" for = "bill_email">Email:</label>
+                        <div class = "col-xs-6">
+                            {!! Form::text('bill_email', $order->customer->bill_email, ['id' => 'bill_email', 'class' => 'form-control']) !!}
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
         <div class = "row">
             <div class = " form-group col-xs-3">
                 <label class = "control-label" for = "Amount">Amount :</label>
-                {!! Form::text('order_total', $order->order_total, ['id' => 'order_total', 'class' => 'form-control']) !!}
+                {!! Form::text('total', $order->total, ['id' => 'total', 'class' => 'form-control']) !!}
             </div>
             <div class = "form-group col-xs-3">
                 <label class = "control-label" for = "paid">Paid:</label>
@@ -198,7 +212,7 @@
             </div>
             <div class = " form-group col-xs-3">
                 <label class = "control-label" for = "shipping_method">Ship Via:</label>
-                {!! Form::select('shipping_method', $shipping_methods, $order->shipping_method, ['id' => 'shipping_method', 'class' => 'form-control']) !!}
+                {!! Form::select('shipping_method', $shipping_methods, $order->customer->shipping, ['id' => 'shipping_method', 'class' => 'form-control']) !!}
             </div>
         </div>
 
@@ -214,7 +228,7 @@
             </div>
             <div class = "form-group col-xs-3">
                 <label class = "control-label " for = "email">Email:</label>
-                {!! Form::text('email', $order->email, ['id' => 'email', 'class' => 'form-control']) !!}
+                {!! Form::text('email', $order->customer->ship_email, ['id' => 'email', 'class' => 'form-control']) !!}
             </div>
             <div class = " form-group col-xs-2">
                 <label class = "control-label" for = "payment_method">Payment:</label>
@@ -233,16 +247,18 @@
                     {{--<th>D/Shipper<br><a href = "#">(Transmit)</a></th>
                     <th>B/O</th>--}}
                 </tr>
-                <tr>
-                    <td><a href = "#">{{$order->item_name}}</a></td>
-                    <td><a href = "#">{{$order->item_code}}</a></td>
-                    <td>{{$order->item_qty}}</td>
-                    <td></td>
-                    <td>{{$order->item_price}}</td>
-                    <td>{!! Form::textarea('item_options', $order->item_options, ['id' => 'item_price', 'class' => 'form-control', 'rows' => '2']) !!}</td>
-                    {{--<td></td>
-                    <td></td>--}}
-                </tr>
+                @foreach($order->items as $item)
+                    <tr>
+                        <td><a href = "#">{{$item->item_description}}</a></td>
+                        <td><a href = "#">{{$item->item_code}}</a></td>
+                        <td>{{$item->item_quantity}}</td>
+                        <td></td>
+                        <td>{{$item->item_unit_price}}</td>
+                        <td>{!! Form::textarea('item_option', $item->item_option, ['id' => 'item_option', 'class' => 'form-control', 'rows' => '2']) !!}</td>
+                        {{--<td></td>
+                        <td></td>--}}
+                    </tr>
+                @endforeach
             </table>
         </div>
         <div class = "row">
@@ -262,7 +278,7 @@
                         <div class = "col-xs-9">
                             <div class = "input-group">
                                 <span class = "input-group-addon">$</span>
-                                {!! Form::text('discount', sprintf("%02.2f",$order->discount), ['id' => 'discount', 'class' => 'form-control', 'disabled']) !!}
+                                {!! Form::text('discount', sprintf("%02.2f",$order->coupon_value), ['id' => 'discount', 'class' => 'form-control', 'disabled']) !!}
                             </div>
                         </div>
                     </div>
@@ -280,7 +296,7 @@
                         <div class = "col-xs-9">
                             <div class = "input-group">
                                 <span class = "input-group-addon">$</span>
-                                {!! Form::text('shipping_cost', sprintf("%02.2f",$order->shipping_cost), ['id' => 'shipping_cost', 'class' => 'form-control', 'disabled']) !!}
+                                {!! Form::text('shipping_cost', sprintf("%02.2f",$order->shipping_charge), ['id' => 'shipping_cost', 'class' => 'form-control', 'disabled']) !!}
                             </div>
                         </div>
                     </div>
@@ -307,16 +323,16 @@
                         <div class = "col-xs-9">
                             <div class = "input-group">
                                 <span class = "input-group-addon">$</span>
-                                {!! Form::text('tax', sprintf("%02.2f",$order->tax), ['id' => 'tax', 'class' => 'form-control', 'disabled']) !!}
+                                {!! Form::text('tax', sprintf("%02.2f",$order->tax_charge), ['id' => 'tax', 'class' => 'form-control', 'disabled']) !!}
                             </div>
                         </div>
                     </div>
                     <div class = "form-group">
-                        <label class = "control-label col-xs-3" for = "order_total">Total:</label>
+                        <label class = "control-label col-xs-3" for = "total">Total:</label>
                         <div class = "col-xs-9">
                             <div class = "input-group">
                                 <span class = "input-group-addon">$</span>
-                                {!! Form::text('order_total', sprintf("%02.2f",$order->order_total), ['id' => 'order_total', 'class' => 'form-control', 'disabled']) !!}
+                                {!! Form::text('total', sprintf("%02.2f",$order->total), ['id' => 'order_total', 'class' => 'form-control', 'disabled']) !!}
                             </div>
                         </div>
                     </div>
