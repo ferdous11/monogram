@@ -25,6 +25,7 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 Route::group([ 'middleware' => [ 'guest' ] ], function () {
     get('login', 'AuthenticationController@getLogin');
     post('login', 'AuthenticationController@postLogin');
+    post('hook', 'OrderController@hook');
 });
 
 // Redefinition of routes

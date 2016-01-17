@@ -404,7 +404,7 @@ class OrderController extends Controller
                     $item_options .= $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Name;
                     $item_options .= " = ";
                     $item_options .= $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Value;
-                    $item_options .= "<br>";
+                    $item_options .= "\n";
                 }
                 $item->item_option = $item_options;
 
@@ -492,5 +492,124 @@ class OrderController extends Controller
         }
 
         return true;
+    }
+
+    public function hook (Request $request)
+    {
+        $order = new Order();
+        try {
+            $order->order_id = $request->get('ID');
+            $order->item_count = $request->get('Item-Count');
+            $order->coupon_description = $request->get('Coupon-Description');
+            $order->coupon_id = $request->get('Coupon-Id');
+            $order->coupon_value = $request->get('Coupon-Value');
+            $order->shipping_charge = $request->get('Shipping-Charge');
+            $order->tax_charge = $request->get('Tax-Charge');
+            $order->total = $request->get('Total');
+            $order->card_name = $request->get('Card-Name');
+            $order->card_expiry = $request->get('Card-Expiry');
+            $order->order_comments = $request->get('Comments');
+            $order->order_date = date('Y-m-d H:i:s', strtotime($request->get('Date')));
+            $order->order_numeric_time = $request->get('Numeric-Time');
+            $order->order_ip = $request->get('IP');
+            $order->paypal_merchant_email = $request->has('PayPal-Merchant-Email') ? $request->get('PayPal-Merchant-Email') : null;
+            $order->paypal_txid = $request->has('PayPal-TxID') ? $request->get('PayPal-TxID') : null;
+            $order->space_id = $request->get('Space-Id');
+            $order->store_id = $request->get('Store-Id');
+            $order->store_name = $request->get('Store-Name');
+            $order->order_status = 4;
+            $order->save();
+
+            $customer = new Customer();
+            $customer->order_id = $request->get('ID');
+            $customer->bill_full_name = $request->get('Bill-Name');
+            $customer->bill_first_name = $request->get('Bill-Firstname');
+            $customer->bill_last_name = $request->get('Bill-Lastname');
+            $customer->bill_company_name = $request->get('Bill-Company');
+            $customer->bill_address_1 = $request->get('Bill-Address1');
+            $customer->bill_address_2 = $request->get('Bill-Address2');
+            $customer->bill_city = $request->get('Bill-City');
+            $customer->bill_state = $request->get('Bill-State');
+            $customer->bill_zip = $request->get('Bill-Zip');
+            $customer->bill_country = $request->get('Bill-Country');
+            $customer->bill_phone = $request->get('Bill-Phone');
+            $customer->bill_email = $request->get('Bill-Email');
+            $customer->bill_mailing_list = $request->get('Bill-maillist');
+
+            $customer->ship_full_name = $request->get('Ship-Name');
+            $customer->ship_first_name = $request->get('Ship-Firstname');
+            $customer->ship_last_name = $request->get('Ship-Lastname');
+            $customer->ship_company_name = $request->get('Ship-Company');
+            $customer->ship_address_1 = $request->get('Ship-Address1');
+            $customer->ship_address_2 = $request->get('Ship-Address2');
+            $customer->ship_city = $request->get('Ship-City');
+            $customer->ship_state = $request->get('Ship-State');
+            $customer->ship_zip = $request->get('Ship-Zip');
+            $customer->ship_country = $request->get('Ship-Country');
+            $customer->ship_phone = $request->get('Ship-Phone');
+            $customer->shipping = $request->get('Shipping');
+            $customer->save();
+
+            for ( $i = 1; $i <= $request->get('Item-Count'); $i++ ) {
+                $item = new Item();
+
+                $itemOptions = '';
+                foreach ( $request->all() as $key => $value ) {
+                    if ( "Item-Option-" . $i . "-" == substr($key, 0, 14) ) {
+                        $itemOptions .= ( str_replace("-", " ", substr($key, 14)) . " = " . $value . "\n" );
+                    }
+                }
+
+                $item_thumb = $request->get('Item-Thumb-' . $i);
+                preg_match("~.*src\s*=\s*(\"|\'|)?(.*)\s?\\1.*~im", $item_thumb, $matches);
+                $item_thumb = trim($matches[2], ">");
+
+                $item_code = $request->get('Item-Code-' . $i);
+                $item_id = $request->get('Item-Id-' . $i);
+                $item_url = $request->get('Item-Url-' . $i);
+                $item_name = $request->get('Item-Description-' . $i);
+                $item_unit_price = $request->get('Item-Unit-Price-' . $i);
+                $item_taxable = ucfirst($request->get('Item-Taxable-' . $i));
+
+                $item->order_id = $request->get('ID');
+                $item->item_code = $item_code;
+                $item->item_description = $item_name;
+                $item->item_id = $item_id;
+                $item->item_option = $itemOptions;
+                $item->item_quantity = $request->get('Item-Quantity-' . $i);
+                $item->item_taxable = $item_taxable;
+                $item->item_thumb = $item_thumb;
+                $item->item_unit_price = $item_unit_price;
+                $item->item_url = $item_url;
+                $item->save();
+                
+                $product = Product::where('model', $item_code)
+                                  ->first();
+                if ( !$product ) {
+                    $product = new Product();
+                    $product->model = $item_code;
+                }
+
+                $product->storeId = $request->get('Store-Id');
+                $product->idCatalog = $item_id;
+                $product->product_url = $item_url;
+                $product->product_name = $item_name;
+                $product->price = $item_unit_price;
+                $product->taxable = $item_taxable;
+                $product->inset_url = $item_thumb;
+                $product->save();
+            }
+
+        } catch ( PDOException $e ) {
+            return response()->json([
+                'error'  => true,
+                'reason' => 'Parse error',
+            ], 422);
+        }
+
+        return response()->json([
+            'error'  => false,
+            'reason' => 'Successfully entered',
+        ], 422);
     }
 }
