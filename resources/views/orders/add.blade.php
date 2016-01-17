@@ -28,10 +28,10 @@
                 </div>
             </div>
         @endif
-        @if(Session::has('message'))
+        @if(Session::has('success'))
             <div class = "col-xs-12">
                 <div class = "alert alert-success">
-                    {{Session::get('message')}}
+                    {{Session::get('success')}}
                 </div>
             </div>
         @endif

@@ -53,6 +53,7 @@ class CreateCustomersTable extends Migration
             $table->string('ship_phone')->nullable();
             $table->string('ship_email')->nullable();
             $table->string('shipping')->nullable();
+
             $table->string('bill_full_name')->nullable();
             $table->string('bill_first_name')->nullable();
             $table->string('bill_last_name')->nullable();

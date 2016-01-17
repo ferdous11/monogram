@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->string('storeId');
             $table->string('idCatalog');
-            $table->integer('vendorId');
+            $table->integer('vendorId')->nullable();
             $table->string('model');
             $table->string('product_url');
             $table->string('product_name');
