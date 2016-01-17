@@ -13,6 +13,9 @@ use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\MessageBag;
+use Monogram\ApiClient;
 
 class OrderController extends Controller
 {
@@ -254,15 +257,152 @@ class OrderController extends Controller
                       ->where('is_deleted', 0)
                       ->where('order_id', $order_id)
                       ->first([ DB::raw('orders.*, COUNT( 1 ) AS item, order_total AS cost') ]);
-                      #->groupBy('order_id')
-                      #->first([ DB::raw('orders.*, COUNT( 1 ) AS item, SUM(order_total) AS cost') ]);
+        #->groupBy('order_id')
+        #->first([ DB::raw('orders.*, COUNT( 1 ) AS item, SUM(order_total) AS cost') ]);
 
         $statuses = Status::where('is_deleted', 0)
                           ->lists('status_name', 'status_code');
 
         $shipping_methods = Order::groupBy('shipping_method')
                                  ->lists('shipping_method', 'shipping_method');
+
         #return compact('order', 'order_id', 'shipping_methods', 'statuses');
         return view('orders.details', compact('order', 'order_id', 'shipping_methods', 'statuses'));
+    }
+
+    public function getAddOrder ()
+    {
+        $stores = Store::where('is_deleted', 0)
+                       ->lists('store_name', 'store_id');
+
+        return view('orders.add', compact('stores'));
+    }
+
+    public function postAddOrder (Request $request)
+    {
+        // 568113, 568114, 568115,568116 ,     568117, 568118, 568119,           568120
+        $order_ids = explode(",", trim(preg_replace('/\s+/', '', $request->get('order_id')), ","));
+        $needed_api = '';
+        $store = $request->get('store');
+        if ( strpos($store, "yhst") !== false ) {
+            $needed_api = 'yahoo';
+        }
+        $api_client = new ApiClient($order_ids, $store, $needed_api);
+        list( $responses, $errors ) = $api_client->fetch_data();
+        foreach ( $responses as $data ) {
+            $order_id = $data[0];
+            $response = $data[1];
+            $success = $this->save_data($response);
+            if ( $success === false ) {
+                $errors->add(sprintf("Insertion error: %d", $order_id), sprintf("Error occurred while reading data from api for order id: %d.", $order_id));
+            }
+        }
+        if ( $errors->count() ) {
+            return redirect()
+                ->back()
+                ->withErrors($errors);
+        }
+        Session::flash('success', 'Order(s) are inserted successfully');
+
+        return redirect(url('orders/add'));
+    }
+
+    public function save_data ($response)
+    {
+        $xml = simplexml_load_string($response);
+        if ( $xml === false ) {
+            return false;
+        }
+
+        $RequestID = $xml->RequestID;
+
+        foreach ( $xml->ResponseResourceList->OrderList->children() as $order ) {
+            $insertOrder = new Order();
+
+            $order_id = $order->OrderID;
+            $order->order_id = $order_id;
+
+            $order_date = $order->CreationTime;
+
+            $customer = new Customer();
+            $StatusID = $order->StatusList->OrderStatus->StatusID;
+            $TrackingNumber = $order->CartShipmentInfo->TrackingNumber;
+            $Shipper = $order->CartShipmentInfo->Shipper;
+            $ShipState = $order->CartShipmentInfo->ShipState;
+            $shipping_method = $order->ShipMethod;
+            $customer->first_name = $order->ShipToInfo->GeneralInfo->FirstName;
+            $customer->last_name = $order->ShipToInfo->GeneralInfo->LastName;
+            $customer->ship_phone = $order->ShipToInfo->GeneralInfo->PhoneNumber;
+            $customer->company_name = $order->ShipToInfo->GeneralInfo->Company;
+            $customer->ship_email = $order->ShipToInfo->GeneralInfo->Email;
+            $customer->shipping_address_1 = $order->ShipToInfo->AddressInfo->Address1;
+            $customer->shipping_address_2 = $order->ShipToInfo->AddressInfo->Address2;
+            $customer->ship_city = $order->ShipToInfo->AddressInfo->City;
+            $customer->ship_state = $order->ShipToInfo->AddressInfo->State;
+            $customer->ship_country = $order->ShipToInfo->AddressInfo->Country;
+            $customer->ship_zip = $order->ShipToInfo->AddressInfo->Zip;
+            $customer->bill_first_name = $order->BillToInfo->GeneralInfo->FirstName;
+            $customer->bill_last_name = $order->BillToInfo->GeneralInfo->LastName;
+            $customer->bill_company_name = $order->BillToInfo->GeneralInfo->Company;
+            $customer->bill_phone = $order->BillToInfo->GeneralInfo->PhoneNumber;
+            $customer->bill_email = $order->BillToInfo->GeneralInfo->Email;
+            $customer->bill_address_1 = $order->BillToInfo->GeneralInfo->Address1;
+            $customer->bill_address_2 = $order->BillToInfo->GeneralInfo->Address2;
+            $customer->bill_city = $order->BillToInfo->AddressInfo->City;
+            $customer->bill_state = $order->BillToInfo->AddressInfo->State;
+            $customer->bill_country = $order->BillToInfo->AddressInfo->Country;
+            $customer->bill_zip = $order->BillToInfo->AddressInfo->Zip;
+            $BuyerEmail = $order->BuyerEmail;
+
+            $count = $order->ItemList->Item->count();
+            for ( $x = 0; $x < $count; $x++ ) {
+                $LineNumber = $order->ItemList->Item[$x]->LineNumber;
+                $item_id = $order->ItemList->Item[$x]->ItemID;
+                $idCatalog = $item_id;
+                $model = $order->ItemList->Item[$x]->ItemCode;
+                $item_code = $model;
+                $item_qty = $order->ItemList->Item[$x]->Quantity;
+                $price = $order->ItemList->Item[$x]->UnitPrice;
+                $item_price = $price;
+                $product_name = $order->ItemList->Item[$x]->Description;
+                $item_name = $product_name;
+                $product_url = $order->ItemList->Item[$x]->URL;
+                $taxable = $order->ItemList->Item[$x]->Taxable;
+                preg_match("~.*src\s*=\s*(\"|\'|)?(.*)\s?\\1.*~im", $order->ItemList->Item[$x]->ThumbnailURL, $matches);
+                $inset_url = $matches[2];
+                $item_options = "";
+                $count2 = $order->ItemList->Item[$x]->SelectedOptionList->Option->count();
+                for ( $y = 0; $y < $count2; $y++ ) {
+                    $item_options .= $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Name;
+                    $item_options .= " = ";
+                    $item_options .= $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Value;
+                    $item_options .= "<br>";
+                }
+            }
+            $sub_total = $order->OrderTotals->Subtotal;
+            $Shipping = $order->OrderTotals->Shipping;
+            $tax = $order->OrderTotals->Tax;
+            $coupon_value = $order->OrderTotals->Coupon;
+            $order_total = $order->OrderTotals->Total;
+            $Referer = $order->Referer;
+            $MerchantNotes = $order->MerchantNotes;
+            $EntryPoint = $order->EntryPoint;
+            $BuyerComments = $order->BuyerComments;
+            $Currency = $order->Currency;
+            $payment_method = $order->PaymentProcessor;
+            $credit_card_type = $order->PaymentType;
+            $LastUpdatedTime = $order->LastUpdatedTime;
+            $ip_address = $order->BuyerIP;
+            $Vwoidc = $order->Vwoidc;
+            $card_auth = "";
+            foreach ( $order->CardEvents[0]->CardAuth[0]->children() as $a ) {
+                $card_auth .= $a->getName() . " = " . $a . ", ";
+            }
+            $card_event = "";
+            foreach ( $order->CardEvents[0]->CardEvent[0]->children() as $a ) {
+                $card_event .= $a->getName() . " = " . $a . ", ";
+            }
+        }
+        return true;
     }
 }
