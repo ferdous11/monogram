@@ -82,10 +82,7 @@ class CreateOrdersTable extends Migration
             $table->string('store_id')->nullable();
             $table->string('store_name')->nullable();
             $table->string('ship_state')->nullable();
-            $table->string('tracking_number')->nullable();
-            $table->string('batch_number')->nullable();
-            $table->string('current_station')->nullable();
-            $table->string('order_status')->nullable();
+            $table->string('order_status')->default(4);
             $table->double('sub_total')->default(0);
             $table->enum('is_filtered', array(0, 1))->default(0);
             $table->enum('is_deleted', array(0, 1))->default(0);

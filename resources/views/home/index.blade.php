@@ -62,6 +62,12 @@
                 <li><a href = "/batch_routes/create">Create batch routes</a></li>
             </ul>
         </div>
+        <div class = "col-xs-3">
+            <h5 class = "page-header">Production Automation</h5>
+            <ul>
+                <li><a href = "/orders/items">Order items list status</a></li>
+            </ul>
+        </div>
     </div>
 </body>
 </html>

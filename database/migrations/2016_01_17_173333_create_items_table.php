@@ -13,12 +13,16 @@ class CreateItemsTable extends Migration
             $table->string('item_code')->nullable();
             $table->string('item_description')->nullable();
             $table->string('item_id')->nullable();
-            $table->string('item_option')->nullable();
+            $table->text('item_option')->nullable();
             $table->string('item_quantity')->nullable();
             $table->string('item_thumb')->nullable();
             $table->string('item_unit_price')->nullable();
             $table->string('item_url')->nullable();
             $table->enum('item_taxable', array('Yes', 'No'))->default('No');
+            $table->string('tracking_number')->nullable();
+            $table->string('batch_number')->nullable();
+            $table->string('station_name')->nullable();
+            $table->string('item_order_status')->nullable();
             $table->enum('is_deleted', array(0, 1))->default(0);
             $table->timestamps();
         });

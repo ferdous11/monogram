@@ -263,7 +263,7 @@ class OrderController extends Controller
                       ->where('is_deleted', 0)
                       ->where('order_id', $order_id)
                       ->first();
-        if(!$order){
+        if ( !$order ) {
             return view('errors.404');
         }
 
@@ -339,7 +339,7 @@ class OrderController extends Controller
 
             #$StatusID = $order->StatusList->OrderStatus->StatusID;
             $tracking_number = $order->CartShipmentInfo->TrackingNumber;
-            $insertOrder->tracking_number = $tracking_number;
+            #$insertOrder->tracking_number = $tracking_number;
             #$Shipper = $order->CartShipmentInfo->Shipper;
             $ship_state = $order->CartShipmentInfo->ShipState;
             $insertOrder->ship_state = $ship_state;
@@ -408,7 +408,7 @@ class OrderController extends Controller
                 $item->item_id = $item_id;
 
                 #$item_options = "";
-                $item_options = [];
+                $item_options = [ ];
                 $item_option_count = $order->ItemList->Item[$x]->SelectedOptionList->Option->count();
                 for ( $y = 0; $y < $item_option_count; $y++ ) {
                     /*$item_options .= $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Name;
@@ -419,7 +419,7 @@ class OrderController extends Controller
                     $option_value = strval($order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Value[0]);
                     $item_options[$option_name] = $option_value;
                 }
-                if( count ($item_options) /*$item_options != ''*/){
+                if ( count($item_options) /*$item_options != ''*/ ) {
                     #$item->item_option = $item_options;
                     $item->item_option = json_encode($item_options);
                 }
@@ -623,5 +623,23 @@ class OrderController extends Controller
             'error'  => false,
             'reason' => 'Successfully entered',
         ], 422);
+    }
+
+    public function items (Request $request)
+    {
+        $items = Item::with('order.customer')
+                     ->where('is_deleted', 0)
+                     ->orderId($request->get('search_for'), $request->get('search_in'))
+                                       ->paginate(50);
+        $search_in = [
+            'order'         => 'Order',
+            'five_p'        => '5P#',
+            'ebay-item'     => 'Ebay-item',
+            'ebay-user'     => 'Ebay-user',
+            'ebay-sale-rec' => 'Ebay-sale-rec',
+            'shipper-po'    => 'Shipper-PO',
+        ];
+
+        return view('orders.items', compact('items', 'search_in', 'request'));
     }
 }
