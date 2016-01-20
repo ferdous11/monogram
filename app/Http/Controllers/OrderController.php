@@ -186,6 +186,7 @@ class OrderController extends Controller
                        ->groupBy('order_id')
                        ->paginate(50, [
                            'order_id',
+                           'short_order',
                            'item_count',
                            'order_date',
                            'order_status',
@@ -405,15 +406,22 @@ class OrderController extends Controller
                 $idCatalog = $item_id;
                 $item->item_id = $item_id;
 
-                $item_options = "";
+                #$item_options = "";
+                $item_options = [];
                 $item_option_count = $order->ItemList->Item[$x]->SelectedOptionList->Option->count();
                 for ( $y = 0; $y < $item_option_count; $y++ ) {
-                    $item_options .= $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Name;
+                    /*$item_options .= $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Name;
                     $item_options .= " = ";
                     $item_options .= $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Value;
-                    $item_options .= "\n";
+                    $item_options .= "\n";*/
+                    $option_name = str_replace(" ", "_", $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Name);
+                    $option_value = strval($order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Value[0]);
+                    $item_options[$option_name] = $option_value;
                 }
-                $item->item_option = $item_options;
+                if( count ($item_options) /*$item_options != ''*/){
+                    #$item->item_option = $item_options;
+                    $item->item_option = json_encode($item_options);
+                }
 
                 $item_quantity = $order->ItemList->Item[$x]->Quantity;
                 $item->item_quantity = $item_quantity;
