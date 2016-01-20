@@ -228,6 +228,7 @@ class OrderController extends Controller
                        ->paginate(50, [
                            'order_id',
                            'item_count',
+                           'short_order',
                            'order_date',
                            'order_status',
                            'total',

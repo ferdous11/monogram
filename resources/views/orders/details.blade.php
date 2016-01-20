@@ -20,11 +20,11 @@
         <div class = "row">
             <div class = "form-group col-xs-3">
                 <label class = "control-label" for = "date">Date :</label>
-                {!! Form::text('date', date("F j, Y, g:i a", strtotime($order->order_date)), ['id' => 'date', 'class' => 'form-control', 'disabled']) !!}
+                {!! Form::text('date', \Monogram\Helper::dateTransformer($order->order_date), ['id' => 'date', 'class' => 'form-control', 'disabled']) !!}
             </div>
             <div class = "form-group col-xs-3">
                 <label class = "control-label" for = "status">Status:</label>
-                {!! Form::select('status', $statuses, \App\Status::find($order->order_status)->status_code, ['class' => 'form-control']) !!}
+                {!! Form::select('status', $statuses, \App\Status::find($order->order_status)->status_code, ['class' => 'form-control', 'id' => 'status']) !!}
             </div>
             <div class = "form-group col-xs-3">
                 <label class = "control-label" for = "order">Order#: {{$order->short_order}}</label>
@@ -254,9 +254,7 @@
                         <td>{{$item->item_quantity}}</td>
                         <td></td>
                         <td>{{$item->item_unit_price}}</td>
-                        <td>{!! Form::textarea('item_option', $item->item_option, ['id' => 'item_option', 'class' => 'form-control', 'rows' => '2']) !!}</td>
-                        {{--<td></td>
-                        <td></td>--}}
+                        <td>{!! Form::textarea('item_option', \Monogram\Helper::jsonTransformer($item->item_option), ['id' => 'item_option', 'class' => 'form-control', 'rows' => '4']) !!}</td>
                     </tr>
                 @endforeach
             </table>
