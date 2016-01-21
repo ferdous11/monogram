@@ -17,7 +17,7 @@
             <li><a href = "{{url('orders/list')}}">Orders</a></li>
             <li class = "active">Add new order</li>
         </ol>
-         @if($errors->any())
+        @if($errors->any())
             <div class = "col-xs-12">
                 <div class = "alert alert-danger">
                     <ul>
@@ -49,24 +49,6 @@
                     {!! Form::text('order_id', null, ['id'=>'order_id', 'class' => 'form-control', 'placeholder' => 'Enter order id ( Comma delimited )']) !!}
                 </div>
             </div>
-         
-            <div class = "form-group">
-                <label for = "to_order_id" class = "col-sm-3 control-label">To Order id</label>
-                <div class = "col-sm-1">
-                    <input type="checkbox" id="ToOrder" class= 'form-control'/>
-                </div>
-                <div class = "col-sm-5">
-                    {!! Form::text('to_order_id', null, ['id'=>'to_order_id', 'class' => 'form-control' , 'placeholder' => 'To order id ' ,'disabled' => 'disabled'] ) !!}
-                </div>
-            </div>
-
-            <script type="text/javascript">
-                document.getElementById('ToOrder').onchange = function() 
-                    {
-                        document.getElementById('to_order_id').disabled = !this.checked;
-                    }
-            </script>
-
             <div class = "form-group">
                 <div class = "col-xs-offset-3 col-sm-6">
                     {!! Form::submit('Add order', ['id' => 'add-order', 'class' => 'btn btn-primary']) !!}

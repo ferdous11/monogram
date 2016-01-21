@@ -27,7 +27,7 @@ class Order extends Model
 
     public function scopeStoreId ($query, $store_id)
     {
-        if ( $store_id == 'all' ) {
+        if ( $store_id == 'all' || null === $store_id) {
             return;
         }
         $query->where('store_id', $store_id);
@@ -35,7 +35,7 @@ class Order extends Model
 
     public function scopeShipping ($query, $shipping_method)
     {
-        if ( $shipping_method == 'all' ) {
+        if ( $shipping_method == 'all' || null === $shipping_method ) {
             return;
         }
         $order_ids = Customer::where('shipping', $shipping_method)
@@ -45,7 +45,7 @@ class Order extends Model
 
     public function scopeStatus ($query, $status)
     {
-        if ( $status == 'all' ) {
+        if ( $status == 'all' || null === $status ) {
             return;
         }
         $query->where('order_status', Status::where('status_code', $status)

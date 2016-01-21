@@ -16,7 +16,7 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
     post('orders/add', 'OrderController@postAddOrder');
     get('orders/list', 'OrderController@getList');
     get('orders/search', 'OrderController@search');
-    get('orders/items', 'OrderController@items');
+    resource('items', 'ItemController');
     resource('orders', 'OrderController');
     resource('stations', 'StationController');
     resource('categories', 'CategoryController');

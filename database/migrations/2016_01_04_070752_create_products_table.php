@@ -38,6 +38,7 @@ class CreateProductsTable extends Migration
             $table->string('product_condition');
             $table->string('image_url_4P');
             $table->string('inset_url');
+            $table->integer('batch_route_id')->nullable();
             $table->timestamps();
         });
     }

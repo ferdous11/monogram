@@ -65,7 +65,7 @@
         <div class = "col-xs-3">
             <h5 class = "page-header">Production Automation</h5>
             <ul>
-                <li><a href = "/orders/items">Order items list status</a></li>
+                <li><a href = "/items">Order items list status</a></li>
             </ul>
         </div>
     </div>

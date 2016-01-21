@@ -14,10 +14,10 @@
     <div class = "container">
         <ol class = "breadcrumb">
             <li><a href = "{{url('/')}}">Home</a></li>
-            <li><a href="{{url('orders/items')}}">Order items list</a></li>
+            <li><a href = "{{url('items')}}">Order items list</a></li>
         </ol>
         <div class = "col-xs-12">
-            {!! Form::open(['method' => 'get', 'url' => url('orders/items'), 'id' => 'search-order']) !!}
+            {!! Form::open(['method' => 'get', 'url' => url('items'), 'id' => 'search-order']) !!}
             <div class = "form-group col-xs-5">
                 <label for = "search_for">Search for</label>
                 {!! Form::text('search_for', null, ['id'=>'search_for', 'class' => 'form-control', 'placeholder' => 'Comma delimited']) !!}
@@ -27,7 +27,7 @@
                 {!! Form::select('search_in', $search_in, $request->get('search_in'), ['id'=>'search_in', 'class' => 'form-control']) !!}
             </div>
             <div class = "form-group col-xs-2">
-                <label for="" class=""></label>
+                <label for = "" class = ""></label>
                 {!! Form::submit('Search', ['id'=>'search', 'style' => 'margin-top: 2px;', 'class' => 'btn btn-primary form-control']) !!}
             </div>
             {!! Form::close() !!}
@@ -35,7 +35,8 @@
         @if(count($items) > 0)
             <h3 class = "page-header">
                 Items
-                <a class = "btn btn-success btn-sm pull-right" href = "{{url('/orders/create')}}">Create order</a>
+                <span style = "font-size: 14px; padding-left: 10px;" class = "text-info text-center">{{$unassigned}} items are unassigned to batch.</span>
+                <a class = "btn btn-success btn-sm" style="float: right;" href = "{{url('/items/batch')}}">Create batch</a>
             </h3>
             <table class = "table table-bordered">
                 <tr>
@@ -52,9 +53,12 @@
                 </tr>
                 @foreach($items as $item)
                     <tr data-id = "{{$item->id}}">
-                        <td><a href="{{ url("orders/details/".$item->order_id) }}" class="btn btn-link">{{$item->order->short_order}}</a></td>
+                        <td><a href = "{{ url("orders/details/".$item->order_id) }}"
+                               class = "btn btn-link">{{$item->order->short_order}}</a></td>
                         <td>{{\App\Store::where('store_id', $item->order->store_id)->first()->store_name}}</td>
-                        <td><a href="{{ url("customers/".$item->order->customer->id) }}" title="This is customer id" class="btn btn-link">{{!empty($item->order->customer->ship_full_name) ? $item->order->customer->ship_full_name : $item->order->customer->bill_full_name }}</a></td>
+                        <td><a href = "{{ url("customers/".$item->order->customer->id) }}" title = "This is customer id"
+                               class = "btn btn-link">{{!empty($item->order->customer->ship_full_name) ? $item->order->customer->ship_full_name : $item->order->customer->bill_full_name }}</a>
+                        </td>
                         <td>{{$item->order->customer->ship_state}}</td>
                         <td>{{$item->item_description}}</td>
                         <td>{{$item->item_id}}</td>

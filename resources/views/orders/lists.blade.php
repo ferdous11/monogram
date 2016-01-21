@@ -14,15 +14,17 @@
     <div class = "container">
         <ol class = "breadcrumb">
             <li><a href = "{{url('/')}}">Home</a></li>
-            @if($request->has('status'))
+            <li><a href="{{url('orders/list')}}">Orders</a></li>
+            {{--@if($request->has('status'))
                 <li><a href="{{url('orders/list')}}">Orders</a></li>
                 <li class="active">Search</li>
             @else
                 <li class = "active">Orders</li>
-            @endif
+            @endif--}}
         </ol>
         <div class = "col-xs-12">
-            {!! Form::open(['method' => 'get', 'url' => url('orders/search'), 'id' => 'search-order']) !!}
+            {{--{!! Form::open(['method' => 'get', 'url' => url('orders/search'), 'id' => 'search-order']) !!}--}}
+            {!! Form::open(['method' => 'get', 'url' => url('orders/list'), 'id' => 'search-order']) !!}
             <div class = "form-group col-xs-2">
                 <label for = "store">Market/Store</label>
                 {!! Form::select('store', $stores, $request->get('store'), ['id'=>'store', 'class' => 'form-control']) !!}

@@ -183,8 +183,12 @@ class OrderController extends Controller
     {
         $orders = Order::with('customer')
                        ->where('is_deleted', 0)
+                       ->storeId($request->get('store'))
+                       ->status($request->get('status'))
+                       ->shipping($request->get('shipping_method'))
+                       ->search($request->get('search_for'), $request->get('search_in'))
                        ->groupBy('order_id')
-                       ->paginate(50, [
+                       ->paginate(10, [
                            'order_id',
                            'short_order',
                            'item_count',
@@ -287,7 +291,11 @@ class OrderController extends Controller
 
     public function postAddOrder (Request $request)
     {
-        $order_ids = explode(",", trim(preg_replace('/\s+/', '', $request->get('order_id')), ","));
+        if ( $request->has('to_order_id') === false ) {
+            $order_ids = explode(",", trim(preg_replace('/\s+/', '', $request->get('order_id')), ","));
+        } else {
+            $order_ids = range($request->get('order_id'), $request->get('to_order_id'));
+        }
         $needed_api = '';
         $store = $request->get('store');
         if ( strpos($store, "yhst") !== false ) {
@@ -327,6 +335,16 @@ class OrderController extends Controller
 
             $order_id = $order->OrderID;
             $full_order_id = sprintf("%s-%d", $this->store_id, $order_id);
+            $previousOrder = Order::where('order_id', $full_order_id)
+                                  ->first();
+            if ( $previousOrder ) {
+                Order::where('order_id', $full_order_id)
+                     ->update([ 'is_deleted' => 1 ]);
+                Customer::where('order_id', $full_order_id)
+                        ->update([ 'is_deleted' => 1 ]);
+                Item::where('order_id', $full_order_id)
+                    ->update([ 'is_deleted' => 1 ]);
+            }
             $insertOrder->short_order = $order_id;
             $insertOrder->store_id = $this->store_id;
             $insertOrder->order_id = $full_order_id;
@@ -623,23 +641,5 @@ class OrderController extends Controller
             'error'  => false,
             'reason' => 'Successfully entered',
         ], 422);
-    }
-
-    public function items (Request $request)
-    {
-        $items = Item::with('order.customer')
-                     ->where('is_deleted', 0)
-                     ->orderId($request->get('search_for'), $request->get('search_in'))
-                                       ->paginate(50);
-        $search_in = [
-            'order'         => 'Order',
-            'five_p'        => '5P#',
-            'ebay-item'     => 'Ebay-item',
-            'ebay-user'     => 'Ebay-user',
-            'ebay-sale-rec' => 'Ebay-sale-rec',
-            'shipper-po'    => 'Shipper-PO',
-        ];
-
-        return view('orders.items', compact('items', 'search_in', 'request'));
     }
 }
