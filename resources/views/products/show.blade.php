@@ -2,7 +2,7 @@
 <html lang = "en">
 <head>
     <meta charset = "UTF-8">
-    <title>Product - {{$product->product_name}}</title>
+    <title>Product - {{$product->id_catalog}}</title>
     <meta name = "viewport" content = "width=device-width, initial-scale=1">
     <link type = "text/css" rel = "stylesheet"
           href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
@@ -22,99 +22,51 @@
             <table class = "table table-hover table-bordered">
                 <tr class = "success">
                     <td>Store Id</td>
-                    <td>{{$product->storeId}}</td>
+                    <td>{{$product->store_id}}</td>
                 </tr>
                 <tr>
                     <td>ID Catalog</td>
-                    <td>{{$product->idCatalog}}</td>
+                    <td>{{$product->id_catalog}}</td>
                 </tr>
                 <tr class = "success">
-                    <td>Vendor Id</td>
-                    <td>{{$product->vendorId}}</td>
+                    <td>Product name</td>
+                    <td>{{$product->product_name}}</td>
                 </tr>
                 <tr>
                     <td>Model</td>
-                    <td>{{$product->model}}</td>
+                    <td>{{$product->product_model}}</td>
                 </tr>
                 <tr class = "success">
-                    <td>Product url</td>
-                    <td><a href = "{{$product->product_url}}">{{$product->product_url}}</a></td>
+                    <td>Product keywords</td>
+                    <td>{{$product->product_keywords}}</td>
                 </tr>
                 <tr>
-                    <td>Product Name</td>
-                    <td>{{$product->product_name}}</td>
+                    <td>Product description</td>
+                    <td>{{$product->product_description}}</td>
                 </tr>
                 <tr class = "success">
-                    <td>Ship Weight</td>
-                    <td>{{$product->ship_weight}}</td>
+                    <td>Product category</td>
+                    <td>{{$product->product_category}}</td>
                 </tr>
                 <tr>
-                    <td>Product Cost</td>
-                    <td>{{$product->productCost}}</td>
+                    <td>Product price</td>
+                    <td>{{$product->product_price}}</td>
                 </tr>
                 <tr class = "success">
-                    <td>M category</td>
-                    <td>{{$product->mcategory}}</td>
+                    <td>URL</td>
+                    <td><a href="{{$product->product_url}}">{{$product->product_url}}</a></td>
                 </tr>
                 <tr>
-                    <td>Cat</td>
-                    <td>{{$product->cat}}</td>
+                    <td>Image</td>
+                    <td><img src="{{$product->product_thumb}}" width="100" height="100" /></td>
                 </tr>
                 <tr class = "success">
-                    <td>Sub</td>
-                    <td>{{$product->sub}}</td>
-                </tr>
-                <tr>
-                    <td>Price</td>
-                    <td>{{$product->price}}</td>
-                </tr>
-                <tr class = "success">
-                    <td>Sale Price</td>
-                    <td>{{$product->sale_price}}</td>
-                </tr>
-                <tr>
-                    <td>W Price</td>
-                    <td>{{$product->wPrice}}</td>
-                </tr>
-                <tr class = "success">
-                    <td>Active</td>
-                    <td>{{$product->active == 0 ? "Inactive" : "Active" }}</td>
+                    <td>Batch route</td>
+                    <td>{{$product->batch_route->batch_code}}</td>
                 </tr>
                 <tr>
                     <td>Taxable</td>
-                    <td>{{$product->taxable}}</td>
-                </tr>
-                <tr class = "success">
-                    <td>UPC</td>
-                    <td>{{$product->upc}}</td>
-                </tr>
-                <tr>
-                    <td>Brand</td>
-                    <td>{{$product->brand}}</td>
-                </tr>
-                <tr class = "success">
-                    <td>ASIN</td>
-                    <td>{{$product->ASIN}}</td>
-                </tr>
-                <tr>
-                    <td>SU Code</td>
-                    <td>{{$product->su_code}}</td>
-                </tr>
-                <tr class = "success">
-                    <td>Acct Code</td>
-                    <td>{{$product->acct_code}}</td>
-                </tr>
-                <tr>
-                    <td>Condition</td>
-                    <td>{{$product->product_condition}}</td>
-                </tr>
-                <tr class = "success">
-                    <td>Image url 4P</td>
-                    <td><a href = "{{$product->image_url_4P}}">{{$product->image_url_4P}}</a></td>
-                </tr>
-                <tr>
-                    <td>Inset url</td>
-                    <td><a href = "{{$product->inset_url}}">{{$product->inset_url}}</a></td>
+                    <td>{{$product->is_taxable ? "Yes" : "No"}}</td>
                 </tr>
             </table>
         </div>

@@ -12,33 +12,58 @@
 <body>
     @include('includes.header_menu')
     <div class = "container">
-        <ol class="breadcrumb">
-            <li><a href="{{url('/')}}">Home</a></li>
-            <li class="active">Products</li>
+        <ol class = "breadcrumb">
+            <li><a href = "{{url('/')}}">Home</a></li>
+            <li class = "active">Products</li>
         </ol>
+        @if($errors->any())
+            <div class = "col-xs-12">
+                <div class = "alert alert-danger">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+        @if(Session::has('success'))
+            <div class = "col-xs-12">
+                <div class = "alert alert-success">
+                    {!! Session::get('success') !!}
+                </div>
+            </div>
+        @endif
         @if(count($products) > 0)
-            <h3 class="page-header">
+            <h3 class = "page-header">
                 Products
-                <a class="btn btn-success btn-sm pull-right" href="{{url('/products/create')}}">Create product</a>
+                <a class = "btn btn-success btn-sm pull-right" href = "{{url('/products/create')}}">Create product</a>
             </h3>
             <table class = "table table-bordered">
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
+                    <th>ID Catalog</th>
                     <th>Model</th>
-                    <th>Condition</th>
+                    <th>Product name</th>
+                    <th>Image</th>
+                    <th>Batch code</th>
                     <th>Action</th>
                 </tr>
                 @foreach($products as $product)
-                    <tr data-id="{{$product->id}}">
+                    <tr data-id = "{{$product->id}}" class = "text-center">
                         <td>{{ $count++ }}</td>
+                        <td>{{ $product->id_catalog }}</td>
+                        <td class = "text-center">{{ $product->product_model ? $product->product_model : '-' }}</td>
                         <td>{{ $product->product_name }}</td>
-                        <td>{{ $product->model }}</td>
-                        <td>{{ $product->product_condition }}</td>
+                        <td><img src = "{{ $product->product_thumb }}" width = "50" height = "50" /></td>
+                        <td>{!! Form::select('batch_route_id', $batch_routes, $product->batch_route_id, ['class' => 'form-control']) !!}</td>
                         <td>
-                            <a href = "{{ url(sprintf("/products/%d", $product->id)) }}" data-toggle = "tooltip"
+                            <a href = "#" data-toggle = "tooltip" class = "update"
                                data-placement = "top"
-                               title = "View this product"><i class = 'fa fa-eye text-primary'></i></a>
+                               title = "Update batch route"><i class = 'fa fa-check text-primary'></i></a>
+                            | <a href = "{{ url(sprintf("/products/%d", $product->id)) }}" data-toggle = "tooltip"
+                                 data-placement = "top"
+                                 title = "View this product"><i class = 'fa fa-eye text-warning'></i></a>
                             | <a href = "{{ url(sprintf("/products/%d/edit", $product->id)) }}" data-toggle = "tooltip"
                                  data-placement = "top"
                                  title = "Edit this product"><i class = 'fa fa-pencil-square-o text-success'></i></a>
@@ -49,6 +74,9 @@
                 @endforeach
             </table>
             {!! Form::open(['url' => url('/products/id'), 'method' => 'delete', 'id' => 'delete-product']) !!}
+            {!! Form::close() !!}
+
+            {!! Form::open(['url' => url('/products/id'), 'method' => 'put', 'id' => 'update-product']) !!}
             {!! Form::close() !!}
             <div class = "col-xs-12 text-center">
                 {!! $products->render() !!}
@@ -61,26 +89,55 @@
             </div>
         @endif
     </div>
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type = "text/javascript" src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
+    <script type = "text/javascript">
         $(function ()
         {
             $('[data-toggle="tooltip"]').tooltip();
         });
         var message = {
             delete: 'Are you sure you want to delete?',
+            update: 'Are you sure you want to update?',
+            error: "You've not selected any route value to update",
         };
-        $("a.delete").on('click', function (event){
+        $("a.update").on('click', function (event)
+        {
+            event.preventDefault();
+            var id = $(this).closest('tr').attr('data-id');
+            var value = $(this).closest('tr').find('select').val();
+            if ( value == "null" ) {
+                alert(message.error);
+                return;
+            }
+            var action = confirm(message.update);
+            if ( action ) {
+                var form = $("form#update-product");
+                var url = form.attr('action');
+                form.attr('action', url.replace('id', id));
+                $("<input type='hidden' value='' />")
+                        .attr("name", "batch_route_id")
+                        .attr("value", value)
+                        .appendTo($("form#update-product"));
+                form.submit();
+            }
+        });
+        $("a.delete").on('click', function (event)
+        {
             event.preventDefault();
             var id = $(this).closest('tr').attr('data-id');
             var action = confirm(message.delete);
-            if(action){
+            if ( action ) {
                 var form = $("form#delete-product");
                 var url = form.attr('action');
                 form.attr('action', url.replace('id', id));
                 form.submit();
             }
+        });
+        $(document).ready(function(){
+            setTimeout(function(){
+                $("div.alert-success").parent('div').remove();
+            }, 2000);
         });
     </script>
 </body>

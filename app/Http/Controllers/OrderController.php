@@ -28,6 +28,7 @@ class OrderController extends Controller
     public function index ()
     {
         $orders = Order::where('is_deleted', 0)
+                       ->latest()
                        ->paginate(50);
         $count = 1;
 
@@ -188,7 +189,8 @@ class OrderController extends Controller
                        ->shipping($request->get('shipping_method'))
                        ->search($request->get('search_for'), $request->get('search_in'))
                        ->groupBy('order_id')
-                       ->paginate(10, [
+                       ->latest()
+                       ->paginate(50, [
                            'order_id',
                            'short_order',
                            'item_count',
@@ -229,6 +231,7 @@ class OrderController extends Controller
                        ->shipping($request->get('shipping_method'))
                        ->search($request->get('search_for'), $request->get('search_in'))
                        ->groupBy('order_id')
+                       ->latest()
                        ->paginate(50, [
                            'order_id',
                            'item_count',
@@ -291,18 +294,29 @@ class OrderController extends Controller
 
     public function postAddOrder (Request $request)
     {
-        if ( $request->has('to_order_id') === false ) {
-            $order_ids = explode(",", trim(preg_replace('/\s+/', '', $request->get('order_id')), ","));
+        $order_ids = [ ];
+        if ( $request->has('order_from') && $request->has('order_to') ) {
+            $order_ids = range($request->get('order_from'), $request->get('order_to'));
         } else {
-            $order_ids = range($request->get('order_id'), $request->get('to_order_id'));
+            $order_ids = explode(",", trim(preg_replace('/\s+/', '', $request->get('order_ids')), ","));
         }
         $needed_api = '';
         $store = $request->get('store');
         if ( strpos($store, "yhst") !== false ) {
             $needed_api = 'yahoo';
         }
-        $api_client = new ApiClient($order_ids, $store, $needed_api);
+        try {
+            $api_client = new ApiClient($order_ids, $store, $needed_api);
+        } catch ( \Exception $exception ) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors(new MessageBag([ 'api_error' => 'Selected store is not valid' ]));
+        }
+        $responses = [ ];
+        $errors = new Collection();
         list( $responses, $errors ) = $api_client->fetch_data();
+        $count = count($order_ids);
         foreach ( $responses as $data ) {
             $this->store_id = $request->get('store');
             $order_id = $data[0];
@@ -317,7 +331,8 @@ class OrderController extends Controller
                 ->back()
                 ->withErrors($errors);
         }
-        Session::flash('success', 'Order(s) are inserted successfully.');
+
+        Session::flash('success', sprintf('%d order(s) are inserted successfully.', (count($responses) - $errors->count()) ));
 
         return redirect(url('orders/add'));
     }
@@ -355,13 +370,13 @@ class OrderController extends Controller
             $insertOrder->order_date = date('Y-m-d H:i:s', strtotime($order_date));
             $insertOrder->order_numeric_time = strtotime($order_date);
 
-            #$StatusID = $order->StatusList->OrderStatus->StatusID;
             $tracking_number = $order->CartShipmentInfo->TrackingNumber;
+            #$StatusID = $order->StatusList->OrderStatus->StatusID;
             #$insertOrder->tracking_number = $tracking_number;
             #$Shipper = $order->CartShipmentInfo->Shipper;
             $ship_state = $order->CartShipmentInfo->ShipState;
             $insertOrder->ship_state = $ship_state;
-            $shipping_method = $order->ShipMethod;
+            $shipping_method = empty( $order->ShipMethod ) ? "N/A" : $order->ShipMethod;
 
             $customer = new Customer();
             $customer->order_id = $full_order_id;
@@ -407,12 +422,6 @@ class OrderController extends Controller
             for ( $x = 0; $x < $item_count; $x++ ) {
                 $model = $order->ItemList->Item[$x]->ItemCode;
 
-                $product = Product::where('model', $model)
-                                  ->first();
-                if ( !$product ) {
-                    $product = new Product();
-                    $product->model = $model;
-                }
                 $item = new Item();
                 $item->order_id = $full_order_id;
                 $item->item_code = $model;
@@ -427,20 +436,21 @@ class OrderController extends Controller
 
                 #$item_options = "";
                 $item_options = [ ];
-                $item_option_count = $order->ItemList->Item[$x]->SelectedOptionList->Option->count();
+                #$item_option_count = $order->ItemList->Item[$x]->SelectedOptionList->Option->count();
+                $item_option_count = 0;
+                if($order->ItemList->Item[$x]->SelectedOptionList->count() && $order->ItemList->Item[$x]->SelectedOptionList->Option->count()){
+                    $item_option_count = $order->ItemList->Item[$x]->SelectedOptionList->Option->count();
+                }
                 for ( $y = 0; $y < $item_option_count; $y++ ) {
-                    /*$item_options .= $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Name;
-                    $item_options .= " = ";
-                    $item_options .= $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Value;
-                    $item_options .= "\n";*/
                     $option_name = str_replace(" ", "_", $order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Name);
                     $option_value = strval($order->ItemList->Item[$x]->SelectedOptionList->Option[$y]->Value[0]);
                     $item_options[$option_name] = $option_value;
                 }
-                if ( count($item_options) /*$item_options != ''*/ ) {
+                $item->item_option = json_encode($item_options);
+                /*if ( count($item_options) ) { // $item_options != ''
                     #$item->item_option = $item_options;
                     $item->item_option = json_encode($item_options);
-                }
+                }*/
 
                 $item_quantity = $order->ItemList->Item[$x]->Quantity;
                 $item->item_quantity = $item_quantity;
@@ -462,13 +472,20 @@ class OrderController extends Controller
 
                 $item->save();
 
-                $product->storeId = $this->store_id;
-                $product->idCatalog = $idCatalog;
+                $product = Product::where('id_catalog', $idCatalog)
+                                  ->first();
+                if ( !$product ) {
+                    $product = new Product();
+                    $product->id_catalog = $idCatalog;
+                }
+
+                $product->store_id = $this->store_id;
+                $product->product_model = $model;
                 $product->product_url = $item_url;
                 $product->product_name = $item_name;
-                $product->price = $item_unit_price;
-                $product->taxable = ( $item_taxable == 'true' ? 'Yes' : 'No' );
-                $product->inset_url = $item_thumb;
+                $product->product_price = $item_unit_price;
+                $product->is_taxable = ( $item_taxable == 'true' ? 1 : 0 );
+                $product->product_thumb = $item_thumb;
 
                 $product->save();
             }
@@ -613,11 +630,11 @@ class OrderController extends Controller
                 $item->item_url = $item_url;
                 $item->save();
 
-                $product = Product::where('model', $item_code)
+                $product = Product::where('product_model', $item_code)
                                   ->first();
                 if ( !$product ) {
                     $product = new Product();
-                    $product->model = $item_code;
+                    $product->product_model = $item_code;
                 }
 
                 $product->storeId = $request->get('Store-Id');
