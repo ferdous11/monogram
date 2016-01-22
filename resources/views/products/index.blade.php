@@ -18,16 +18,20 @@
         </ol>
         <div class = "col-xs-12">
             {!! Form::open(['method' => 'get', 'id' => 'search-order']) !!}
-            <div class = "form-group col-xs-5">
-                <label for = "search_for">Search for</label>
-                {!! Form::text('search_for', $request->get('search_for'), ['id'=>'search_for', 'class' => 'form-control', 'placeholder' => 'Search for separate by comma']) !!}
+            <div class = "form-group col-xs-3">
+                <label for = "id_catalog">Search in id catalog</label>
+                {!! Form::text('id_catalog', $request->get('id_catalog'), ['id'=>'id_catalog', 'class' => 'form-control', 'placeholder' => 'Search in id catalog']) !!}
             </div>
-            <div class = "form-group col-xs-5">
-                <label for = "search_in">Search in</label>
-                {!! Form::select('search_in', $search_in, $request->get('search_in'), ['id'=>'search_in', 'class' => 'form-control']) !!}
+            <div class = "form-group col-xs-3">
+                <label for = "product_model">Search in model</label>
+                {!! Form::text('product_model', $request->get('product_model'), ['id'=>'product_model', 'class' => 'form-control', 'placeholder' => 'Search in product model']) !!}
+            </div>
+            <div class = "form-group col-xs-3">
+                <label for = "product_name">Search in name</label>
+                {!! Form::text('product_name', $request->get('product_name'), ['id'=>'product_name', 'class' => 'form-control', 'placeholder' => 'Search in product name']) !!}
             </div>
             <div class = "form-group col-xs-2">
-                <label for="" class=""></label>
+                <label for = "" class = ""></label>
                 {!! Form::submit('Search', ['id'=>'search', 'style' => 'margin-top: 2px;', 'class' => 'btn btn-primary form-control']) !!}
             </div>
             {!! Form::close() !!}
@@ -150,8 +154,10 @@
                 form.submit();
             }
         });
-        $(document).ready(function(){
-            setTimeout(function(){
+        $(document).ready(function ()
+        {
+            setTimeout(function ()
+            {
                 $("div.alert-success").parent('div').remove();
             }, 2000);
         });

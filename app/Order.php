@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
+    protected $fillable = ['*'];
+
     public function customer ()
     {
         return $this->belongsTo('App\Customer', 'order_id', 'order_id')
@@ -22,15 +24,22 @@ class Order extends Model
 
     public function order_sub_total ()
     {
-        return $this->hasOne('App\Item', 'order_id', 'order_id')->where('is_deleted', 0)->groupBy('order_id')->select(['order_id', DB::raw('(SUM(item_unit_price * item_quantity)) AS sub_total')]);
+        return $this->hasOne('App\Item', 'order_id', 'order_id')
+                    ->where('is_deleted', 0)
+                    ->groupBy('order_id')
+                    ->select([
+                        'order_id',
+                        DB::raw('(SUM(item_unit_price * item_quantity)) AS sub_total'),
+                    ]);
     }
 
     public function scopeStoreId ($query, $store_id)
     {
-        if ( $store_id == 'all' || null === $store_id) {
+        if ( $store_id == 'all' || null === $store_id ) {
             return;
         }
-        $query->where('store_id', $store_id);
+
+        return $query->where('store_id', $store_id);
     }
 
     public function scopeShipping ($query, $shipping_method)
@@ -40,7 +49,8 @@ class Order extends Model
         }
         $order_ids = Customer::where('shipping', $shipping_method)
                              ->lists('order_id');
-        $query->whereIn('order_id', $order_ids);
+
+        return $query->whereIn('order_id', $order_ids);
     }
 
     public function scopeStatus ($query, $status)
@@ -48,8 +58,9 @@ class Order extends Model
         if ( $status == 'all' || null === $status ) {
             return;
         }
-        $query->where('order_status', Status::where('status_code', $status)
-                                            ->first()->id);
+
+        return $query->where('order_status', Status::where('status_code', $status)
+                                                   ->first()->id);
     }
 
     public function scopeSearch ($query, $search_for, $search_in)
@@ -57,11 +68,12 @@ class Order extends Model
         if ( !$search_for ) {
             return;
         }
-        $values = explode(",", str_replace(" ", "", $search_for));
+        $replaced = str_replace(" ", "", $search_for);
+        $values = explode(",", trim($replaced, ","));
         if ( $search_in == 'order' ) {
-            $query->where('order_id', 'REGEXP', implode("|", $values));
-        } else {
-            return;
+            return $query->where('order_id', 'REGEXP', implode("|", $values));
         }
+
+        return;
     }
 }

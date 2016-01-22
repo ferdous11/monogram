@@ -20,7 +20,9 @@ class ProductController extends Controller
     {
         $products = Product::with('batch_route')
                            ->where('is_deleted', 0)
-                           ->search($request->get('search_in'), $request->get('search_for'))
+                           ->searchIdCatalog($request->get('id_catalog'))
+                           ->searchProductModel($request->get('product_model'))
+                           ->searchProductName($request->get('product_name'))
                            ->latest()
                            ->paginate(50);
 
@@ -29,9 +31,7 @@ class ProductController extends Controller
 
         $batch_routes->prepend('Not selected', 'null');
         $count = 1;
-
-        $search_in = Product::$searchable_fields;
-        return view('products.index', compact('products', 'count', 'batch_routes', 'request', 'search_in'));
+        return view('products.index', compact('products', 'count', 'batch_routes', 'request'));
     }
 
     public function create ()

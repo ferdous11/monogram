@@ -1,7 +1,17 @@
 <?php
 
-get('test', function () {
-    dd(config('app.debug'));
+get('test/batch', function () {
+    $index = 1;
+    foreach ( range(1, \App\Product::count()) as $id ) {
+        if ( $index > 31 ) {
+            $index = 1;
+        }
+        \App\Product::find($id)
+                    ->update([ 'batch_route_id' => $index ]);
+        ++$index;
+    }
+
+    return 'done';
 });
 
 

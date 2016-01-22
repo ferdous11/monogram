@@ -23,6 +23,7 @@ class CreateItemsTable extends Migration
             $table->string('batch_number')->nullable();
             $table->string('station_name')->nullable();
             $table->string('item_order_status')->nullable();
+            $table->string('data_parse_type')->nullable();
             $table->enum('is_deleted', array(0, 1))->default(0);
             $table->timestamps();
         });
