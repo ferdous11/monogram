@@ -16,6 +16,22 @@
             <li><a href = "{{url('/')}}">Home</a></li>
             <li class = "active">Products</li>
         </ol>
+        <div class = "col-xs-12">
+            {!! Form::open(['method' => 'get', 'id' => 'search-order']) !!}
+            <div class = "form-group col-xs-5">
+                <label for = "search_for">Search for</label>
+                {!! Form::text('search_for', $request->get('search_for'), ['id'=>'search_for', 'class' => 'form-control', 'placeholder' => 'Search for separate by comma']) !!}
+            </div>
+            <div class = "form-group col-xs-5">
+                <label for = "search_in">Search in</label>
+                {!! Form::select('search_in', $search_in, $request->get('search_in'), ['id'=>'search_in', 'class' => 'form-control']) !!}
+            </div>
+            <div class = "form-group col-xs-2">
+                <label for="" class=""></label>
+                {!! Form::submit('Search', ['id'=>'search', 'style' => 'margin-top: 2px;', 'class' => 'btn btn-primary form-control']) !!}
+            </div>
+            {!! Form::close() !!}
+        </div>
         @if($errors->any())
             <div class = "col-xs-12">
                 <div class = "alert alert-danger">

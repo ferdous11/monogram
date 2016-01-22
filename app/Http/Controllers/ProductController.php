@@ -16,18 +16,22 @@ use Illuminate\Support\MessageBag;
 
 class ProductController extends Controller
 {
-    public function index ()
+    public function index (Request $request)
     {
         $products = Product::with('batch_route')
                            ->where('is_deleted', 0)
+                           ->search($request->get('search_in'), $request->get('search_for'))
                            ->latest()
                            ->paginate(50);
+
         $batch_routes = BatchRoute::where('is_deleted', 0)
                                   ->lists('batch_code', 'id');
+
         $batch_routes->prepend('Not selected', 'null');
         $count = 1;
 
-        return view('products.index', compact('products', 'count', 'batch_routes'));
+        $search_in = Product::$searchable_fields;
+        return view('products.index', compact('products', 'count', 'batch_routes', 'request', 'search_in'));
     }
 
     public function create ()
