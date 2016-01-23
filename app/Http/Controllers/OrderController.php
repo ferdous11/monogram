@@ -624,6 +624,10 @@ class OrderController extends Controller
                     $ItemOption [substr($key, 14)] = $value;
                 }
             }
+            $matches = [];
+            preg_match("~.*src\s*=\s*(\"|\'|)?(.*)\s?\\1.*~im", $request->get('Item-Thumb-' . $item_count_index) , $matches);
+            $item_thumb = trim($matches[2], ">");
+
             $item = new Item();
             $item->order_id = $request->get('ID');
             $item->item_code = $request->get('Item-Code-' . $item_count_index);
@@ -631,7 +635,7 @@ class OrderController extends Controller
             $item->item_id = $request->get('Item-Id-' . $item_count_index);
             $item->item_option = json_encode($ItemOption);
             $item->item_quantity = $request->get('Item-Quantity-' . $item_count_index);
-            $item->item_thumb = $request->get('Item-Thumb-' . $item_count_index);
+            $item->item_thumb = $item_thumb;
             $item->item_unit_price = $request->get('Item-Unit-Price-' . $item_count_index);
             $item->item_url = $request->get('Item-Url-' . $item_count_index);
             $item->item_taxable = $request->get('Item-Taxable-' . $item_count_index);
@@ -644,7 +648,7 @@ class OrderController extends Controller
                               ->first();
             if ( !$product ) {
                 $product = new Product();
-                $product->id_catalog = $idCatalog;
+                $product->id_catalog = $item->item_id;
             }
 
             $product->store_id = sprintf("%s-%s", $exploded[0], $exploded[1]);

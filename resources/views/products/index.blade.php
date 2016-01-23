@@ -14,7 +14,7 @@
     <div class = "container">
         <ol class = "breadcrumb">
             <li><a href = "{{url('/')}}">Home</a></li>
-            <li class = "active">Products</li>
+            <li><a href = "{{url('/products')}}">Products</a></li>
         </ol>
         <div class = "col-xs-12">
             {!! Form::open(['method' => 'get', 'id' => 'search-order']) !!}
