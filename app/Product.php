@@ -13,6 +13,11 @@ class Product extends Model
         return $this->hasOne('App\BatchRoute', 'id', 'batch_route_id');
     }
 
+    public function groupedItems ()
+    {
+        return $this->hasMany('App\Item', 'item_id', 'id_catalog')->whereNull('batch_number')->where('is_deleted', 0)->select(['id', 'item_id', 'order_id']);
+    }
+
     public function scopeSearchIdCatalog ($query, $id_catalog)
     {
         if ( !$id_catalog ) {

@@ -155,6 +155,12 @@ return [
          */
         Collective\Html\HtmlServiceProvider::class,
 
+        /*
+         * Blade service provider
+         *
+         */
+        App\Providers\BladeExtensionServiceProvider::class,
+
     ],
 
     /*

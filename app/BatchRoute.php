@@ -3,16 +3,42 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class BatchRoute extends Model
 {
-    public function stations ()
-    {
-        return $this->belongsToMany('App\Station', 'batch_route_station', 'batch_route_id', 'station_id')
-                    ->withTimestamps();
-    }
+	public function itemGroups ()
+	{
+		return $this->hasMany('App\Product')
+					->where('products.is_deleted', 0)
+					->select([
+						DB::raw('products.id as product_table_id'),
+						'products.store_id',
+						'products.batch_route_id',
+						'products.id_catalog'
+					]);
+	}
 
-    public function stations_list(){
-        return $this->belongsToMany('App\Station')->select('station_name');
-    }
+	public function stations ()
+	{
+		return $this->belongsToMany('App\Station', 'batch_route_station', 'batch_route_id', 'station_id')
+					->withTimestamps();
+	}
+
+	public function products ()
+	{
+		return $this->hasMany('App\Product', 'batch_route_id', 'id')
+					->where('is_deleted', 0)
+					->select([
+						'id',
+						'batch_route_id',
+						'id_catalog',
+					]);
+	}
+
+	public function stations_list ()
+	{
+		return $this->belongsToMany('App\Station')
+					->select('station_name');
+	}
 }

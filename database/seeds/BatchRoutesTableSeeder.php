@@ -69,7 +69,7 @@ class BatchRoutesTableSeeder extends Seeder
         [
             'CGD-002912',
             'H-CGD-002912 Picture',
-            '0',
+            '40',
             'Personalize First Line Up to 20 Letters,Personalize Second Line Up to 20 Letters',
         ],
         [

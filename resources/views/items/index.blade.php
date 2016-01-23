@@ -57,7 +57,7 @@
                                class = "btn btn-link">{{$item->order->short_order}}</a></td>
                         <td>{{\App\Store::where('store_id', $item->order->store_id)->first()->store_name}}</td>
                         <td><a href = "{{ url("customers/".$item->order->customer->id) }}" title = "This is customer id"
-                               class = "btn btn-link">{{!empty($item->order->customer->ship_full_name) ? $item->order->customer->ship_full_name : $item->order->customer->bill_full_name }}</a>
+                               class = "btn btn-link">{{ !empty($item->order->customer->ship_full_name) ? $item->order->customer->ship_full_name : $item->order->customer->bill_full_name }}</a>
                         </td>
                         <td>{{$item->order->customer->ship_state}}</td>
                         <td>{{$item->item_description}}</td>

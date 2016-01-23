@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
      */
     public function render ($request, Exception $e)
     {
-        if ( config('app.debug') ) {
+        /*if ( config('app.debug') ) {
             $whoops = new \Whoops\Run;
             $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
             return new Response($whoops->handleException($e), $e->getCode(), $request->headers());
@@ -52,6 +52,10 @@ class Handler extends ExceptionHandler
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }
 
+        return parent::render($request, $e);*/
+        if ($e instanceof ModelNotFoundException) {
+            $e = new NotFoundHttpException($e->getMessage(), $e);
+        }
         return parent::render($request, $e);
     }
 }
