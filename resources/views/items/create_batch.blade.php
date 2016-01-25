@@ -13,6 +13,11 @@
 	<style>
 		table {
 			table-layout: fixed;
+			font-size: 11px;
+		}
+
+		td {
+			width: auto;
 		}
 	</style>
 </head>
@@ -37,11 +42,23 @@
 
 		@if(count($batch_routes) > 0)
 			{!! Form::open(['url' => url('items/batch'), 'method' => 'post']) !!}
+			<div class = "col-xs-12">
+				<div class = "checkbox pull-left">
+					<label>
+						{!! Form::checkbox('select-deselect', 1, false, ['id' => 'select-deselect']) !!} Select add /
+						                                                                                 Deselect all
+					</label>
+				</div>
+				<div class="form-group pull-right">
+					{!! Form::submit('Create batch', ['class' => 'btn btn-success']) !!}
+				</div>
+			</div>
 			<div class = "row">
 				<div class = "col-xs-12">
 					<table class = "table">
 						<tr>
 							<th>Batch#</th>
+							<th>S.L#</th>
 							<th>Route</th>
 							<th>ID</th>
 							<th>Order date</th>
@@ -54,9 +71,10 @@
 					@if($batch_route->itemGroups)
 						@foreach($batch_route->itemGroups->chunk($batch_route->batch_max_units) as $croppedRows)
 							<div class = "col-xs-12">
-								<table class = "table">
+								<table class = "table" style = "margin-top: 5px;">
 									<tr data-id = "{{$batch_route->id}}">
-										<td>{{ $count++ }}</td>
+										<td>{{ $count }}</td>
+										<td></td>
 										<td>
 											<div class = "checkbox">
 												<label>
@@ -72,7 +90,8 @@
 									@foreach($croppedRows as $item)
 										<tr>
 											<td></td>
-											<td>{!! Form::checkbox('product[]', sprintf("%s|%s|%s", $batch_route->id, $item->product_table_id, $item->item_table_id) ,false) !!}</td>
+											<td>{{$serial++}}</td>
+											<td>{!! Form::checkbox('batches[]', sprintf("%s|%s|%s", $count, $batch_route->id, /*$item->product_table_id, */$item->item_table_id) ,false, ['class' => 'checkable']) !!}</td>
 											<td>{{$item->order_id}}</td>
 											<td>{{$item->order_date}}</td>
 											<td>{{$item->item_id}}</td>
@@ -85,20 +104,27 @@
 										<td></td>
 										<td></td>
 										<td></td>
-										<td><span class = "selected">0</span> of {{$batch_route->batch_max_units}}</td>
+										<td></td>
+										<td><span class = "item_selected">0</span> of <span
+													class = "item_total">{{$batch_route->batch_max_units}}</span>
+										</td>
 									</tr>
+									@setvar(++$count)
 								</table>
 							</div>
 						@endforeach
 					@endif
 				@endforeach
 			</div>
-			<div class = "col-xs-12 text-center">
-				<div class = "checkbox">
+			<div class = "col-xs-12">
+				<div class = "checkbox pull-left">
 					<label>
 						{!! Form::checkbox('select-deselect', 1, false, ['id' => 'select-deselect']) !!} Select add /
 						                                                                                 Deselect all
 					</label>
+				</div>
+				<div class="form-group pull-right">
+					{!! Form::submit('Create batch', ['class' => 'btn btn-success']) !!}
 				</div>
 			</div>
 			{!! Form::close() !!}
@@ -118,14 +144,48 @@
 		{
 			state = !state;
 			$("input[type='checkbox']").not($(this)).prop('checked', state);
-		});
-		$("input.group-select").on("click", function (event){
-			var tr = $(this).closest('tr');
-			var state = $(this).prop('checked');
-			tr.nextAll('tr').each(function(){
-				$(this).find(':checkbox').prop('checked', state);
+			$("table").each(function ()
+			{
+				updateTableInfo($(this));
 			});
 		});
+		$("input.group-select").on("click", function (event)
+		{
+			var table = $(this).closest('table');
+			var state = $(this).prop('checked');
+			table.find('tr').not(':first').not(':last').each(function ()
+			{
+				$(this).find('input:checkbox').prop('checked', state);
+			});
+
+			updateTableInfo(table);
+		});
+		$("input.checkable").not('input#select-deselect, input.group-select').on('click', function (event)
+		{
+			var table = $(this).closest('table');
+			var item_selected = getSelectedItemCount(table);
+			var item_total = table.find('tr').not(':first').not(':last').length;
+			//$(table).find('span.item_selected').text(item_selected);
+			updateTableInfo(table);
+			$(table).find('tr').eq(0).find('input:checkbox').prop('checked', item_selected == item_total);
+		});
+
+		function updateTableInfo (table)
+		{
+			$(table).find('span.item_selected').text(getSelectedItemCount(table));
+		}
+
+		function getSelectedItemCount (table)
+		{
+			var total_selected = 0;
+			table.find('tr').not(':first').not(':last').each(function ()
+			{
+				if ( $(this).find('input:checkbox').prop('checked') == true ) {
+					++total_selected;
+				}
+			});
+			return total_selected;
+		}
 	</script>
 </body>
 </html>

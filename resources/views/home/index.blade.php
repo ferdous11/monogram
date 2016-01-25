@@ -66,6 +66,7 @@
             <h5 class = "page-header">Production Automation</h5>
             <ul>
                 <li><a href = "/items">Order items list status</a></li>
+                <li><a href = "/items/grouped">Created Batches</a></li>
             </ul>
         </div>
     </div>

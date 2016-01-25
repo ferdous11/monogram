@@ -36,7 +36,7 @@
             <h3 class = "page-header">
                 Items
                 <span style = "font-size: 14px; padding-left: 10px;" class = "text-info text-center">{{$unassigned}} items are unassigned to batch.</span>
-                <a class = "btn btn-success btn-sm" style="float: right;" href = "{{url('/items/batch')}}">Create batch</a>
+                <a class = "btn btn-success btn-sm" style="float: right;" href = "{{url('/items/batch')}}">Create batch preview</a>
             </h3>
             <table class = "table table-bordered">
                 <tr>
