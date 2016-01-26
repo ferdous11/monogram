@@ -424,6 +424,7 @@ class OrderController extends Controller
 
                 $item = new Item();
                 $item->order_id = $full_order_id;
+				$item->store_id = $this->store_id;
                 $item->item_code = $model;
 
                 $product_name = $order->ItemList->Item[$item_count_index]->Description;
@@ -630,6 +631,7 @@ class OrderController extends Controller
 
             $item = new Item();
             $item->order_id = $request->get('ID');
+			$item->store_id = $order->store_id;
             $item->item_code = $request->get('Item-Code-' . $item_count_index);
             $item->item_description = $request->get('Item-Description-' . $item_count_index);
             $item->item_id = $request->get('Item-Id-' . $item_count_index);

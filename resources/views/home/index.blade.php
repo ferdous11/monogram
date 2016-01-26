@@ -67,6 +67,7 @@
             <ul>
                 <li><a href = "/items">Order items list status</a></li>
                 <li><a href = "/items/grouped">Created Batches</a></li>
+                <li><a href = "/stations/status">Station status</a></li>
             </ul>
         </div>
     </div>

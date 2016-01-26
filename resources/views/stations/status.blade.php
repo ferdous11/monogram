@@ -2,7 +2,7 @@
 <html lang = "en">
 <head>
 	<meta charset = "UTF-8">
-	<title>Items list</title>
+	<title>Station status</title>
 	<meta name = "viewport" content = "width=device-width, initial-scale=1">
 	<link type = "text/css" rel = "stylesheet"
 	      href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
@@ -14,33 +14,19 @@
 	<div class = "container">
 		<ol class = "breadcrumb">
 			<li><a href = "{{url('/')}}">Home</a></li>
-			<li><a href = "{{url('items')}}">Order items list</a></li>
+			<li><a href = "{{url('stations/status')}}">Station status</a></li>
 		</ol>
 		<div class = "col-xs-12">
-			{!! Form::open(['method' => 'get', 'url' => url('items'), 'id' => 'search-order']) !!}
+			{!! Form::open(['method' => 'get', 'url' => url('stations/status'), 'id' => 'station-status-form']) !!}
 			<div class = "form-group col-xs-5">
-				<label for = "search_for">Search for</label>
-				{!! Form::text('search_for', null, ['id'=>'search_for', 'class' => 'form-control', 'placeholder' => 'Comma delimited']) !!}
-			</div>
-			<div class = "form-group col-xs-5">
-				<label for = "search_in">Search in</label>
-				{!! Form::select('search_in', $search_in, $request->get('search_in'), ['id'=>'search_in', 'class' => 'form-control']) !!}
-			</div>
-			<div class = "form-group col-xs-2">
-				<label for = "" class = ""></label>
-				{!! Form::submit('Search', ['id'=>'search', 'style' => 'margin-top: 2px;', 'class' => 'btn btn-primary form-control']) !!}
+				<label for = "station_name">Select stations</label>
+				{!! Form::select('station_name', $stations, $station_name, ['id'=>'station_name', 'class' => 'form-control']) !!}
 			</div>
 			{!! Form::close() !!}
 		</div>
 		@if(count($items) > 0)
 			<h3 class = "page-header">
-				Items
-				<span style = "font-size: 14px; padding-left: 10px;"
-				      class = "text-info text-center">{{$unassigned}} items are unassigned to batch.</span>
-				<a href = "{{url('products/unassigned')}}"
-				   style = "font-size: 14px; padding-left: 10px;">{{$unassignedProductCount}} products don't have Routes assigned</a>
-				<a class = "btn btn-success btn-sm" style = "float: right;"
-				   href = "{{url('/items/batch')}}">Create batch preview</a>
+				Items on station {{ucfirst($station_name)}}
 			</h3>
 			<table class = "table table-bordered">
 				<tr>
@@ -96,5 +82,10 @@
 	</div>
 	<script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script type = "text/javascript" src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$("select#station_name").on('change', function(){
+			$("form#station-status-form").submit();
+		});
+	</script>
 </body>
 </html>

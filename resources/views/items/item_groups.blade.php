@@ -2,7 +2,7 @@
 <html lang = "en">
 <head>
 	<meta charset = "UTF-8">
-	<title>Batch routes</title>
+	<title>Created Batches</title>
 	<meta name = "viewport" content = "width=device-width, initial-scale=1">
 	<link type = "text/css" rel = "stylesheet"
 	      href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
@@ -30,29 +30,33 @@
 		</ol>
 
 		<div class = "col-xs-12">
-			@foreach($itemGroups as $itemGroup)
-				<table class = "table">
-					<caption>{{ $count++ }}. Batch: {{$itemGroup->batch_number}}</caption>
-					<tr>
-						<th>Serial#</th>
-						<th>Order id</th>
-						<th>Order date</th>
-						<th>SKU</th>
-					</tr>
-					@foreach($itemGroup->groupedItems as $items)
+			@if(count($itemGroups))
+				@foreach($itemGroups as $itemGroup)
+					<table class = "table">
+						<caption>{{ $count++ }}. Batch: {{$itemGroup->batch_number}}</caption>
 						<tr>
-							<td>{{ $serial++ }}</td>
-							<td>{{ $items->order_id }}</td>
-							<td>{{ $items->order->order_date }}</td>
-							<td>{{ $items->item_id }}</td>
+							<th>Serial#</th>
+							<th>Order id</th>
+							<th>Order date</th>
+							<th>SKU</th>
 						</tr>
-					@endforeach
-					@setvar($serial = 1)
-				</table>
-			@endforeach
+						@foreach($itemGroup->groupedItems as $items)
+							<tr>
+								<td>{{ $serial++ }}</td>
+								<td>{{ $items->order_id }}</td>
+								<td>{{ $items->order->order_date }}</td>
+								<td>{{ $items->item_id }}</td>
+							</tr>
+						@endforeach
+						@setvar($serial = 1)
+					</table>
+				@endforeach
+			@else
+				<div class="alert alert-warning">No batch is created</div>
+			@endif
 		</div>
 
-		<div class="col-xs-12 text-center">
+		<div class = "col-xs-12 text-center">
 			{!! $itemGroups->render() !!}
 		</div>
 

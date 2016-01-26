@@ -39,6 +39,6 @@ class BatchRoute extends Model
 	public function stations_list ()
 	{
 		return $this->belongsToMany('App\Station')
-					->select('station_name');
+					->select(['station_name', 'station_description']);
 	}
 }

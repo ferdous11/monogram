@@ -1,64 +1,68 @@
 <?php
 
 get('test/batch', function () {
-    return implode(", ", range(1, 51));
-    /*$index = 1;
-    foreach ( range(1, \App\Product::count()) as $id ) {
-        if ( $index > 31 ) {
-            $index = 1;
-        }
-        $product = \App\Product::find($id);
-        $product->batch_route_id = $index;
-        $product->save();
-        ++$index;
-    }
+	return App\Order::where('order_date', 'REGEXP', implode("|", ['2016-01-17', '2015-01-07']))->get();
+	/*$index = 1;
+	foreach ( range(1, \App\Product::count()) as $id ) {
+		if ( $index > 31 ) {
+			$index = 1;
+		}
+		$product = \App\Product::find($id);
+		$product->batch_route_id = $index;
+		$product->save();
+		++$index;
+	}
 
-    return 'done';*/
+	return 'done';*/
 });
 
 
 Route::group([ 'middleware' => [ 'auth' ] ], function () {
-    get('/', 'HomeController@index');
-    get('logout', 'AuthenticationController@getLogout');
+	get('/', 'HomeController@index');
+	get('logout', 'AuthenticationController@getLogout');
 
-    resource('customers', 'CustomerController');
+	resource('customers', 'CustomerController');
 
-    resource('users', 'UserController');
+	resource('users', 'UserController');
 
-    resource('products', 'ProductController');
+	get('products/unassigned', 'ProductController@unassigned');
+	resource('products', 'ProductController');
 
-    get('orders/details/{order_id}', 'OrderController@details');
-    get('orders/add', 'OrderController@getAddOrder');
-    post('orders/add', 'OrderController@postAddOrder');
-    get('orders/list', 'OrderController@getList');
-    get('orders/search', 'OrderController@search');
+	get('orders/details/{order_id}', 'OrderController@details');
+	get('orders/add', 'OrderController@getAddOrder');
+	post('orders/add', 'OrderController@postAddOrder');
+	get('orders/list', 'OrderController@getList');
+	get('orders/search', 'OrderController@search');
 
-    get('items/batch', 'ItemController@getBatch');
-    post('items/batch', 'ItemController@postBatch');
-    get('items/grouped', 'ItemController@getGroupedBatch');
-    resource('items', 'ItemController');
+	get('items/batch', 'ItemController@getBatch');
+	post('items/batch', 'ItemController@postBatch');
+	get('items/grouped', 'ItemController@getGroupedBatch');
+	resource('items', 'ItemController');
 
-    resource('orders', 'OrderController');
-    resource('stations', 'StationController');
-    resource('categories', 'CategoryController');
-    resource('batch_routes', 'BatchRouteController');
+	resource('orders', 'OrderController');
+
+	get('stations/status', 'StationController@status');
+	resource('stations', 'StationController');
+
+	resource('categories', 'CategoryController');
+	resource('batch_routes', 'BatchRouteController');
 });
 
 Route::group([ 'middleware' => [ 'guest' ] ], function () {
-    get('login', 'AuthenticationController@getLogin');
-    post('login', 'AuthenticationController@postLogin');
-    post('hook', 'OrderController@hook');
+	get('login', 'AuthenticationController@getLogin');
+	post('login', 'AuthenticationController@postLogin');
+	post('hook', 'OrderController@hook');
 });
 
 // Redefinition of routes
 get('home', function () {
-    return redirect(url('/'));
+	return redirect(url('/'));
 });
 Route::group([ 'prefix' => 'auth' ], function () {
-    get('login', 'AuthenticationController@getLogin');
-    get('logout', 'AuthenticationController@getLogout');
+	get('login', 'AuthenticationController@getLogin');
+	get('logout', 'AuthenticationController@getLogout');
 });
 
-Event::listen('illuminate.query', function($q){
-    Log::info($q);
+Event::listen('illuminate.query', function ($q) {
+	Log::info($q);
 });

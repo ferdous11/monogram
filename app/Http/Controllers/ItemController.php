@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BatchRoute;
 use App\Item;
+use App\Product;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -14,36 +15,43 @@ class ItemController extends Controller
 {
 	public function index (Request $request)
 	{
-		$items = Item::with('order.customer')
+		/*
+					 ->searchByOrderDate($request->get('search_for'), $request->get('search_in'))
+					 ->searchByStoreId($request->get('search_for'), $request->get('search_in'))
+					 ->searchByState($request->get('search_for'), $request->get('search_in'))
+					 ->searchByDescription($request->get('search_for'), $request->get('search_in'))
+					 ->searchByItemId($request->get('search_for'), $request->get('search_in'))
+					 ->searchByBatch($request->get('search_for'), $request->get('search_in'))
+					 ->searchByBatchCreationDate($request->get('search_for'), $request->get('search_in'))*/
+		$items = Item::with('order.customer', 'store', 'route.stations_list')
 					 ->where('is_deleted', 0)
-					 ->orderId($request->get('search_for'), $request->get('search_in'))
+					 ->search($request->get('search_for'), $request->get('search_in'))
 					 ->paginate(50);
+
 		$unassigned = Item::whereNull('batch_number')
 						  ->where('is_deleted', 0)
 						  ->count();
+		$unassignedProductCount = Product::whereNull('batch_route_id')
+										 ->where('is_deleted', 0)
+										 ->count();
 		$search_in = [
-			'order'         => 'Order',
-			'five_p'        => '5P#',
-			'ebay-item'     => 'Ebay-item',
-			'ebay-user'     => 'Ebay-user',
-			'ebay-sale-rec' => 'Ebay-sale-rec',
-			'shipper-po'    => 'Shipper-PO',
+			'all'                 => 'All',
+			'order'               => 'Order',
+			'order_date'          => 'Order date',
+			'store_id'            => 'Store',
+			'state'               => 'State',
+			'description'         => 'Description',
+			'item_id'             => 'SKU',
+			'batch'               => 'Batch',
+			'batch_creation_date' => 'Batch Creation date',
 		];
 
 		#return $items;
-		return view('items.index', compact('items', 'search_in', 'request', 'unassigned'));
+		return view('items.index', compact('items', 'search_in', 'request', 'unassigned', 'unassignedProductCount'));
 	}
 
 	public function getBatch ()
 	{
-		/*$batch_routes = BatchRoute::with('products.groupedItems.order', 'stations_list')
-								  ->where('is_deleted', 0)
-								  ->paginate(500, [
-									  'id',
-									  'batch_code',
-									  'batch_route_name',
-									  'batch_max_units',
-								  ]);*/
 		$count = 1;
 		$serial = 1;
 		$batch_routes = BatchRoute::with([
@@ -102,15 +110,22 @@ class ItemController extends Controller
 			$acceptedGroups[$inGroup][] = [
 				$item_id,
 				$proposedBatch,
+				$batch_route_id,
 			];
 		}
 		foreach ( $acceptedGroups as $groups ) {
 			foreach ( $groups as $itemGroup ) {
 				$item_id = $itemGroup[0];
 				$batch_number = $itemGroup[1];
+				$batch_route_id = $itemGroup[2];
 
 				$item = Item::find($item_id);
 				$item->batch_number = $batch_number;
+				$item->batch_route_id = $batch_route_id;
+				$batch = BatchRoute::with('stations_list')
+								   ->find($batch_route_id);
+				$item->station_name = $batch->stations_list[0]->station_name;
+				$item->batch_creation_date = date('Y-m-d H:i:s', strtotime('now'));
 				$item->save();
 			}
 		}
