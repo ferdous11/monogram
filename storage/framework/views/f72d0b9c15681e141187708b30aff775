@@ -22,42 +22,43 @@
 	</style>
 </head>
 <body>
-	@include('includes.header_menu')
+	<?php echo $__env->make('includes.header_menu', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 	<div class = "container">
 		<ol class = "breadcrumb">
-			<li><a href = "{{url('/')}}">Home</a></li>
+			<li><a href = "<?php echo e(url('/')); ?>">Home</a></li>
 			<li class = "active">Batch list</li>
 		</ol>
 
 		<div class = "col-xs-12">
-			@if(count($itemGroups))
-				@foreach($itemGroups as $itemGroup)
+			<?php if(count($itemGroups)): ?>
+				<?php foreach($itemGroups as $itemGroup): ?>
 					<table class = "table">
-						<caption>{{ $count++ }}. Batch: {{$itemGroup->batch_number}}</caption>
+						<caption><?php echo e($count++); ?>. Batch: <?php echo e($itemGroup->batch_number); ?></caption>
 						<tr>
 							<th>Serial#</th>
 							<th>Order id</th>
 							<th>Order date</th>
 							<th>SKU</th>
 						</tr>
-						@foreach($itemGroup->groupedItems as $items)
+						<?php foreach($itemGroup->groupedItems as $items): ?>
 							<tr>
-								<td>{{ $serial++ }}</td>
-								<td>{{ $items->order_id }}</td>
-								<td>{{ $items->order->order_date }}</td>
-								<td>{{ $items->item_id }}</td>
+								<td><?php echo e($serial++); ?></td>
+								<td><?php echo e($items->order_id); ?></td>
+								<td><?php echo e($items->order->order_date); ?></td>
+								<td><?php echo e($items->item_id); ?></td>
 							</tr>
-						@endforeach
-						@setvar($serial = 1)
+						<?php endforeach; ?>
+						<?php $serial = 1; ?>
 					</table>
-				@endforeach
-			@else
+				<?php endforeach; ?>
+			<?php else: ?>
 				<div class="alert alert-warning">No batch is created</div>
-			@endif
+			<?php endif; ?>
 		</div>
 
 		<div class = "col-xs-12 text-center">
-			{!! $itemGroups->render() !!}
+			<?php echo $itemGroups->render(); ?>
+
 		</div>
 
 	</div>

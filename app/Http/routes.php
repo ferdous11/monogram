@@ -1,8 +1,9 @@
 <?php
 
 get('test/batch', function () {
-	return App\Order::where('order_date', 'REGEXP', implode("|", ['2016-01-17', '2015-01-07']))->get();
-	/*$index = 1;
+	return date('ymd', strtotime('now'));
+	#return implode(", ", range(1, 31));
+	$index = 1;
 	foreach ( range(1, \App\Product::count()) as $id ) {
 		if ( $index > 31 ) {
 			$index = 1;
@@ -13,7 +14,13 @@ get('test/batch', function () {
 		++$index;
 	}
 
-	return 'done';*/
+	return 'done';
+});
+
+get('set/{id}', function ($id) {
+	\Session::put('station_id', $id);
+
+	return redirect(url('stations/my_station'));
 });
 
 
@@ -41,10 +48,18 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 
 	resource('orders', 'OrderController');
 
+
+	post('stations/change', 'StationController@change');
 	get('stations/status', 'StationController@status');
+	get('stations/supervisor', 'StationController@supervisor');
+	post('stations/assign_to_station', 'StationController@assign_to_station');
+	get('stations/my_station', 'StationController@my_station');
 	resource('stations', 'StationController');
 
 	resource('categories', 'CategoryController');
+
+	resource('sub_categories', 'SubCategoryController');
+
 	resource('batch_routes', 'BatchRouteController');
 });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Station;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -11,6 +12,7 @@ class HomeController extends Controller
 {
     public function index ()
     {
-        return view('home.index');
+		$stations = Station::where('is_deleted', 0)->get();
+        return view('home.index', compact('stations'));
     }
 }

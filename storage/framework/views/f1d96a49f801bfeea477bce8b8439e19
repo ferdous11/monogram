@@ -10,54 +10,61 @@
 	      href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-	@include('includes.header_menu')
+	<?php echo $__env->make('includes.header_menu', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 	<div class = "container">
 		<ol class = "breadcrumb">
-			<li><a href = "{{url('/')}}">Home</a></li>
-			<li><a href = "{{url('/products')}}">Products</a></li>
+			<li><a href = "<?php echo e(url('/')); ?>">Home</a></li>
+			<li><a href = "<?php echo e(url('/products')); ?>">Products</a></li>
 		</ol>
 		<div class = "col-xs-12">
-			{!! Form::open(['method' => 'get', 'id' => 'search-order']) !!}
+			<?php echo Form::open(['method' => 'get', 'id' => 'search-order']); ?>
+
 			<div class = "form-group col-xs-3">
 				<label for = "id_catalog">Search in id catalog</label>
-				{!! Form::text('id_catalog', $request->get('id_catalog'), ['id'=>'id_catalog', 'class' => 'form-control', 'placeholder' => 'Search in id catalog']) !!}
+				<?php echo Form::text('id_catalog', $request->get('id_catalog'), ['id'=>'id_catalog', 'class' => 'form-control', 'placeholder' => 'Search in id catalog']); ?>
+
 			</div>
 			<div class = "form-group col-xs-3">
 				<label for = "product_model">Search in model</label>
-				{!! Form::text('product_model', $request->get('product_model'), ['id'=>'product_model', 'class' => 'form-control', 'placeholder' => 'Search in product model']) !!}
+				<?php echo Form::text('product_model', $request->get('product_model'), ['id'=>'product_model', 'class' => 'form-control', 'placeholder' => 'Search in product model']); ?>
+
 			</div>
 			<div class = "form-group col-xs-3">
 				<label for = "product_name">Search in name</label>
-				{!! Form::text('product_name', $request->get('product_name'), ['id'=>'product_name', 'class' => 'form-control', 'placeholder' => 'Search in product name']) !!}
+				<?php echo Form::text('product_name', $request->get('product_name'), ['id'=>'product_name', 'class' => 'form-control', 'placeholder' => 'Search in product name']); ?>
+
 			</div>
 			<div class = "form-group col-xs-2">
 				<label for = "" class = ""></label>
-				{!! Form::submit('Search', ['id'=>'search', 'style' => 'margin-top: 2px;', 'class' => 'btn btn-primary form-control']) !!}
+				<?php echo Form::submit('Search', ['id'=>'search', 'style' => 'margin-top: 2px;', 'class' => 'btn btn-primary form-control']); ?>
+
 			</div>
-			{!! Form::close() !!}
+			<?php echo Form::close(); ?>
+
 		</div>
-		@if($errors->any())
+		<?php if($errors->any()): ?>
 			<div class = "col-xs-12">
 				<div class = "alert alert-danger">
 					<ul>
-						@foreach($errors->all() as $error)
-							<li>{{$error}}</li>
-						@endforeach
+						<?php foreach($errors->all() as $error): ?>
+							<li><?php echo e($error); ?></li>
+						<?php endforeach; ?>
 					</ul>
 				</div>
 			</div>
-		@endif
-		@if(Session::has('success'))
+		<?php endif; ?>
+		<?php if(Session::has('success')): ?>
 			<div class = "col-xs-12">
 				<div class = "alert alert-success">
-					{!! Session::get('success') !!}
+					<?php echo Session::get('success'); ?>
+
 				</div>
 			</div>
-		@endif
-		@if(count($products) > 0)
+		<?php endif; ?>
+		<?php if(count($products) > 0): ?>
 			<h3 class = "page-header">
 				Products
-				<a class = "btn btn-success btn-sm pull-right" href = "{{url('/products/create')}}">Create product</a>
+				<a class = "btn btn-success btn-sm pull-right" href = "<?php echo e(url('/products/create')); ?>">Create product</a>
 			</h3>
 			<table class = "table table-bordered">
 				<tr>
@@ -69,45 +76,50 @@
 					<th>Batch code</th>
 					<th>Action</th>
 				</tr>
-				@foreach($products as $product)
-					<tr data-id = "{{$product->id}}" class = "text-center">
-						<td>{{ $count++ }}</td>
-						<td>{{ $product->id_catalog }}</td>
-						<td class = "text-center">{{ $product->product_model ? $product->product_model : '-' }}</td>
-						<td>{{ $product->product_name }}</td>
-						<td><img src = "{{ $product->product_thumb }}" width = "50" height = "50" /></td>
-						<td>{!! Form::select('batch_route_id', $batch_routes, $product->batch_route_id, ['class' => 'form-control']) !!}</td>
+				<?php foreach($products as $product): ?>
+					<tr data-id = "<?php echo e($product->id); ?>" class = "text-center">
+						<td><?php echo e($count++); ?></td>
+						<td><?php echo e($product->id_catalog); ?></td>
+						<td class = "text-center"><?php echo e($product->product_model ? $product->product_model : '-'); ?></td>
+						<td><?php echo e($product->product_name); ?></td>
+						<td><img src = "<?php echo e($product->product_thumb); ?>" width = "50" height = "50" /></td>
+						<td><?php echo Form::select('batch_route_id', $batch_routes, $product->batch_route_id, ['class' => 'form-control']); ?></td>
 						<td>
-							{{--<a href = "#" data-toggle = "tooltip" class = "update"
+							<?php /*<a href = "#" data-toggle = "tooltip" class = "update"
 							   data-placement = "top"
-							   title = "Update batch route"><i class = 'fa fa-check text-primary'></i></a> |--}}
-							<a href = "{{ url(sprintf("/products/%d", $product->id)) }}" data-toggle = "tooltip"
+							   title = "Update batch route"><i class = 'fa fa-check text-primary'></i></a> |*/ ?>
+							<a href = "<?php echo e(url(sprintf("/products/%d", $product->id))); ?>" data-toggle = "tooltip"
 							   data-placement = "top"
 							   title = "View this product"><i class = 'fa fa-eye text-warning'></i></a>
-							| <a href = "{{ url(sprintf("/products/%d/edit", $product->id)) }}" data-toggle = "tooltip"
+							| <a href = "<?php echo e(url(sprintf("/products/%d/edit", $product->id))); ?>" data-toggle = "tooltip"
 							     data-placement = "top"
 							     title = "Edit this product"><i class = 'fa fa-pencil-square-o text-success'></i></a>
 							| <a href = "#" class = "delete" data-toggle = "tooltip" data-placement = "top"
 							     title = "Delete this product"><i class = 'fa fa-times text-danger'></i></a>
 						</td>
 					</tr>
-				@endforeach
+				<?php endforeach; ?>
 			</table>
-			{!! Form::open(['url' => url('/products/id'), 'method' => 'delete', 'id' => 'delete-product']) !!}
-			{!! Form::close() !!}
+			<?php echo Form::open(['url' => url('/products/id'), 'method' => 'delete', 'id' => 'delete-product']); ?>
 
-			{!! Form::open(['url' => url('/products/id'), 'method' => 'put', 'id' => 'update-product']) !!}
-			{!! Form::close() !!}
+			<?php echo Form::close(); ?>
+
+
+			<?php echo Form::open(['url' => url('/products/id'), 'method' => 'put', 'id' => 'update-product']); ?>
+
+			<?php echo Form::close(); ?>
+
 			<div class = "col-xs-12 text-center">
-				{!! $products->render() !!}
+				<?php echo $products->render(); ?>
+
 			</div>
-		@else
+		<?php else: ?>
 			<div class = "col-xs-12">
 				<div class = "alert alert-warning text-center">
 					<h3>No product found.</h3>
 				</div>
 			</div>
-		@endif
+		<?php endif; ?>
 	</div>
 	<script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script type = "text/javascript" src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>

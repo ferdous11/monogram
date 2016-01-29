@@ -11,75 +11,83 @@ use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
-    public function index()
-    {
-        $categories = Category::where('is_deleted', 0)->paginate(50);
-        $count = 1;
-        return view('categories.index', compact('categories', 'count'));
-    }
+	public function index ()
+	{
+		$categories = Category::where('is_deleted', 0)
+							  ->latest()
+							  ->paginate(50);
+		$count = 1;
 
-    public function create()
-    {
-        return view('categories.create');
-    }
+		return view('categories.index', compact('categories', 'count'));
+	}
 
-    public function store(CategoryCreateRequest $request)
-    {
-        $category = new Category();
-        $category->category_code = $request->get('category_code');
-        $category->category_description = $request->get('category_description');
-        $category->category_display_order = $request->get('category_display_order');
+	public function create ()
+	{
+		return view('categories.create');
+	}
 
-        $category->save();
+	public function store (CategoryCreateRequest $request)
+	{
+		$category = new Category();
+		$category->category_code = $request->get('category_code');
+		$category->category_description = $request->get('category_description');
+		$category->category_display_order = $request->get('category_display_order');
 
-        return redirect(url('categories'));
-    }
+		$category->save();
 
-    public function show($id)
-    {
-        $category = Category::where('is_deleted', 0)->find($id);
-        if(!$category){
-            return view('errors.404');
-        }
-        return view('categories.show', compact('category'));
-    }
+		return redirect(url('categories'));
+	}
 
-    public function edit($id)
-    {
-        $category = Category::where('is_deleted', 0)->find($id);
-        if(!$category){
-            return view('errors.404');
-        }
+	public function show ($id)
+	{
+		$category = Category::where('is_deleted', 0)
+							->find($id);
+		if ( !$category ) {
+			return view('errors.404');
+		}
 
-        return view('categories.edit', compact('category'));
-    }
+		return view('categories.show', compact('category'));
+	}
 
-    public function update(CategoryUpdateRequest $request, $id)
-    {
-        $category = Category::where('is_deleted', 0)->find($id);
-        if(!$category){
-            return view('errors.404');
-        }
+	public function edit ($id)
+	{
+		$category = Category::where('is_deleted', 0)
+							->find($id);
+		if ( !$category ) {
+			return view('errors.404');
+		}
 
-        $category->category_code = $request->get('category_code');
-        $category->category_description = $request->get('category_description');
-        $category->category_display_order = $request->get('category_display_order');
+		return view('categories.edit', compact('category'));
+	}
 
-        $category->save();
+	public function update (CategoryUpdateRequest $request, $id)
+	{
+		$category = Category::where('is_deleted', 0)
+							->find($id);
+		if ( !$category ) {
+			return view('errors.404');
+		}
 
-        return redirect(url('categories'));
-    }
+		$category->category_code = $request->get('category_code');
+		$category->category_description = $request->get('category_description');
+		$category->category_display_order = $request->get('category_display_order');
 
-    public function destroy($id)
-    {
-        $category = Category::where('is_deleted', 0)->find($id);
-        if(!$category){
-            return view('errors.404');
-        }
+		$category->save();
 
-        $category->is_deleted = 1;
-        $category->save();
+		return redirect(url('categories'));
+	}
 
-        return redirect(url('categories'));
-    }
+	public function destroy ($id)
+	{
+		$category = Category::where('is_deleted', 0)
+							->find($id);
+		if ( !$category ) {
+			return view('errors.404');
+		}
+
+		$category->is_deleted = 1;
+		$category->save();
+
+		return redirect(url('categories'));
+	}
 }

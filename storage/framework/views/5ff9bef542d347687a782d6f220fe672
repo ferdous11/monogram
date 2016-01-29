@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8">
+    <title>Orders list</title>
+    <meta name = "viewport" content = "width=device-width, initial-scale=1">
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link type = "text/css" rel = "stylesheet"
+          href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+</head>
+<body>
+    <?php echo $__env->make('includes.header_menu', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    <div class = "container">
+        <ol class = "breadcrumb">
+            <li><a href = "<?php echo e(url('/')); ?>">Home</a></li>
+            <li><a href="<?php echo e(url('orders/list')); ?>">Orders</a></li>
+            <?php /*<?php if($request->has('status')): ?>
+                <li><a href="<?php echo e(url('orders/list')); ?>">Orders</a></li>
+                <li class="active">Search</li>
+            <?php else: ?>
+                <li class = "active">Orders</li>
+            <?php endif; ?>*/ ?>
+        </ol>
+        <div class = "col-xs-12">
+            <?php /*<?php echo Form::open(['method' => 'get', 'url' => url('orders/search'), 'id' => 'search-order']); ?>*/ ?>
+            <?php echo Form::open(['method' => 'get', 'url' => url('orders/list'), 'id' => 'search-order']); ?>
+
+            <div class = "form-group col-xs-2">
+                <label for = "store">Market/Store</label>
+                <?php echo Form::select('store', $stores, $request->get('store'), ['id'=>'store', 'class' => 'form-control']); ?>
+
+            </div>
+            <div class = "form-group col-xs-2">
+                <label for = "status">Status</label>
+                <?php echo Form::select('status', $statuses, $request->get('status'), ['id'=>'status', 'class' => 'form-control']); ?>
+
+            </div>
+            <div class = "form-group col-xs-2">
+                <label for = "shipping_method">Shipping method</label>
+                <?php echo Form::select('shipping_method', $shipping_methods, $request->get('shipping_method'), ['id'=>'shipping_method', 'class' => 'form-control']); ?>
+
+            </div>
+            <div class = "form-group col-xs-2">
+                <label for = "search_for">Search for</label>
+                <?php echo Form::text('search_for', null, ['id'=>'search_for', 'class' => 'form-control', 'placeholder' => 'Comma delimited']); ?>
+
+            </div>
+            <div class = "form-group col-xs-2">
+                <label for = "search_in">Search in</label>
+                <?php echo Form::select('search_in', $search_in, $request->get('search_in'), ['id'=>'search_in', 'class' => 'form-control']); ?>
+
+            </div>
+            <div class = "form-group col-xs-2">
+                <label for="" class=""></label>
+                <?php echo Form::submit('Search', ['id'=>'search', 'style' => 'margin-top: 2px;', 'class' => 'btn btn-primary form-control']); ?>
+
+            </div>
+            <?php echo Form::close(); ?>
+
+        </div>
+        <?php if(count($orders) > 0): ?>
+            <h3 class = "page-header">
+                Orders
+                <a class = "btn btn-success btn-sm pull-right" href = "<?php echo e(url('/orders/create')); ?>">Create order</a>
+            </h3>
+            <table class = "table table-bordered">
+                <tr>
+                    <th>Order#</th>
+                    <th>Customer#</th>
+                    <th>Name</th>
+                    <th>State/Country</th>
+                    <th>Item</th>
+                    <th>Order total</th>
+                    <th>Order date</th>
+                    <th>Ship method</th>
+                    <th>Status</th>
+                </tr>
+                <?php foreach($orders as $order): ?>
+                    <tr data-id = "<?php echo e($order->id); ?>">
+                        <td><a href="<?php echo e(url("orders/details/".$order->order_id)); ?>" class="btn btn-link"><?php echo e($order->short_order); ?></a></td>
+                        <td><a href="<?php echo e(url("customers/".$order->customer->id)); ?>" title="This is customer id" class="btn btn-link"><?php echo e($order->customer->id); ?></a></td>
+                        <td><?php echo e($order->customer->ship_full_name); ?></td>
+                        <td><?php echo e($order->customer->ship_state); ?>, <?php echo e($order->customer->ship_country); ?></td>
+                        <td><?php echo e($order->item_count); ?></td>
+                        <td><i class="fa fa-usd"></i><?php echo e($order->total); ?></td>
+                        <td><?php echo e($order->order_date); ?></td>
+                        <td><?php echo e($order->customer->shipping); ?></td>
+                        <td><?php echo Form::select('status', $statuses, App\Status::find($order->order_status)->status_code); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+            <div class = "col-xs-12 text-center">
+                <?php echo $orders->appends($request->all())->render(); ?>
+
+            </div>
+        <?php else: ?>
+            <div class = "col-xs-12">
+                <div class = "alert alert-warning text-center">
+                    <h3>No order found.</h3>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+    <script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type = "text/javascript" src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</body>
+</html>

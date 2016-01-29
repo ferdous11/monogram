@@ -15,17 +15,10 @@ class ItemController extends Controller
 {
 	public function index (Request $request)
 	{
-		/*
-					 ->searchByOrderDate($request->get('search_for'), $request->get('search_in'))
-					 ->searchByStoreId($request->get('search_for'), $request->get('search_in'))
-					 ->searchByState($request->get('search_for'), $request->get('search_in'))
-					 ->searchByDescription($request->get('search_for'), $request->get('search_in'))
-					 ->searchByItemId($request->get('search_for'), $request->get('search_in'))
-					 ->searchByBatch($request->get('search_for'), $request->get('search_in'))
-					 ->searchByBatchCreationDate($request->get('search_for'), $request->get('search_in'))*/
 		$items = Item::with('order.customer', 'store', 'route.stations_list')
 					 ->where('is_deleted', 0)
 					 ->search($request->get('search_for'), $request->get('search_in'))
+					 ->latest()
 					 ->paginate(50);
 
 		$unassigned = Item::whereNull('batch_number')
@@ -55,6 +48,7 @@ class ItemController extends Controller
 		$count = 1;
 		$serial = 1;
 		$batch_routes = BatchRoute::with([
+			'stations_list',
 			'itemGroups' => function ($q) {
 				return $q->join('items', 'products.id_catalog', '=', 'items.item_id')
 						 ->where('items.is_deleted', 0)
@@ -71,7 +65,7 @@ class ItemController extends Controller
 							 'orders.order_date',
 						 ]);
 			},
-		], 'stations_list')
+		])
 								  ->where('batch_routes.is_deleted', 0)
 								  ->get();
 
@@ -82,30 +76,35 @@ class ItemController extends Controller
 
 	public function postBatch (Request $request)
 	{
-		$today = date('Ymd', strtotime('now'));
+		$today = date('ymd', strtotime('now'));
 		$batches = $request->get('batches');
 
 		$acceptedGroups = [ ];
-
-		$last_assigned_batch = Item::whereNotNull('batch_number')
+		/*
+		 * $max_batch_id = 0;
+		 * $last_assigned_batch = Item::whereNotNull('batch_number')
 								   ->latest()
 								   ->first();
-
-		$max_batch_id = 0;
 		if ( $last_assigned_batch ) {
 			$max_batch_id = explode("~", $last_assigned_batch->batch_number)[2];
-		}
+		}*/
 
+		$items = Item::where('batch_number', 'LIKE', sprintf("%s%%", $today))
+					 ->groupBy('batch_number')
+					 ->get();
+		$last_batch_number = count($items);
 		$current_group = -1;
 
 		foreach ( $batches as $preferredBatch ) {
 			list( $inGroup, $batch_route_id, $item_id ) = explode("|", $preferredBatch);
 			if ( $inGroup != $current_group ) {
-				$max_batch_id++;
+				#$max_batch_id++;
+				$last_batch_number++;
 				$current_group = $inGroup;
 			}
-			$batch_code = BatchRoute::find($batch_route_id)->batch_code;
-			$proposedBatch = sprintf("%s~%s~%s", $today, $batch_code, $max_batch_id);
+			#$batch_code = BatchRoute::find($batch_route_id)->batch_code;
+			#$proposedBatch = sprintf("%s~%s~%s", $today, $batch_code, $max_batch_id);
+			$proposedBatch = sprintf("%s%04d", $today, $last_batch_number);
 
 			$acceptedGroups[$inGroup][] = [
 				$item_id,
@@ -113,6 +112,8 @@ class ItemController extends Controller
 				$batch_route_id,
 			];
 		}
+
+		#return $acceptedGroups;
 		foreach ( $acceptedGroups as $groups ) {
 			foreach ( $groups as $itemGroup ) {
 				$item_id = $itemGroup[0];
@@ -139,7 +140,7 @@ class ItemController extends Controller
 						  ->where('is_deleted', 0)
 						  ->whereNotNull('batch_number')
 						  ->groupBy('batch_number')
-						  ->latest()
+						  ->latest('batch_creation_date')
 						  ->paginate(50);
 
 		#return $itemGroups;

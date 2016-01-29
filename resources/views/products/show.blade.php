@@ -62,7 +62,7 @@
                 </tr>
                 <tr class = "success">
                     <td>Batch route</td>
-                    <td>{{$product->batch_route->batch_code}}</td>
+                    <td>{{$product->batch_route ? $product->batch_route->batch_code : "N/A"}}</td>
                 </tr>
                 <tr>
                     <td>Taxable</td>

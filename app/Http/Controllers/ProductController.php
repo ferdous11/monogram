@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\BatchRoute;
+use App\Category;
 use App\Product;
+use App\SubCategory;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -27,7 +29,8 @@ class ProductController extends Controller
 						   ->paginate(50);
 
 		$batch_routes = BatchRoute::where('is_deleted', 0)
-								  ->lists('batch_code', 'id');
+								  ->lists('batch_route_name', 'id');
+		#->lists('batch_code', 'id');
 
 		$batch_routes->prepend('Not selected', 'null');
 		$count = 1;
@@ -38,13 +41,21 @@ class ProductController extends Controller
 	public function create ()
 	{
 		$batch_routes = BatchRoute::where('is_deleted', 0)
-								  ->lists('batch_code', 'id');
+								  ->lists('batch_route_name', 'id')
+								  ->prepend('Select a Route', '');
 		$is_taxable = [
 			'1' => 'Yes',
 			'0' => 'No',
 		];
 
-		return view('products.create', compact('title', 'batch_routes', 'is_taxable'));
+		$categories = Category::where('is_deleted', 0)
+							  ->lists('category_description', 'id')
+							  ->prepend('Select a category', '');
+		$sub_categories = SubCategory::where('is_deleted', 0)
+									 ->lists('sub_category_description', 'id')
+									 ->prepend('Select a sub category', '');
+
+		return view('products.create', compact('title', 'batch_routes', 'is_taxable', 'categories', 'sub_categories'));
 	}
 
 	public function store (ProductAddRequest $request)
@@ -62,6 +73,8 @@ class ProductController extends Controller
 		$product->product_thumb = $request->get('product_thumb');
 		$product->batch_route_id = $request->get('batch_route_id');
 		$product->is_taxable = $request->get('is_taxable');
+		$product->product_category = $request->get('category');
+		$product->product_sub_category = $request->get('sub_category');
 		/*$product->sale_price = $request->get('sale_price');
 		$product->wPrice = $request->get('wPrice');
 		$product->taxable = $request->get('taxable');
@@ -88,6 +101,7 @@ class ProductController extends Controller
 			return view('errors.404');
 		}
 
+		#return $product;
 		return view('products.show', compact('product'));
 	}
 
@@ -171,16 +185,31 @@ class ProductController extends Controller
 		if ( $request->exists('is_taxable') ) {
 			$product->is_taxable = $request->get('is_taxable');
 		}
+		$product->save();
 
-		if ( $is_error ) {
-			return redirect()
-				->back()
-				->withErrors(new MessageBag($error_messages));
+		if ( !$request->ajax() ) {
+			if ( $is_error ) {
+				return redirect()
+					->back()
+					->withErrors(new MessageBag($error_messages));
+			} else {
+				$product->save();
+				Session::flash('success', sprintf('Product: <b>%s</b> is updated successfully', $product->id_catalog));
+
+				return redirect()->back();
+			}
 		} else {
-			$product->save();
-			Session::flash('success', sprintf('Product: <b>%s</b> is updated successfully', $product->id_catalog));
+			if ( $is_error ) {
+				return response()->json([
+					'error' => true,
+					'data'  => new MessageBag($error_messages),
+				], 422);
+			}
 
-			return redirect()->back();
+			return response()->json([
+				'error' => false,
+				'data'  => 'Product batch is successfully updated',
+			], 200);
 		}
 
 	}
@@ -211,7 +240,8 @@ class ProductController extends Controller
 						   ->paginate(50);
 
 		$batch_routes = BatchRoute::where('is_deleted', 0)
-								  ->lists('batch_code', 'id');
+								  ->lists('batch_route_name', 'id');
+		#->lists('batch_code', 'id');
 
 		$batch_routes->prepend('Not selected', 'null');
 		$count = 1;

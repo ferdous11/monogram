@@ -66,16 +66,16 @@
                 {!! Form::textarea('product_description', null, ['id' => 'product_description','class'=>'form-control', 'rows' => 2]) !!}
             </div>
         </div>
-        <div class = "form-group">
+        {{--<div class = "form-group">
             {!!Form::label('product_category','Product category: ',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
             <div class = "col-xs-5">
                 {!! Form::text('product_category', null, ['id' => 'product_category','class'=>'form-control']) !!}
             </div>
-        </div>
+        </div>--}}
         <div class = "form-group">
             {!!Form::label('product_price','Product price: ',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
             <div class = "col-xs-5">
-                {!! Form::number('product_price', null, ['id' => 'product_price','class'=>'form-control']) !!}
+                {!! Form::number('product_price', null, ['id' => 'product_price','class'=>'form-control', 'step' => 'any']) !!}
             </div>
         </div>
         <div class = "form-group">
@@ -97,7 +97,19 @@
             </div>
         </div>
         <div class = "form-group">
-            {!!Form::label('batch_route_id','Batch route: ',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
+            {!!Form::label('category','Category: ',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
+            <div class = "col-xs-5">
+                {!! Form::select('category', $categories, null, ['id' => 'category', 'class'=>'form-control']) !!}
+            </div>
+        </div>
+        <div class = "form-group">
+            {!!Form::label('sub_category','Sub category: ',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
+            <div class = "col-xs-5">
+                {!! Form::select('sub_category', $sub_categories, null, ['id' => 'sub_category', 'class'=>'form-control']) !!}
+            </div>
+        </div>
+        <div class = "form-group">
+            {!!Form::label('batch_route_id','Route: ',['class'=>'control-label col-xs-offset-2 col-xs-2'])!!}
             <div class = "col-xs-5">
                 {!! Form::select('batch_route_id', $batch_routes, null, ['id' => 'batch_route_id','class'=>'form-control']) !!}
             </div>

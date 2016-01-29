@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>{{env('APPLICATION_NAME')}} - Home</title>
+	<title><?php echo e(env('APPLICATION_NAME')); ?> - Home</title>
 	<meta name = "viewport" content = "width=device-width, initial-scale=1">
 	<link type = "text/css" rel = "stylesheet"
 	      href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
@@ -9,7 +9,7 @@
 	      href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
-	@include('includes.header_menu')
+	<?php echo $__env->make('includes.header_menu', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 	<div class = "container">
 		<div class = "col-xs-6">
 			<h5 class = "page-header">Users Management</h5>
@@ -26,7 +26,7 @@
 				<li><a href = "/categories">Categories</a></li>
 				<li><a href = "/sub_categories">Sub categories</a></li>
 				<li><a href = "/products">Products ( SKUs ) </a></li>
-				{{--<li><a href = "/orders">Orders</a></li>--}}
+				<?php /*<li><a href = "/orders">Orders</a></li>*/ ?>
 				<li><a href = "/orders/list">Orders</a></li>
 				<li><a href = "/stations">Stations</a></li>
 				<li><a href = "/batch_routes">Routes</a></li>
@@ -38,17 +38,17 @@
 
 			<ul>
 				<hr />
-				{{--<li><a href = "/orders/create">Create Order</a></li>--}}
+				<?php /*<li><a href = "/orders/create">Create Order</a></li>*/ ?>
 				<li><a href = "/products/create">Create Product</a></li>
 				<li><a href = "/orders/add">Add new order</a></li>
-				{{--<li><a href = "/stations/create">Create Station</a></li>--}}
-				{{--<li><a href = "/categories/create">Create Category</a></li>--}}
-				{{--<li><a href = "/batch_routes/create">Create batch routes</a></li>--}}
+				<?php /*<li><a href = "/stations/create">Create Station</a></li>*/ ?>
+				<?php /*<li><a href = "/categories/create">Create Category</a></li>*/ ?>
+				<?php /*<li><a href = "/batch_routes/create">Create batch routes</a></li>*/ ?>
 				<li><a href = "/stations/status">Station status</a></li>
 				<li><a href = "/stations/my_station">My station</a></li>
 			</ul>
 		</div>
-		{{--<div class = "col-xs-3">
+		<?php /*<div class = "col-xs-3">
 			<h5 class = "page-header">Users</h5>
 			<ul>
 				<li><a href = "/users">Users</a></li>
@@ -111,11 +111,11 @@
 		</div>
 		<div class = "col-xs-12">
 			<ul>
-			@foreach($stations as $station)
-				<li><a href="{{url('set/'.$station->id)}}">{{$station->station_description}}</a></li>
-			@endforeach
+			<?php foreach($stations as $station): ?>
+				<li><a href="<?php echo e(url('set/'.$station->id)); ?>"><?php echo e($station->station_description); ?></a></li>
+			<?php endforeach; ?>
 			</ul>
-		</div>--}}
+		</div>*/ ?>
 	</div>
 </body>
 </html>

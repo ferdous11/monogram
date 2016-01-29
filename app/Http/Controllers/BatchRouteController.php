@@ -19,6 +19,7 @@ class BatchRouteController extends Controller
 						   ->lists('station_description', 'id');
 		$batch_routes = BatchRoute::with('stations_list')
 								  ->where('is_deleted', 0)
+								  ->latest()
 								  ->paginate(50);
 
 		return view('batch_routes.index', compact('batch_routes', 'count', 'stations'));
@@ -69,8 +70,8 @@ class BatchRouteController extends Controller
 		$updatedStationsArray = explode(",", $updateStationText);
 		$newStations = Station::whereIn('station_name', $updatedStationsArray)
 							  ->orderByRaw(sprintf("FIELD (station_name, '%s')", implode("', '", $updatedStationsArray)))
-								  ->lists('id')
-								  ->toArray();
+							  ->lists('id')
+							  ->toArray();
 		$batch_route->stations()
 					->detach();
 		$batch_route->stations()
