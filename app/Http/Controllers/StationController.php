@@ -10,6 +10,8 @@ use App\Station;
 
 use App\Http\Requests\StationCreateRequest;
 use App\Http\Requests\StationUpdateRequest;
+use Illuminate\Support\Facades\DB;
+use Monogram\Helper;
 
 class StationController extends Controller
 {
@@ -134,30 +136,30 @@ class StationController extends Controller
 		if ( !$item ) {
 			return view('errors.404');
 		}
-		if ( $action == 'forward' ) {
+		if ( $action == 'done' ) {
 			$batch_route_id = $item->batch_route_id;
-			$station_name = $item->station_name;
-			$station = Station::where('station_name', $station_name)
-							  ->first();
-			$station_id = $station->id;
+			$current_station_name = $item->station_name;
+			/*$current_station = Station::where('station_name', $current_station_name)
+									  ->first();
+			if ( !$current_station ) {
+				return redirect()->back();
+			}
+			$current_station_id = $current_station->id;
 
-			$next_station = BatchRoute::with([
-				'stations' => function ($query) use ($station_id) {
-					return $query->where('station_id', '>', $station_id);
-				},
-			])
-									  ->find($batch_route_id);
+			$next_stations = DB::select(sprintf("SELECT * FROM batch_route_station WHERE batch_route_id = %d and id > ( SELECT id FROM batch_route_station WHERE batch_route_id = %d AND station_id = %d)", $batch_route_id, $batch_route_id, $current_station_id));
 
-			#return $next_station;
-			if ( count($next_station->stations) ) {
-				$item->station_name = $next_station->stations[0]->station_name;
+			#return $next_stations;
+			if ( count($next_stations) ) {
+				$item->station_name = Station::find($next_stations[0]->station_id)->station_name;
 			} else {
 				$item->station_name = null;
-			}
+			}*/
 
+			$next_station_name = Helper::getNextStationName($batch_route_id, $current_station_name);
+			$item->station_name = $next_station_name;
 			$item->save();
-		} elseif ( $action == 'back' ) {
-			$item->station_name = -1;
+		} elseif ( $action == 'reject' ) {
+			$item->station_name = Helper::getSupervisorStationName();
 			$item->save();
 		}
 
@@ -169,7 +171,7 @@ class StationController extends Controller
 		$items = Item::with('route.stations_list', 'order')
 					 ->where('is_deleted', 0)
 					 ->whereNotNull('batch_number')
-					 ->where('station_name', '-1')
+					 ->where('station_name', Helper::getSupervisorStationName())
 					 ->paginate(50);
 
 		return view('stations.supervisor', compact('items'));

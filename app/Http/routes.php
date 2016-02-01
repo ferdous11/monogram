@@ -1,10 +1,13 @@
 <?php
 
 get('test/batch', function () {
-	return date('ymd', strtotime('now'));
-	#return implode(", ", range(1, 31));
+	#return \DNS1D::getBarcodeHTML("4445645656", "C39");
+	#return date('Y-m-d h:i:s', strtotime("now"));
+	$start = strtotime("now");
 	$index = 1;
-	foreach ( range(1, \App\Product::count()) as $id ) {
+	$x = 0;
+	/*foreach ( range(1, \App\Product::count()) as $id ) {
+		++$x;
 		if ( $index > 31 ) {
 			$index = 1;
 		}
@@ -12,9 +15,20 @@ get('test/batch', function () {
 		$product->batch_route_id = $index;
 		$product->save();
 		++$index;
+	}*/
+	foreach ( \App\Product::all() as $product ) {
+		++$x;
+		if ( $index > 31 ) {
+			$index = 1;
+		}
+		#$product = \App\Product::find($id);
+		$product->batch_route_id = $index;
+		$product->save();
+		++$index;
 	}
+	$end = strtotime("now");
 
-	return 'done';
+	return sprintf("%d seconds passed to add routes to %d products", ( $end - $start ), $x);
 });
 
 get('set/{id}', function ($id) {
@@ -41,6 +55,10 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 	get('orders/list', 'OrderController@getList');
 	get('orders/search', 'OrderController@search');
 
+	get('batches/{batch_number}/{station_name}', 'ItemController@getBatchItems');
+	post('batches/{batch_number}/{station_name}', 'ItemController@postBatchItems');
+
+	put('batches/{batch_number}', 'ItemController@updateBatchItems');
 	get('items/batch', 'ItemController@getBatch');
 	post('items/batch', 'ItemController@postBatch');
 	get('items/grouped', 'ItemController@getGroupedBatch');
@@ -54,6 +72,7 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 	get('stations/supervisor', 'StationController@supervisor');
 	post('stations/assign_to_station', 'StationController@assign_to_station');
 	get('stations/my_station', 'StationController@my_station');
+
 	resource('stations', 'StationController');
 
 	resource('categories', 'CategoryController');
@@ -78,6 +97,6 @@ Route::group([ 'prefix' => 'auth' ], function () {
 	get('logout', 'AuthenticationController@getLogout');
 });
 
-Event::listen('illuminate.query', function ($q) {
+/*Event::listen('illuminate.query', function ($q) {
 	Log::info($q);
-});
+});*/

@@ -99,7 +99,7 @@
 		<hr style = "width: 100%; color: black; background-color:black;margin-top: 10px" size = "2" />
 
 		<div class = "col-xs-12 ">
-			{!! Form::open(['url' => url('/batch_routes'), 'method' => 'post',]) !!}
+			{!! Form::open(['url' => url('/batch_routes'), 'method' => 'post', 'id' => 'create-batch-route']) !!}
 			<table>
 				<tr>
 					<td style = "vertical-align: top;"> {!! Form::text('batch_code', null, ['id' => 'batch_code', 'placeholder' => "Enter batch code", 'style'=>'width:100px']) !!} </td>
@@ -177,6 +177,19 @@
 			form.attr('action', url.replace('id', id));
 			form.submit();
 		});
+
+		var form = $("form#create-batch-route");
+
+		$(form).on('submit', function(){
+
+			$("ul.selected li").each(function(){
+				var selected_id = $(this).attr('data-selected-id');
+				if(selected_id){
+					$(form).append("<input type='hidden' value='"+selected_id+"' name='batch_route_order[]' />");
+				}
+			});
+		});
+
 	</script>
 </body>
 </html>

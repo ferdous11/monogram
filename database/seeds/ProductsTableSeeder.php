@@ -34729,7 +34729,16 @@ class ProductsTableSeeder extends Seeder
 		foreach ( $this->products as $value ) {
 			$i = 0;
 			$product = new Product();
-			$product->storeId = $value[$i++];
+			$product->id_catalog = $value[$i++];
+			$product->product_name = $value[$i++];
+			$product->product_keywords = $value[$i++];
+			$product->product_description = $value[$i++];
+			$product->product_price = $value[$i++];
+			$product->is_taxable = $value[$i++] == 'Yes' ? 1 : 0;
+			$product->product_url = $value[$i++];
+			$product->product_thumb = $value[$i++];
+			$product->save();
+			/*$product->storeId = $value[$i++];
 			$product->idCatalog = $value[$i++];
 			$product->vendorId = $value[$i++];
 			$product->model = $value[$i++];
@@ -34751,8 +34760,7 @@ class ProductsTableSeeder extends Seeder
 			$product->acct_code = $value[$i++];
 			$product->product_condition = $value[$i++];
 			$product->image_url_4P = $value[$i++];
-			$product->inset_url = $value[$i++];
-			$product->save();
+			$product->inset_url = $value[$i++];*/
 		}
 	}
 }

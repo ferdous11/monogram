@@ -23,7 +23,7 @@ class CreateItemsTable extends Migration
             $table->string('tracking_number')->nullable();
 			$table->integer('batch_route_id')->nullable();
 			$table->string('batch_creation_date')->nullable();
-            $table->string('batch_number')->nullable();
+            $table->integer('batch_number')->default(0);
             $table->string('station_name')->nullable();
             $table->string('item_order_status')->nullable();
             $table->string('data_parse_type')->nullable();

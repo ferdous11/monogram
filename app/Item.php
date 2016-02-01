@@ -20,6 +20,21 @@ class Item extends Model
 					]);
 	}
 
+	public function lowest_order_date ()
+	{
+		return $this->belongsTo('App\Order', 'order_id', 'order_id')
+					->where('is_deleted', 0)
+					->orderBy('order_numeric_time', 'asc')
+					->select([
+						'id',
+						'order_id',
+						'item_count',
+						'order_date',
+						'short_order',
+						'store_id',
+					]);
+	}
+
 	public function product ()
 	{
 		return $this->belongsTo('App\Product', 'item_id', 'id_catalog')
@@ -68,6 +83,7 @@ class Item extends Model
 			$order_ids = Order::where('order_date', 'REGEXP', implode("|", $values))
 							  ->lists('order_id')
 							  ->toArray();
+
 			return $query->whereIn('order_id', $order_ids);
 
 		} elseif ( $search_in == 'store_id' ) {
@@ -97,6 +113,49 @@ class Item extends Model
 		} else {
 			return;
 		}
+	}
+
+
+	public function scopeSearchBatch ($query, $batch_number)
+	{
+		if ( !$batch_number ) {
+			return;
+		}
+
+		return $query->where('batch_number', 'LIKE', $batch_number);
+	}
+
+	public function scopeSearchRoute ($query, $batch_route_id)
+	{
+		if ( !$batch_route_id || $batch_route_id == 'all' ) {
+			return;
+		}
+
+		return $query->where('batch_route_id', '=', $batch_route_id);
+	}
+
+	public function scopeSearchStation ($query, $station_id)
+	{
+		if ( !$station_id || $station_id == 'all' ) {
+			return;
+		}
+
+		$station = Station::find($station_id);
+		if ( !$station ) {
+			return;
+		}
+		$station_name = $station->station_name;
+
+		return $query->where('station_name', $station_name);
+	}
+
+	public function scopeSearchStatus ($query, $status)
+	{
+		if ( !$status || $status == 'all' ) {
+			return;
+		}
+
+		return $query->where('order_item_status', '=', $status);
 	}
 
 	/*public function scopeSearchByOrderId ($query, $search_for, $search_in)

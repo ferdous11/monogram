@@ -6,6 +6,7 @@ use App\BatchRoute;
 use App\Category;
 use App\Product;
 use App\SubCategory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -25,17 +26,28 @@ class ProductController extends Controller
 						   ->searchIdCatalog($request->get('id_catalog'))
 						   ->searchProductModel($request->get('product_model'))
 						   ->searchProductName($request->get('product_name'))
+						   ->searchRoute($request->get('route'))
+						   ->searchCategory($request->get('category'))
+			   			   ->searchSubCategory($request->get('sub_category'))
 						   ->latest()
 						   ->paginate(50);
 
 		$batch_routes = BatchRoute::where('is_deleted', 0)
 								  ->lists('batch_route_name', 'id');
-		#->lists('batch_code', 'id');
+		$searchInRoutes = Collection::make($batch_routes);
+		$searchInRoutes->prepend('All', '0');
 
 		$batch_routes->prepend('Not selected', 'null');
+
+		$categories = Category::where('is_deleted', 0)
+							  ->lists('category_description', 'id')
+							  ->prepend('All', 0);
+		$sub_categories = SubCategory::where('is_deleted', 0)
+									 ->lists('sub_category_description', 'id')
+									 ->prepend('All', 0);
 		$count = 1;
 
-		return view('products.index', compact('products', 'count', 'batch_routes', 'request'));
+		return view('products.index', compact('products', 'count', 'batch_routes', 'request', 'searchInRoutes', 'categories', 'sub_categories'));
 	}
 
 	public function create ()
@@ -239,13 +251,33 @@ class ProductController extends Controller
 						   ->latest()
 						   ->paginate(50);
 
-		$batch_routes = BatchRoute::where('is_deleted', 0)
+        $batch_routes = BatchRoute::where('is_deleted', 0)
+                                  ->lists('batch_route_name', 'id');
+        $searchInRoutes = Collection::make($batch_routes);
+        $searchInRoutes->prepend('All', '0');
+
+        $batch_routes->prepend('Not selected', 'null');
+
+        $categories = Category::where('is_deleted', 0)
+                              ->lists('category_description', 'id')
+                              ->prepend('All', 0);
+        $sub_categories = SubCategory::where('is_deleted', 0)
+                                     ->lists('sub_category_description', 'id')
+                                     ->prepend('All', 0);
+        $count = 1;
+
+        return view('products.index', compact('products', 'count', 'batch_routes', 'request', 'searchInRoutes', 'categories', 'sub_categories'));
+
+		/*$batch_routes = BatchRoute::where('is_deleted', 0)
 								  ->lists('batch_route_name', 'id');
 		#->lists('batch_code', 'id');
+
+	    $searchInRoutes = Collection::make($batch_routes);
+		$searchInRoutes->prepend('All', '0');
 
 		$batch_routes->prepend('Not selected', 'null');
 		$count = 1;
 
-		return view('products.index', compact('products', 'count', 'batch_routes', 'request'));
+		return view('products.index', compact('products', 'count', 'batch_routes', 'request'));*/
 	}
 }

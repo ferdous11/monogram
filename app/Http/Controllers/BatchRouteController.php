@@ -35,6 +35,7 @@ class BatchRouteController extends Controller
 
 	public function store (BatchRouteCreateRequest $request)
 	{
+		#return $request->all();
 		$batch_route = new BatchRoute();
 		$batch_route->batch_code = $request->get('batch_code');
 		$batch_route->batch_route_name = $request->get('batch_route_name');
@@ -42,7 +43,7 @@ class BatchRouteController extends Controller
 		$batch_route->batch_options = $request->get('batch_options');
 		$batch_route->save();
 		$batch_route->stations()
-					->attach($request->get('batch_stations'));
+					->attach($request->get('batch_route_order'));
 
 		return redirect(url('batch_routes'));
 	}

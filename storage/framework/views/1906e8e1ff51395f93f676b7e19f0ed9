@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang = "en">
+<head>
+	<meta charset = "UTF-8">
+	<title>Batch list</title>
+	<meta name = "viewport" content = "width=device-width, initial-scale=1">
+	<link type = "text/css" rel = "stylesheet"
+	      href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+	<link type = "text/css" rel = "stylesheet"
+	      href = "//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">
+	<link type = "text/css" rel = "stylesheet"
+	      href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<style>
+		table {
+			table-layout: fixed;
+			font-size: 12px;
+		}
+
+		td {
+			width: auto;
+		}
+	</style>
+</head>
+<body>
+	<?php echo $__env->make('includes.header_menu', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+	<div class = "container">
+		<ol class = "breadcrumb">
+			<li><a href = "<?php echo e(url('/')); ?>">Home</a></li>
+			<li class = "active">Batch list</li>
+		</ol>
+		<div class = "col-xs-12">
+			<?php echo Form::open(['method' => 'get']); ?>
+
+			<div class = "form-group col-xs-2">
+				<label for = "batch">Batch#</label>
+				<?php echo Form::text('batch', $request->get('batch'), ['id'=>'batch', 'class' => 'form-control', 'placeholder' => 'Search in batch']); ?>
+
+			</div>
+			<div class = "form-group col-xs-3">
+				<label for = "route">Route</label>
+				<?php echo Form::select('route', $routes, $request->get('route'), ['id'=>'route', 'class' => 'form-control']); ?>
+
+			</div>
+			<div class = "form-group col-xs-3">
+				<label for = "route">Station</label>
+				<?php echo Form::select('station', $stations, $request->get('station'), ['id'=>'station', 'class' => 'form-control']); ?>
+
+			</div>
+			<div class = "form-group col-xs-2">
+				<label for = "status">Status</label>
+				<?php echo Form::select('status', $statuses, $request->get('status'), ['id'=>'status', 'class' => 'form-control']); ?>
+
+			</div>
+			<div class = "form-group col-xs-2">
+				<label for = "" class = ""></label>
+				<?php echo Form::submit('Search', ['id'=>'search', 'style' => 'margin-top: 2px;', 'class' => 'btn btn-primary form-control']); ?>
+
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+		<div class = "col-xs-12">
+			<?php if(count($rows)): ?>
+				<table class = "table">
+					<tr>
+						<th>Batch#</th>
+						<th>Batch creation date</th>
+						<th>Route</th>
+						<th>Lines</th>
+						<th>Current station</th>
+						<th>Current station since</th>
+						<th>Next station</th>
+						<th>Status</th>
+						<th>MinOrderDate</th>
+					</tr>
+					<?php foreach($rows as $row): ?>
+						<tr>
+							<td>
+								<a href = "<?php echo e(url(sprintf('batches/%d/%s',$row['batch_number'], $row['current_station_name']))); ?>"><?php echo e($row['batch_number']); ?></a>
+							</td>
+							<td><?php echo e($row['batch_creation_date']); ?></td>
+							<td><span data-toggle = "tooltip" data-placement = "top"
+							          title = "<?php echo e($row['route_name']); ?>"><?php echo e($row['route_code']); ?></span>
+							</td>
+							<td><?php echo e($row['lines']); ?></td>
+							<td>
+								<span data-toggle = "tooltip" data-placement = "top"
+								      title = "<?php echo e($row['current_station_description']); ?>"><?php echo e($row['current_station_name']); ?></span>
+							</td>
+							<td><?php echo e($row['batch_creation_date']); ?></td>
+							<td><span data-toggle = "tooltip" data-placement = "top"
+							          title = "<?php echo e($row['next_station_description']); ?>"><?php echo e($row['next_station_name']); ?></span>
+							</td>
+							<td>Active</td>
+							<td><?php echo e($row['min_order_date']); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			<?php else: ?>
+				<div class = "alert alert-warning">No batch is created.</div>
+			<?php endif; ?>
+		</div>
+		<div class = "col-xs-12 text-center">
+			<?php echo $items->render(); ?>
+
+		</div>
+	</div>
+	<script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script type = "text/javascript" src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script type = "text/javascript">
+		$(function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
+</body>
+</html>

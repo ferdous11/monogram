@@ -18,17 +18,29 @@
 		</ol>
 		<div class = "col-xs-12">
 			{!! Form::open(['method' => 'get', 'id' => 'search-order']) !!}
-			<div class = "form-group col-xs-3">
+			<div class = "form-group col-xs-4">
 				<label for = "id_catalog">Search in id catalog</label>
 				{!! Form::text('id_catalog', $request->get('id_catalog'), ['id'=>'id_catalog', 'class' => 'form-control', 'placeholder' => 'Search in id catalog']) !!}
 			</div>
-			<div class = "form-group col-xs-3">
+			<div class = "form-group col-xs-4">
 				<label for = "product_model">Search in model</label>
 				{!! Form::text('product_model', $request->get('product_model'), ['id'=>'product_model', 'class' => 'form-control', 'placeholder' => 'Search in product model']) !!}
 			</div>
-			<div class = "form-group col-xs-3">
+			<div class = "form-group col-xs-4">
 				<label for = "product_name">Search in name</label>
 				{!! Form::text('product_name', $request->get('product_name'), ['id'=>'product_name', 'class' => 'form-control', 'placeholder' => 'Search in product name']) !!}
+			</div>
+			<div class = "form-group col-xs-4">
+				<label for = "route">Search in route</label>
+				{!! Form::select('route', $searchInRoutes, $request->get('route')?: 0, ['id'=>'route', 'class' => 'form-control']) !!}
+			</div>
+			<div class = "form-group col-xs-4">
+				<label for = "category">Search in Categories</label>
+				{!! Form::select('category', $categories, $request->get('category')?: 0, ['id'=>'category', 'class' => 'form-control']) !!}
+			</div>
+			<div class = "form-group col-xs-4">
+				<label for = "sub_category">Search in sub categories</label>
+				{!! Form::select('sub_category', $sub_categories, $request->get('sub_category')?: 0, ['id'=>'sub_category', 'class' => 'form-control']) !!}
 			</div>
 			<div class = "form-group col-xs-2">
 				<label for = "" class = ""></label>
@@ -76,7 +88,7 @@
 						<td class = "text-center">{{ $product->product_model ? $product->product_model : '-' }}</td>
 						<td>{{ $product->product_name }}</td>
 						<td><img src = "{{ $product->product_thumb }}" width = "50" height = "50" /></td>
-						<td>{!! Form::select('batch_route_id', $batch_routes, $product->batch_route_id, ['class' => 'form-control']) !!}</td>
+						<td>{!! Form::select('batch_route_id', $batch_routes, $product->batch_route_id, ['class' => 'form-control changable']) !!}</td>
 						<td>
 							{{--<a href = "#" data-toggle = "tooltip" class = "update"
 							   data-placement = "top"
@@ -121,28 +133,7 @@
 			update: 'Are you sure you want to update?',
 			error: "You've not selected any route value to update",
 		};
-		/*$("a.update").on('click', function (event)
-		 {
-		 event.preventDefault();
-		 var id = $(this).closest('tr').attr('data-id');
-		 var value = $(this).closest('tr').find('select').val();
-		 if ( value == "null" ) {
-		 alert(message.error);
-		 return;
-		 }
-		 var action = confirm(message.update);
-		 if ( action ) {
-		 var form = $("form#update-product");
-		 var url = form.attr('action');
-		 form.attr('action', url.replace('id', id));
-		 $("<input type='hidden' value='' />")
-		 .attr("name", "batch_route_id")
-		 .attr("value", value)
-		 .appendTo($("form#update-product"));
-		 form.submit();
-		 }
-		 });*/
-		$("select").on('change', function ()
+		$("select.changable").on('change', function ()
 		{
 			var value = $(this).val();
 			if ( value == "null" ) {

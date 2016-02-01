@@ -6,46 +6,80 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = [ '*' ];
+	protected $fillable = [ '*' ];
 
-    public function batch_route ()
-    {
-        return $this->hasOne('App\BatchRoute', 'id', 'batch_route_id');
-    }
+	public function batch_route ()
+	{
+		return $this->hasOne('App\BatchRoute', 'id', 'batch_route_id');
+	}
 
-    public function groupedItems ()
-    {
-        return $this->hasMany('App\Item', 'item_id', 'id_catalog')->whereNull('batch_number')->where('is_deleted', 0)->select(['id', 'item_id', 'order_id']);
-    }
+	public function groupedItems ()
+	{
+		return $this->hasMany('App\Item', 'item_id', 'id_catalog')
+					->whereNull('batch_number')
+					->where('is_deleted', 0)
+					->select([
+						'id',
+						'item_id',
+						'order_id',
+					]);
+	}
 
-    public function scopeSearchIdCatalog ($query, $id_catalog)
-    {
-        if ( !$id_catalog ) {
-            return;
-        }
-        $replaced = str_replace(" ", "", $id_catalog);
-        $values = explode(",", trim($replaced, ","));
+	public function scopeSearchIdCatalog ($query, $id_catalog)
+	{
+		if ( !$id_catalog ) {
+			return;
+		}
+		$replaced = str_replace(" ", "", $id_catalog);
+		$values = explode(",", trim($replaced, ","));
 
-        return $query->where('id_catalog', 'REGEXP', implode("|", $values));
-    }
+		return $query->where('id_catalog', 'REGEXP', implode("|", $values));
+	}
 
-    public function scopeSearchProductModel ($query, $product_model)
-    {
-        if ( !$product_model ) {
-            return;
-        }
-        $replaced = str_replace(" ", "", $product_model);
-        $values = explode(",", trim($replaced, ","));
+	public function scopeSearchProductModel ($query, $product_model)
+	{
+		if ( !$product_model ) {
+			return;
+		}
+		$replaced = str_replace(" ", "", $product_model);
+		$values = explode(",", trim($replaced, ","));
 
-        return $query->where('product_model', 'REGEXP', implode("|", $values));
-    }
+		return $query->where('product_model', 'REGEXP', implode("|", $values));
+	}
 
-    public function scopeSearchProductName ($query, $product_name)
-    {
-        if ( !$product_name ) {
-            return;
-        }
+	public function scopeSearchProductName ($query, $product_name)
+	{
+		if ( !$product_name ) {
+			return;
+		}
 
-        return $query->where('product_name', 'LIKE', sprintf("%%%s%%", $product_name));
-    }
+		return $query->where('product_name', 'LIKE', sprintf("%%%s%%", $product_name));
+	}
+
+	public function scopeSearchRoute ($query, $route_id)
+	{
+		if ( !$route_id ) {
+			return;
+		}
+
+		return $query->where('batch_route_id', $route_id);
+	}
+
+	public function scopeSearchCategory ($query, $category_id)
+	{
+		if ( !$category_id ) {
+			return;
+		}
+
+		return $query->where('product_category', $category_id);
+	}
+
+	public function scopeSearchSubCategory ($query, $sub_category_id)
+	{
+		if ( !$sub_category_id ) {
+			return;
+		}
+
+		return $query->where('product_sub_category', $sub_category_id);
+	}
 }
