@@ -1,12 +1,16 @@
 <?php namespace Monogram;
 
 
+use App\Parameter;
 use App\Setting;
 use App\Station;
 use Illuminate\Support\Facades\DB;
 
 class Helper
 {
+	public static $column_names = [ ];
+	public static $columns = [ ];
+
 	public static function jsonTransformer ($json, $separator = null)
 	{
 		if ( null === $separator ) {
@@ -49,5 +53,19 @@ class Helper
 	public static function getSupervisorStationName ()
 	{
 		return Setting::first()->supervisor_station;
+	}
+
+	public static function validateSkuImportFile ($store_id, $row)
+	{
+		$parameters = Parameter::where('store_id', $store_id)
+							   ->where('is_deleted', 0)
+							   ->get();
+		self::$column_names = $parameters->lists('parameter_value')
+										 ->toArray();
+		self::$columns = $parameters->lists('id', 'parameter_value')
+									->toArray();
+
+		#$parameters->lists('parameter_value')->toArray()
+		return count($parameters) && ( self::$column_names == $row );
 	}
 }

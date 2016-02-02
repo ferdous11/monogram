@@ -48,7 +48,7 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 
 	get('products/unassigned', 'ProductController@unassigned');
 	#get('products/import', 'ProductController@getAddProductsByCSV');
-    post('products/import', 'ProductController@import');
+	post('products/import', 'ProductController@import');
 	get('products/export', 'ProductController@export');
 	resource('products', 'ProductController');
 
@@ -68,6 +68,13 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 	resource('items', 'ItemController');
 
 	resource('orders', 'OrderController');
+
+	get('logistics/sku_converter', 'LogisticsController@sku_converter');
+	post('logistics/sku_converter', 'LogisticsController@post_sku_converter');
+
+	put('logistics/{store_id}/update', 'LogisticsController@sku_converter_update');
+	get('logistics/sku_import', 'LogisticsController@get_sku_import');
+	post('logistics/sku_import', 'LogisticsController@post_sku_import');
 
 
 	post('stations/change', 'StationController@change');

@@ -21,6 +21,13 @@
 					<li><a href = "/customers/create">Create Customer</a></li>
 				</ul>
 			</div>
+			<div class = "col-xs-12">
+				<h5 class = "page-header">Logistics</h5>
+				<ul>
+					<li><a href = "/logistics/sku_converter">Set store options to SKU conversion parameters</a></li>
+					<li><a href = "/logistics/sku_import">Export/Import options coded SKUs CSV file</a></li>
+				</ul>
+			</div>
 		</div>
 		<div class = "col-xs-6">
 			<div class = "col-xs-12">

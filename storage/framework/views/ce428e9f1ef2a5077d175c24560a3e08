@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang = "en">
+<head>
+	<meta charset = "UTF-8">
+	<title>Export/Import options coded SKUs CSV file</title>
+	<meta name = "viewport" content = "width=device-width, initial-scale=1">
+	<link type = "text/css" rel = "stylesheet"
+	      href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+	<link type = "text/css" rel = "stylesheet"
+	      href = "//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">
+	<link type = "text/css" rel = "stylesheet"
+	      href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<style>
+		table {
+			table-layout: fixed;
+			font-size: 12px;
+		}
+
+		td {
+			width: auto;
+		}
+	</style>
+</head>
+<body>
+	<?php echo $__env->make('includes.header_menu', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+	<div class = "container">
+		<ol class = "breadcrumb">
+			<li><a href = "<?php echo e(url('/')); ?>">Home</a></li>
+			<li class = "active">Export/Import options coded SKUs CSV file</li>
+		</ol>
+		<?php if($errors->any()): ?>
+			<div class = "alert alert-danger">
+				<ul>
+					<?php foreach($errors->all() as $error): ?>
+						<li><?php echo $error; ?></li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+		<?php endif; ?>
+		<?php if(session('success')): ?>
+			<div class = "alert alert-success"><?php echo session('success'); ?></div>
+		<?php endif; ?>
+		<div class = "col-xs-12">
+			<?php echo Form::open(['method' => 'post', 'class' => "form-horizontal", 'files' => true, 'id' => 'sku-import-form']); ?>
+
+			<div class = "form-group">
+				<?php echo Form::label('store_id', "Store id", ['class'=> 'col-xs-2 control-label']); ?>
+
+				<div class = "col-sm-6">
+					<?php echo Form::select('store_id', $stores->lists('store_name', 'store_id')->prepend('Select a station', 'all'), 'all', ['id'=>'store_id', 'class' => 'form-control']); ?>
+
+				</div>
+			</div>
+			<div class = "form-group">
+				<?php echo Form::label('file', "Choose file", ['class'=> 'col-xs-2 control-label']); ?>
+
+				<div class = "col-sm-6">
+					<?php echo Form::file('file', ['id'=>'file', 'class' => 'form-control']); ?>
+
+				</div>
+			</div>
+			<?php echo Form::hidden('action', null, ['id' => 'action']); ?>
+
+			<div class = "form-group">
+				<div class = "col-sm-offset-2 col-sm-10">
+					<button type = "button" id = "validate" class = "btn btn-warning">Validate</button>
+					<button type = "button" id = "upload" class = "btn btn-primary">Upload</button>
+					<button type = "button" id = "export" class = "btn btn-success">Export</button>
+				</div>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+		<div class = "col-xs-12" id = "show-info-div" style = "display: none;">
+			<h3 class = "page-header">Allowed parameter options are</h3>
+			<div class = "col-xs-12" id = "show-info"></div>
+		</div>
+	</div>
+	<script type = "text/javascript" src = "//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script type = "text/javascript" src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script type = "text/javascript">
+		var empty = '<ol class="list-group"></ol>';
+		var store_parameters = {};
+		<?php foreach($store_parameters as $store_id => $parameter_value): ?>
+				store_parameters['<?php echo e($store_id); ?>'] = '<?php echo $parameter_value; ?>';
+		<?php endforeach; ?>
+		$("select").on('change', function (event)
+		{
+			var show_center = $("div#show-info-div");
+			var selected = $(this).val();
+			if ( selected == 'all' ) {
+				show_center.hide();
+				return;
+			}
+
+			var parameters = store_parameters[selected];
+
+			if ( parameters == empty ) {
+				parameters = "<div class='alert alert-warning'>No parameter option is found</div>";
+			}
+
+			show_center.show();
+			$("div#show-info").empty();
+			$("div#show-info").html(parameters);
+		});
+		$("button#upload").on('click', function (event)
+		{
+			var store_id = $("select#store_id").val();
+			var file = $("input#file").val();
+			if ( store_id == 'all' ) {
+				alert('Please, select a store');
+				return;
+			}
+
+			if ( !file ) {
+				alert('Please, select a file');
+				return;
+			}
+
+			$("input#action").val('upload');
+
+			$("form#sku-import-form").submit();
+		});
+
+		$("button#validate").on('click', function (event)
+		{
+			event.preventDefault();
+			var store_id = $("select#store_id").val();
+			var file = $("input#file").val();
+			if ( store_id == 'all' ) {
+				alert('Please, select a store');
+				return;
+			}
+
+			if ( !file ) {
+				alert('Please, select a file');
+				return;
+			}
+
+			$("input#action").val('validate');
+			$("form#sku-import-form").submit();
+		});
+
+		$("button#export").on('click', function (event)
+		{
+			event.preventDefault();
+			var store_id = $("select#store_id").val();
+
+			if ( store_id == 'all' ) {
+				alert('Please, select a store');
+				return;
+			}
+
+			$("input#action").val('export');
+			$("form#sku-import-form").submit();
+		})
+	</script>
+</body>
+</html>
