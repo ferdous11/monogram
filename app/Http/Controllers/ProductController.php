@@ -13,9 +13,13 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductAddRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\MessageBag;
+use League\Csv\Reader;
+use League\Csv\Writer;
 
 class ProductController extends Controller
 {
@@ -28,7 +32,7 @@ class ProductController extends Controller
 						   ->searchProductName($request->get('product_name'))
 						   ->searchRoute($request->get('route'))
 						   ->searchCategory($request->get('category'))
-			   			   ->searchSubCategory($request->get('sub_category'))
+						   ->searchSubCategory($request->get('sub_category'))
 						   ->latest()
 						   ->paginate(50);
 
@@ -228,13 +232,13 @@ class ProductController extends Controller
 
 	public function destroy ($id)
 	{
-		$product = Product::where('active', 1)
+		$product = Product::where('is_deleted', 0)
 						  ->find($id);
 		if ( !$product ) {
 			return view('errors.404');
 		}
 
-		$product->active = 0;
+		$product->is_deleted = 1;
 		$product->save();
 
 		return redirect(url('products'));
@@ -251,22 +255,22 @@ class ProductController extends Controller
 						   ->latest()
 						   ->paginate(50);
 
-        $batch_routes = BatchRoute::where('is_deleted', 0)
-                                  ->lists('batch_route_name', 'id');
-        $searchInRoutes = Collection::make($batch_routes);
-        $searchInRoutes->prepend('All', '0');
+		$batch_routes = BatchRoute::where('is_deleted', 0)
+								  ->lists('batch_route_name', 'id');
+		$searchInRoutes = Collection::make($batch_routes);
+		$searchInRoutes->prepend('All', '0');
 
-        $batch_routes->prepend('Not selected', 'null');
+		$batch_routes->prepend('Not selected', 'null');
 
-        $categories = Category::where('is_deleted', 0)
-                              ->lists('category_description', 'id')
-                              ->prepend('All', 0);
-        $sub_categories = SubCategory::where('is_deleted', 0)
-                                     ->lists('sub_category_description', 'id')
-                                     ->prepend('All', 0);
-        $count = 1;
+		$categories = Category::where('is_deleted', 0)
+							  ->lists('category_description', 'id')
+							  ->prepend('All', 0);
+		$sub_categories = SubCategory::where('is_deleted', 0)
+									 ->lists('sub_category_description', 'id')
+									 ->prepend('All', 0);
+		$count = 1;
 
-        return view('products.index', compact('products', 'count', 'batch_routes', 'request', 'searchInRoutes', 'categories', 'sub_categories'));
+		return view('products.index', compact('products', 'count', 'batch_routes', 'request', 'searchInRoutes', 'categories', 'sub_categories'));
 
 		/*$batch_routes = BatchRoute::where('is_deleted', 0)
 								  ->lists('batch_route_name', 'id');
@@ -279,5 +283,123 @@ class ProductController extends Controller
 		$count = 1;
 
 		return view('products.index', compact('products', 'count', 'batch_routes', 'request'));*/
+	}
+
+	public function import (Request $request)
+	{
+		$file = $request->file('csv_file');
+
+		$mimes = [
+			'application/vnd.ms-excel',
+			'text/plain',
+			'text/csv',
+			'text/tsv',
+		];
+		if ( !in_array($file->getClientMimeType(), $mimes) ) {
+			return redirect()
+				->back()
+				->withErrors(new MessageBag([ 'error' => 'Not a valid csv file' ]));
+		}
+		$file_path = sprintf("%s/assets/imports/products/", base_path());
+		$file_name = $file->getClientOriginalName();
+		$fully_specified_file_name = sprintf("%s%s", $file_path, $file_name);
+
+		$file->move($file_path, $file_name);
+		$reader = Reader::createFromPath($fully_specified_file_name);
+		$columns = [
+			'store_id',
+			'id_catalog',
+			'product_name',
+			'product_model',
+			'product_keywords',
+			'product_description',
+			'product_category',
+			'product_sub_category',
+			'product_price',
+			'product_url',
+			'product_thumb',
+			'batch_route_id',
+			'is_taxable',
+		];
+		$rows = $reader->setOffset(1)
+					   ->fetchAssoc($columns);
+
+		foreach ( $rows as $row ) {
+			$product = Product::where('id_catalog', $row['id_catalog'])
+							  ->first();
+
+			if ( !$product ) {
+				$product = new Product();
+				$product->id_catalog = $row['id_catalog'];
+			}
+
+			$product->store_id = $row['store_id'];
+			$product->product_name = $row['product_name'];
+			$product->product_model = $row['product_model'];
+			$product->product_keywords = $row['product_keywords'];
+			$product->product_description = $row['product_description'];
+			$product->product_category = $row['product_category'];
+			$product->product_sub_category = $row['product_sub_category'];
+			$product->product_price = $row['product_price'];
+			$product->product_url = $row['product_url'];
+			$product->product_thumb = $row['product_thumb'];
+			$batch_route = BatchRoute::where('batch_code', 'LIKE', sprintf("%%%s%%", trim($row['batch_route_id'])))
+									 ->first();
+			if ( $batch_route ) {
+				$product->batch_route_id = $batch_route->id;
+			}
+			$product->is_taxable = strtolower($row['is_taxable']) == 'yes' ? 1 : 0;
+			$product->save();
+		}
+
+		return redirect(url('products'));
+	}
+
+	public function export ()
+	{
+		$columns = [
+			'store_id',
+			'id_catalog',
+			'product_name',
+			'product_model',
+			'product_keywords',
+			'product_description',
+			'product_category',
+			'product_sub_category',
+			'product_price',
+			'product_url',
+			'product_thumb',
+			'batch_route_id',
+			'is_taxable',
+		];
+		$products = Product::all($columns);
+		$file_path = sprintf("%s/assets/exports/products/", base_path());
+		$file_name = sprintf("products-%s-%s.csv", date("y-m-d", strtotime('now')), str_random(5));
+		$fully_specified_path = sprintf("%s%s", $file_path, $file_name);
+
+		$csv = Writer::createFromFileObject(new \SplFileObject($fully_specified_path, 'a+'), 'w');
+
+		$csv->insertOne($columns);
+
+		foreach ( $products as $product ) {
+			$row = [ ];
+			foreach ( $columns as $column ) {
+				if ( $column == 'batch_route_id' ) {
+					if ( $product->batch_route_id ) {
+						$row[] = BatchRoute::find($product->batch_route_id)->batch_code;
+					} else {
+						$row[] = '';
+					}
+					continue;
+				} elseif ( $column == 'is_taxable' ) {
+					$row[] = ( $product->is_taxable == 1 ) ? 'Yes' : 'No';
+				} else {
+					$row[] = $product->$column;
+				}
+			}
+			$csv->insertOne($row);
+		}
+
+		return response()->download($fully_specified_path);
 	}
 }

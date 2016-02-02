@@ -82,7 +82,7 @@
 						<?php foreach($items as $item): ?>
 							<tr data-id = "<?php echo e($item->id); ?>">
 								<td>
-									<a href = "<?php echo e(url('/orders/'.$item->order->short_order)); ?>"><?php echo e($item->order->short_order); ?></a>
+									<a href = "<?php echo e(url('/orders/details/'.$item->order->order_id)); ?>"><?php echo e($item->order->short_order); ?></a>
 								</td>
 								<td><?php echo e(substr($item->order->order_date, 0, 10)); ?></td>
 								<td><?php echo e($item->item_quantity); ?></td>

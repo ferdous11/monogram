@@ -8,7 +8,6 @@
 	      href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
 	<link type = "text/css" rel = "stylesheet"
 	      href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
 </head>
 <body>
 	@include('includes.header_menu')
@@ -18,41 +17,30 @@
 			<li><a href = "{{url('/products')}}">Products</a></li>
 		</ol>
 		<div class = "col-xs-12">
-			<a class = "btn btn-warning pull-right" role = "button" data-toggle = "collapse" href = "#collapse"
-			   aria-expanded = "false" aria-controls = "collapse">
-				Export / Import products
-			</a>
-		</div>
-		<div class = "col-xs-12" style="margin-top: 10px;">
-			<div class = "collapse" id = "collapse">
-				<div class = "col-xs-6">
-					{!! Form::open(['url' => url('products/import'), 'files' => true, 'id' => 'importer']) !!}
-					<div class = "form-group">
-						{!! Form::file('csv_file', ['required' => 'required', 'class' => 'form-control', 'accept' => '.csv']) !!}
-					</div>
-					<div class = "form-group">
-						{!! Form::submit('Import', ['class' => 'btn btn-info']) !!}
-					</div>
-					{!! Form::close() !!}
-				</div>
-				<div class = "col-xs-6">
-					<a class = "btn btn-info pull-right" href = "{{url('products/export')}}">Export products</a>
-				</div>
-			</div>
-		</div>
-		<div class = "col-xs-12">
 			{!! Form::open(['method' => 'get', 'id' => 'search-order']) !!}
-			<div class = "form-group col-xs-3">
+			<div class = "form-group col-xs-4">
 				<label for = "id_catalog">Search in id catalog</label>
 				{!! Form::text('id_catalog', $request->get('id_catalog'), ['id'=>'id_catalog', 'class' => 'form-control', 'placeholder' => 'Search in id catalog']) !!}
 			</div>
-			<div class = "form-group col-xs-3">
+			<div class = "form-group col-xs-4">
 				<label for = "product_model">Search in model</label>
 				{!! Form::text('product_model', $request->get('product_model'), ['id'=>'product_model', 'class' => 'form-control', 'placeholder' => 'Search in product model']) !!}
 			</div>
-			<div class = "form-group col-xs-3">
+			<div class = "form-group col-xs-4">
 				<label for = "product_name">Search in name</label>
 				{!! Form::text('product_name', $request->get('product_name'), ['id'=>'product_name', 'class' => 'form-control', 'placeholder' => 'Search in product name']) !!}
+			</div>
+			<div class = "form-group col-xs-4">
+				<label for = "route">Search in route</label>
+				{!! Form::select('route', $searchInRoutes, $request->get('route')?: 0, ['id'=>'route', 'class' => 'form-control']) !!}
+			</div>
+			<div class = "form-group col-xs-4">
+				<label for = "category">Search in Categories</label>
+				{!! Form::select('category', $categories, $request->get('category')?: 0, ['id'=>'category', 'class' => 'form-control']) !!}
+			</div>
+			<div class = "form-group col-xs-4">
+				<label for = "sub_category">Search in sub categories</label>
+				{!! Form::select('sub_category', $sub_categories, $request->get('sub_category')?: 0, ['id'=>'sub_category', 'class' => 'form-control']) !!}
 			</div>
 			<div class = "form-group col-xs-2">
 				<label for = "" class = ""></label>
@@ -81,8 +69,7 @@
 		@if(count($products) > 0)
 			<h3 class = "page-header">
 				Products
-				<a style = "margin-bottom:20px" class = "btn btn-success btn-sm pull-right"
-				   href = "{{url('/products/create')}}">Create product</a>
+				<a class = "btn btn-success btn-sm pull-right" href = "{{url('/products/create')}}">Create product</a>
 			</h3>
 			<table class = "table table-bordered">
 				<tr>
@@ -101,14 +88,14 @@
 						<td class = "text-center">{{ $product->product_model ? $product->product_model : '-' }}</td>
 						<td>{{ $product->product_name }}</td>
 						<td><img src = "{{ $product->product_thumb }}" width = "50" height = "50" /></td>
-						<td>{!! Form::select('batch_route_id', $batch_routes, $product->batch_route_id, ['class' => 'form-control']) !!}</td>
+						<td>{!! Form::select('batch_route_id', $batch_routes, $product->batch_route_id, ['class' => 'form-control changable']) !!}</td>
 						<td>
-							<a href = "#" data-toggle = "tooltip" class = "update"
+							{{--<a href = "#" data-toggle = "tooltip" class = "update"
 							   data-placement = "top"
-							   title = "Update batch route"><i class = 'fa fa-check text-primary'></i></a>
-							| <a href = "{{ url(sprintf("/products/%d", $product->id)) }}" data-toggle = "tooltip"
-							     data-placement = "top"
-							     title = "View this product"><i class = 'fa fa-eye text-warning'></i></a>
+							   title = "Update batch route"><i class = 'fa fa-check text-primary'></i></a> |--}}
+							<a href = "{{ url(sprintf("/products/%d", $product->id)) }}" data-toggle = "tooltip"
+							   data-placement = "top"
+							   title = "View this product"><i class = 'fa fa-eye text-warning'></i></a>
 							| <a href = "{{ url(sprintf("/products/%d/edit", $product->id)) }}" data-toggle = "tooltip"
 							     data-placement = "top"
 							     title = "Edit this product"><i class = 'fa fa-pencil-square-o text-success'></i></a>
@@ -146,26 +133,32 @@
 			update: 'Are you sure you want to update?',
 			error: "You've not selected any route value to update",
 		};
-		$("a.update").on('click', function (event)
+		$("select.changable").on('change', function ()
 		{
-			event.preventDefault();
-			var id = $(this).closest('tr').attr('data-id');
-			var value = $(this).closest('tr').find('select').val();
+			var value = $(this).val();
 			if ( value == "null" ) {
-				alert(message.error);
+				alert("Not a valid batch");
 				return;
 			}
-			var action = confirm(message.update);
-			if ( action ) {
-				var form = $("form#update-product");
-				var url = form.attr('action');
-				form.attr('action', url.replace('id', id));
-				$("<input type='hidden' value='' />")
-						.attr("name", "batch_route_id")
-						.attr("value", value)
-						.appendTo($("form#update-product"));
-				form.submit();
-			}
+			var id = $(this).closest('tr').attr('data-id');
+
+			var form = $("form#update-product");
+			var formUrl = form.attr('action');
+			formUrl = formUrl.replace('id', id);
+
+			var token = $(form).find('input[name="_token"]').val();
+			console.log(token);
+			$.ajax({
+				method: 'PUT', url: formUrl, data: {
+					_token: token, batch_route_id: value,
+				}, success: function (data, textStatus, xhr)
+				{
+
+				}, error: function (xhr, textStatus, errorThrown)
+				{
+					alert('Could not update product route');
+				}
+			});
 		});
 		$("a.delete").on('click', function (event)
 		{

@@ -330,6 +330,6 @@ class ItemController extends Controller
 				break;
 		}
 
-		return redirect()->back();
+		return redirect(url('items/grouped'));
 	}
 }

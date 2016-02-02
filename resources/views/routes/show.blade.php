@@ -74,7 +74,7 @@
 						@foreach($items as $item)
 							<tr data-id = "{{$item->id}}">
 								<td>
-									<a href = "{{url('/orders/'.$item->order->short_order)}}">{{$item->order->short_order}}</a>
+									<a href = "{{url('/orders/details/'.$item->order->order_id)}}">{{$item->order->short_order}}</a>
 								</td>
 								<td>{{substr($item->order->order_date, 0, 10)}}</td>
 								<td>{{$item->item_quantity}}</td>

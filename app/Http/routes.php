@@ -47,6 +47,9 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 	resource('users', 'UserController');
 
 	get('products/unassigned', 'ProductController@unassigned');
+	#get('products/import', 'ProductController@getAddProductsByCSV');
+    post('products/import', 'ProductController@import');
+	get('products/export', 'ProductController@export');
 	resource('products', 'ProductController');
 
 	get('orders/details/{order_id}', 'OrderController@details');

@@ -10,7 +10,8 @@
         "laravelcollective/html": "5.1.9",
         "zizaco/entrust": "dev-laravel-5",
         "guzzlehttp/guzzle": "~6.0",
-        "milon/barcode": "^5.1"
+        "milon/barcode": "^5.1",
+        "league/csv": "^8.0"
     },
     "require-dev": {
         "filp/whoops": "^1.1",
