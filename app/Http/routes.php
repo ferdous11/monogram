@@ -90,6 +90,10 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 	resource('sub_categories', 'SubCategoryController');
 
 	resource('batch_routes', 'BatchRouteController');
+
+	resource('templates', 'TemplateController', [
+		'except' => [ 'create' ],
+	]);
 });
 
 Route::group([ 'middleware' => [ 'guest' ] ], function () {
