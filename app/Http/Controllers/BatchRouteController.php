@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BatchRoute;
 use App\Station;
+use App\Template;
 use Illuminate\Http\Request;
 
 use App\Http\Requests\BatchRouteCreateRequest;
@@ -21,8 +22,11 @@ class BatchRouteController extends Controller
 								  ->where('is_deleted', 0)
 								  ->latest()
 								  ->paginate(50);
+		$templates = Template::where('is_deleted', 0)
+							 ->lists('template_name', 'id')
+							 ->prepend('Select template', '');
 
-		return view('batch_routes.index', compact('batch_routes', 'count', 'stations'));
+		return view('batch_routes.index', compact('batch_routes', 'count', 'stations', 'templates'));
 	}
 
 	public function create ()
@@ -64,6 +68,7 @@ class BatchRouteController extends Controller
 		$batch_route->batch_code = $request->get('batch_code');
 		$batch_route->batch_route_name = $request->get('batch_route_name');
 		$batch_route->batch_max_units = $request->get('batch_max_units');
+		$batch_route->export_template = $request->get('batch_export_template');
 		$batch_route->batch_options = $request->get('batch_options');
 		$batch_route->save();
 

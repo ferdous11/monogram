@@ -34730,6 +34730,7 @@ class ProductsTableSeeder extends Seeder
 			$i = 0;
 			$product = new Product();
 			$product->id_catalog = $value[$i++];
+			$product->product_model = $value[0];
 			$product->product_name = $value[$i++];
 			$product->product_keywords = $value[$i++];
 			$product->product_description = $value[$i++];

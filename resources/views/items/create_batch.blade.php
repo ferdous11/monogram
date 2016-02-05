@@ -69,7 +69,7 @@
 				</div>
 				@foreach($batch_routes as $batch_route)
 					@if($batch_route->itemGroups)
-						@foreach($batch_route->itemGroups->chunk($batch_route->batch_max_units) as $croppedRows)
+						@foreach($batch_route->itemGroups->chunk($batch_route->batch_max_units) as $chunkedRows)
 							<div class = "col-xs-12">
 								<table class = "table" style = "margin-top: 5px;">
 									<tr data-id = "{{$batch_route->id}}">
@@ -87,14 +87,14 @@
 										<td></td>
 										<td></td>
 									</tr>
-									@foreach($croppedRows as $item)
+									@foreach($chunkedRows as $item)
 										<tr>
 											<td></td>
 											<td>{{$serial++}}</td>
 											<td>{!! Form::checkbox('batches[]', sprintf("%s|%s|%s", $count, $batch_route->id, /*$item->product_table_id, */$item->item_table_id) ,false, ['class' => 'checkable']) !!}</td>
 											<td>{{$item->order_id}}</td>
-											<td>{{$item->order_date}}</td>
-											<td>{{$item->item_id}}</td>
+											<td>{{substr($item->order_date, 0, 10)}}</td>
+											<td>{{$item->item_code}}</td>
 											<td>{{$item->item_quantity}}</td>
 										</tr>
 									@endforeach

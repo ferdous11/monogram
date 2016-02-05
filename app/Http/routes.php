@@ -37,7 +37,7 @@ get('set/{id}', function ($id) {
 	return redirect(url('stations/my_station'));
 });
 
-
+// auth middleware enabled controller
 Route::group([ 'middleware' => [ 'auth' ] ], function () {
 	get('/', 'HomeController@index');
 	get('logout', 'AuthenticationController@getLogout');
@@ -45,6 +45,8 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 	resource('customers', 'CustomerController');
 
 	resource('users', 'UserController');
+
+	get('exports/batch/{id}', 'ItemController@export_batch');
 
 	get('products/unassigned', 'ProductController@unassigned');
 	#get('products/import', 'ProductController@getAddProductsByCSV');
@@ -96,6 +98,7 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 	]);
 });
 
+// guest middleware enabled controller
 Route::group([ 'middleware' => [ 'guest' ] ], function () {
 	get('login', 'AuthenticationController@getLogin');
 	post('login', 'AuthenticationController@postLogin');

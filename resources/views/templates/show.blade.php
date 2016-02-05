@@ -276,19 +276,6 @@
 			$("body").tooltip({selector: '[data-toggle="tooltip"]'});
 			table_row_repositioning_method();
 		});
-		/*$("a.delete").on('click', function (event)
-		 {
-		 event.preventDefault();
-		 var id = $(this).closest('tr').attr('data-id');
-		 var action = confirm(message.delete);
-		 if ( action ) {
-		 var form = $("form#delete-template");
-		 var url = form.attr('action');
-		 form.attr('action', url.replace('id', id));
-		 form.submit();
-		 }
-		 });
-		 */
 		$("body").on('mousedown', 'table#draggable-table tbody', function (event)
 		{
 			$('html,body').css('cursor', 'move');
@@ -340,10 +327,14 @@
 		{
 			//event.preventDefault();
 			var i = 1;
+			var left_blnak = false;
 			$("table#draggable-table tbody#draggable-table-rows tr").each(function ()
 			{
 				var tr = $(this);
-
+				var textbox_value = $(tr).find('input[type="text"]').eq(0).val();
+				if ( !textbox_value ) {
+					left_blnak = true;
+				}
 				var hidden_template_order = $(tr).find('input.hidden-template-order');
 				$(hidden_template_order).val(i);
 
@@ -353,6 +344,11 @@
 
 				++i;
 			});
+
+			if ( left_blnak ) {
+				alert('Template name field is left blank. Please correct!');
+				return false;
+			}
 		});
 	</script>
 </body>

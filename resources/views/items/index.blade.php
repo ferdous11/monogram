@@ -50,7 +50,7 @@
 					<th>Customer</th>
 					<th>State</th>
 					<th>Description</th>
-					<th>ID</th>
+					<th>SKU</th>
 					<th>Option</th>
 					<th>Qty.</th>
 					<th>Batch</th>
@@ -68,7 +68,7 @@
 						</td>
 						<td>{{$item->order->customer->ship_state}}</td>
 						<td>{{$item->item_description}}</td>
-						<td>{{$item->item_id}}</td>
+						<td>{{$item->item_code}}</td>
 						<td>{{\Monogram\Helper::jsonTransformer($item->item_option)}}</td>
 						<td>{{$item->item_quantity}}</td>
 						<td>{{$item->batch_number ?: 'N/A' }}</td>

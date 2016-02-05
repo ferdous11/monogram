@@ -15,12 +15,21 @@ class Product extends Model
 
 	public function groupedItems ()
 	{
-		return $this->hasMany('App\Item', 'item_id', 'id_catalog')
+		/*return $this->hasMany('App\Item', 'item_id', 'id_catalog')
 					->whereNull('batch_number')
 					->where('is_deleted', 0)
 					->select([
 						'id',
 						'item_id',
+						'order_id',
+					]);*/
+		return $this->hasMany('App\Item', 'item_code', 'product_model')
+					->whereNull('batch_number')
+					->where('is_deleted', 0)
+					->select([
+						'id',
+						'item_id',
+						'item_code',
 						'order_id',
 					]);
 	}

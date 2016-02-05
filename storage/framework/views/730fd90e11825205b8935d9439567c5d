@@ -55,7 +55,7 @@
 					<th>Customer</th>
 					<th>State</th>
 					<th>Description</th>
-					<th>ID</th>
+					<th>SKU</th>
 					<th>Option</th>
 					<th>Qty.</th>
 					<th>Batch</th>
@@ -73,7 +73,7 @@
 						</td>
 						<td><?php echo e($item->order->customer->ship_state); ?></td>
 						<td><?php echo e($item->item_description); ?></td>
-						<td><?php echo e($item->item_id); ?></td>
+						<td><?php echo e($item->item_code); ?></td>
 						<td><?php echo e(\Monogram\Helper::jsonTransformer($item->item_option)); ?></td>
 						<td><?php echo e($item->item_quantity); ?></td>
 						<td><?php echo e($item->batch_number ?: 'N/A'); ?></td>

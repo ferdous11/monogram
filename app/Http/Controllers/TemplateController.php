@@ -199,13 +199,19 @@ class TemplateController extends Controller
 		TemplateOption::where('template_id', $id)
 					  ->delete();
 
+		$errors = false;
+
 		foreach ( $option_names as $option_name ) {
+			if ( !trim($option_names[$index]) ) {
+				$errors = true;
+				continue;
+			}
 			$templateOptions = new TemplateOption();
 			$templateOptions->template_id = $id;
 			$templateOptions->line_item_field = $line_item_fields[$index];
-			$templateOptions->option_name = $option_names[$index];
+			$templateOptions->option_name = trim($option_names[$index]);
 			$templateOptions->option_category = $option_categories[$index];
-			$templateOptions->value = $values[$index];
+			$templateOptions->value = trim($values[$index], ",");
 			$templateOptions->width = $widths[$index];
 			$templateOptions->format = $formats[$index];
 			$templateOptions->template_order = $template_orders[$index];
@@ -215,8 +221,14 @@ class TemplateController extends Controller
 		}
 
 		Session::flash('success', sprintf("Template <b>%s</b> is successfully updated", $template->template_name));
+		$messageBag = null;
+		if ( $errors ) {
+			$messageBag = new MessageBag([
+				'error' => 'Option name was left empty. Was not added to the template.',
+			]);
+		}
 
-		return redirect(url('templates/'.$id));
+		return redirect(url('templates/' . $id))->withErrors($messageBag);
 	}
 
 	public function destroy ($id)

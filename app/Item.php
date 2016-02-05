@@ -37,7 +37,9 @@ class Item extends Model
 
 	public function product ()
 	{
-		return $this->belongsTo('App\Product', 'item_id', 'id_catalog')
+		/*return $this->belongsTo('App\Product', 'item_id', 'id_catalog')
+					->where('is_deleted', 0);*/
+		return $this->belongsTo('App\Product', 'item_code', 'product_model')
 					->where('is_deleted', 0);
 	}
 
@@ -115,6 +117,7 @@ class Item extends Model
 		}
 	}
 
+	/* Scope Search methods */
 
 	public function scopeSearchBatch ($query, $batch_number)
 	{
@@ -122,7 +125,8 @@ class Item extends Model
 			return;
 		}
 
-		return $query->where('batch_number', 'LIKE', $batch_number);
+		#return $query->where('batch_number', 'LIKE', $batch_number);
+		return $query->whereIn('batch_number', explode(",", trim($batch_number, ",")));
 	}
 
 	public function scopeSearchRoute ($query, $batch_route_id)
@@ -155,7 +159,28 @@ class Item extends Model
 			return;
 		}
 
-		return $query->where('order_item_status', '=', $status);
+		return $query->where('item_order_status', '=', $status);
+	}
+
+	public function scopeSearchOptionText ($query, $option_text)
+	{
+		if ( !$option_text ) {
+			return;
+		}
+		$trimmed_text = trim($option_text);
+		$underscored_text = str_replace(" ", "_", $trimmed_text);
+
+		return $query->where('item_option', 'LIKE', sprintf("%%%s%%", $underscored_text));
+	}
+
+	public function scopeSearchOrderIds ($query, $order_ids)
+	{
+		if ( !$order_ids ) {
+			return;
+		}
+
+		$ids = explode(",", trim($order_ids, ","));
+		return $query->where('order_id', 'REGEXP', implode("|", $ids));
 	}
 
 	/*public function scopeSearchByOrderId ($query, $search_for, $search_in)

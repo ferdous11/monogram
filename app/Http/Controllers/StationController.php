@@ -10,11 +10,18 @@ use App\Station;
 
 use App\Http\Requests\StationCreateRequest;
 use App\Http\Requests\StationUpdateRequest;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Monogram\Helper;
 
 class StationController extends Controller
 {
+	private $statuses = [
+		'active'      => 'Active',
+		'not started' => 'Not started',
+		'completed'   => 'Completed',
+	];
+
 	public function index ()
 	{
 		$count = 1;
@@ -160,21 +167,47 @@ class StationController extends Controller
 			$item->save();
 		} elseif ( $action == 'reject' ) {
 			$item->station_name = Helper::getSupervisorStationName();
+			$item->rejection_message = trim($request->get('rejection_message'));
 			$item->save();
 		}
 
 		return redirect()->back();
 	}
 
-	public function supervisor ()
+	public function supervisor (Request $request)
 	{
-		$items = Item::with('route.stations_list', 'order')
-					 ->where('is_deleted', 0)
-					 ->whereNotNull('batch_number')
-					 ->where('station_name', Helper::getSupervisorStationName())
-					 ->paginate(50);
+		$routes = BatchRoute::where('is_deleted', 0)
+							->latest()
+							->lists('batch_route_name', 'id')
+							->prepend('Select a route', 'all');
 
-		return view('stations.supervisor', compact('items'));
+		$stations = Station::where('is_deleted', 0)
+						   ->latest()
+						   ->lists('station_description', 'id')
+						   ->prepend('Select a station', 'all');
+
+		$statuses = (new Collection($this->statuses))->prepend('Select status', 'all');
+
+		$items = null;
+		if ( count($request->all()) ) {
+			$items = Item::with('route.stations_list', 'order')
+						 ->searchBatch($request->get('batch'))
+						 ->searchRoute($request->get('route'))
+						 ->searchStatus($request->get('status'))
+						 ->searchStation($request->get('station'))
+						 ->searchOptionText($request->get('option_text'))
+						 ->searchOrderIds($request->get('order_id'))
+						 ->where('is_deleted', 0)
+						 ->paginate(50);
+		} else {
+			$items = Item::with('route.stations_list', 'order')
+						 ->where('is_deleted', 0)
+						 ->whereNotNull('batch_number')
+						 ->where('station_name', Helper::getSupervisorStationName())
+						 ->paginate(50);
+		}
+
+		return view('stations.supervisor', compact('items', 'request', 'routes', 'stations', 'statuses'));
 	}
 
 	public function assign_to_station (Request $request)
@@ -183,6 +216,7 @@ class StationController extends Controller
 		$station_name = $request->get('station_name');
 		$item = Item::find($item_id);
 		$item->station_name = $station_name;
+		$item->rejection_message = null;
 		$item->save();
 
 		return redirect()->back();

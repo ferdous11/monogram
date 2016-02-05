@@ -8,6 +8,7 @@ use App\Product;
 use App\Setting;
 use App\Station;
 use App\StationLog;
+use App\Template;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use DNS1D;
+use League\Csv\Writer;
 use Monogram\Helper;
 
 class ItemController extends Controller
@@ -63,7 +65,8 @@ class ItemController extends Controller
 		$batch_routes = BatchRoute::with([
 			'stations_list',
 			'itemGroups' => function ($q) {
-				return $q->join('items', 'products.id_catalog', '=', 'items.item_id')
+				/*return $q->join('items', 'products.id_catalog', '=', 'items.item_id')*/
+				return $q->join('items', 'products.product_model', '=', 'items.item_code')
 						 ->where('items.is_deleted', 0)
 						 ->where('items.batch_number', '0')
 						 ->join('orders', 'orders.order_id', '=', 'items.order_id')
@@ -71,6 +74,7 @@ class ItemController extends Controller
 						 ->addSelect([
 							 DB::raw('items.id AS item_table_id'),
 							 'items.item_id',
+							 'items.item_code',
 							 'items.order_id',
 							 'items.item_quantity',
 							 DB::raw('orders.id as order_table_id'),
@@ -215,7 +219,7 @@ class ItemController extends Controller
 						$grab_next = true;
 					}
 				}
-				$item->groupedItems[0]->station_name;
+				#$item->groupedItems[0]->station_name;
 			} else {
 				foreach ( $station_list as $station ) {
 					if ( $grab_next ) {
@@ -232,7 +236,7 @@ class ItemController extends Controller
 				}
 			}
 			if ( $current_station_name == '' ) {
-				$current_station_name = Setting::first()->station_name;
+				$current_station_name = Helper::getSupervisorStationName();
 				$current_station_description = "Supervisor station";
 			}
 			$row['current_station_name'] = $current_station_name;
@@ -269,8 +273,9 @@ class ItemController extends Controller
 		}, $route->stations->toArray()));
 
 		#return $items;
+		$count = 1;
 
-		return view('routes.show', compact('items', 'bar_code', 'batch_number', 'statuses', 'route', 'stations'));
+		return view('routes.show', compact('items', 'bar_code', 'batch_number', 'statuses', 'route', 'stations', 'count'));
 	}
 
 	public function updateBatchItems (Request $request, $batch_number)
@@ -323,7 +328,10 @@ class ItemController extends Controller
 
 				$items = Item::where('batch_number', $batch_number)
 							 ->where('station_name', $station_name)
-							 ->update([ 'station_name' => $supervisor_station ]);
+							 ->update([
+								 'station_name'      => $supervisor_station,
+								 'rejection_message' => trim($request->get('rejection_message')),
+							 ]);
 
 				break;
 			default:
@@ -331,5 +339,65 @@ class ItemController extends Controller
 		}
 
 		return redirect(url('items/grouped'));
+	}
+
+	public function export_batch (Request $request, $id)
+	{
+		if ( !$id || $id == 0 ) {
+			return view('errors.404');
+		}
+		$batch_id = intval($id);
+
+		$items = Item::where('batch_number', $batch_id)
+					 ->get();
+
+		if ( !$items ) {
+			return view('errors.404');
+		}
+
+		$route_id = $items[0]->batch_route_id;
+		$route = BatchRoute::find($route_id);
+
+		$template_id = $route->export_template;
+		$template = Template::with('exportable_options')
+							->find($template_id);
+
+		$columns = $template->exportable_options->lists('option_name')
+												->toArray(); #->prepend('Order id');
+
+		$file_path = sprintf("%s/assets/exports/batches/", base_path());
+		$file_name = sprintf("batch_%d-%s-%s.csv", $batch_id, date("y-m-d", strtotime('now')), str_random(5));
+		$fully_specified_path = sprintf("%s%s", $file_path, $file_name);
+
+		$csv = Writer::createFromFileObject(new \SplFileObject($fully_specified_path, 'a+'), 'w');
+		$csv->insertOne($columns);
+
+		foreach ( $items as $item ) {
+			$row = [ ];
+			#$row[] = explode("-", $item->order_id)[2];
+			$options = $item->item_option;
+			$decoded_options = json_decode($options, true);
+
+			foreach ( $template->exportable_options as $column ) {
+				$keys = explode(",", $column->value);
+				$found = false;
+				$values = [ ];
+				foreach ( $keys as $key ) {
+					$trimmed_key = implode("_", explode(" ", trim($key)));
+					if ( array_key_exists($trimmed_key, $decoded_options) ) {
+						$values[] = $decoded_options[$trimmed_key];
+						$found = true;
+					}
+				}
+				if ( $found ) {
+					$row[] = implode(",", $values);
+				} else {
+					$row[] = '';
+				}
+			}
+			$csv->insertOne($row);
+		}
+
+		return response()->download($fully_specified_path);
 	}
 }

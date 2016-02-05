@@ -71,7 +71,7 @@
 				</div>
 				<?php foreach($batch_routes as $batch_route): ?>
 					<?php if($batch_route->itemGroups): ?>
-						<?php foreach($batch_route->itemGroups->chunk($batch_route->batch_max_units) as $croppedRows): ?>
+						<?php foreach($batch_route->itemGroups->chunk($batch_route->batch_max_units) as $chunkedRows): ?>
 							<div class = "col-xs-12">
 								<table class = "table" style = "margin-top: 5px;">
 									<tr data-id = "<?php echo e($batch_route->id); ?>">
@@ -90,14 +90,14 @@
 										<td></td>
 										<td></td>
 									</tr>
-									<?php foreach($croppedRows as $item): ?>
+									<?php foreach($chunkedRows as $item): ?>
 										<tr>
 											<td></td>
 											<td><?php echo e($serial++); ?></td>
 											<td><?php echo Form::checkbox('batches[]', sprintf("%s|%s|%s", $count, $batch_route->id, /*$item->product_table_id, */$item->item_table_id) ,false, ['class' => 'checkable']); ?></td>
 											<td><?php echo e($item->order_id); ?></td>
-											<td><?php echo e($item->order_date); ?></td>
-											<td><?php echo e($item->item_id); ?></td>
+											<td><?php echo e(substr($item->order_date, 0, 10)); ?></td>
+											<td><?php echo e($item->item_code); ?></td>
 											<td><?php echo e($item->item_quantity); ?></td>
 										</tr>
 									<?php endforeach; ?>

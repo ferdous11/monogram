@@ -12,7 +12,8 @@
 	      href = "//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel = "stylesheet" href = "{{url('assets/css/common.css')}}" type = "text/css" />
 	<link type = "text/css" href = "{{url('assets/css/ui.multiselect.css')}}" rel = "stylesheet" />
-	<link type = "text/css" href = "http://yandex.st/jquery-ui/1.8.11/themes/humanity/jquery.ui.all.min.css" rel = "stylesheet" />
+	<link type = "text/css" href = "http://yandex.st/jquery-ui/1.8.11/themes/humanity/jquery.ui.all.min.css"
+	      rel = "stylesheet" />
 </head>
 <body style = "background:#ffffff ;font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;color: #000000;">
 	@include('includes.header_menu')
@@ -46,6 +47,7 @@
 					<th style = "padding-bottom:10px"><b>Route name</b></th>
 					<th style = "padding-bottom:10px"><b>Max unit</b></th>
 					<th style = "padding-bottom:10px"><b>Stations</b></th>
+					<th style = "padding-bottom:10px"><b>Export template</b></th>
 					<th style = "padding-bottom:10px"><b>Options( Comma delimited )</b></th>
 					<th style = "padding-bottom:10px"><b>Action</b></th>
 				</tr>
@@ -58,10 +60,11 @@
 						                                                                          data-placement = "top"
 						                                                                          title = "Delete this item">
 								<i class = "fa fa-times text-danger"></i> </a></td>
-						<td style = "vertical-align: top;padding-bottom:7px;">{!! Form::text('batch_code', $batch_route->batch_code, ['style'=>'width:100px;margin-right:10px;margin-left:5px','readonly'=>'"readonly"']) !!}</td>
+						<td style = "vertical-align: top;padding-bottom:7px;">{!! Form::text('batch_code', $batch_route->batch_code, ['style'=>'width:100px;margin-right:10px;margin-left:5px','readonly'=>'readonly']) !!}</td>
 						<td style = "vertical-align: top;padding-bottom:7px;">{!! Form::text('batch_route_name', $batch_route->batch_route_name, ['style'=>'width:250px;margin-right:10px']) !!}</td>
 						<td style = "vertical-align: top;padding-bottom:7px;">{!! Form::text('batch_max_units', $batch_route->batch_max_units, ['style'=>'width:70px;margin-right:25px']) !!}</td>
 						<td style = "vertical-align: top;padding-bottom:7px;">{!! Form::textarea('batch_stations', implode(",\n", array_map(function($station) { return $station['station_name']; }, $batch_route->stations_list->toArray())), ['style'=>'width:120px;height:80px;margin-right:10px;overflow-y: scroll;']) !!}</td>
+						<td style = "vertical-align: top;padding-bottom:7px;">{!! Form::select('export_template', $templates, $batch_route->export_template, ['style'=>'width:70px;margin-right:25px']) !!}</td>
 						<td style = "vertical-align: top;padding-bottom:7px;">{!! Form::textarea('batch_options', $batch_route->batch_options, ['style'=>'width:120px;height:80px;margin-left:25px;margin-right:70px']) !!}</td>
 						<td style = "vertical-align: top;padding-bottom:7px;">
 							<a href = "#" class = "update" data-toggle = "tooltip" data-placement = "top"
@@ -84,6 +87,7 @@
 			{!! Form::hidden('batch_code', null, ['id' => 'update_batch_code']) !!}
 			{!! Form::hidden('batch_route_name', null, ['id' => 'update_batch_route_name']) !!}
 			{!! Form::hidden('batch_max_units', null, ['id' => 'update_batch_max_units']) !!}
+			{!! Form::hidden('batch_export_template', null, ['id' => 'update_batch_export_template']) !!}
 			{!! Form::hidden('batch_stations', null, ['id' => 'update_batch_stations']) !!}
 			{!! Form::hidden('batch_options', null, ['id' => 'update_batch_options']) !!}
 			{!! Form::close() !!}
@@ -166,12 +170,16 @@
 			var route = tr.find('input').eq(1).val();
 			var unit = tr.find('input').eq(2).val();
 			var stations = tr.find('textarea').eq(0).val();
+			var export_template = tr.find('select').eq(0).val();
 			var options = tr.find('textarea').eq(1).val();
+
 			$("input#update_batch_code").val(code);
 			$("input#update_batch_route_name").val(route);
 			$("input#update_batch_max_units").val(unit);
 			$("input#update_batch_stations").val(stations);
+			$("input#update_batch_export_template").val(export_template);
 			$("input#update_batch_options").val(options);
+
 			var form = $("form#update-batch-routes");
 			var url = form.attr('action');
 			form.attr('action', url.replace('id', id));
@@ -180,12 +188,14 @@
 
 		var form = $("form#create-batch-route");
 
-		$(form).on('submit', function(){
+		$(form).on('submit', function ()
+		{
 
-			$("ul.selected li").each(function(){
+			$("ul.selected li").each(function ()
+			{
 				var selected_id = $(this).attr('data-selected-id');
-				if(selected_id){
-					$(form).append("<input type='hidden' value='"+selected_id+"' name='batch_route_order[]' />");
+				if ( selected_id ) {
+					$(form).append("<input type='hidden' value='" + selected_id + "' name='batch_route_order[]' />");
 				}
 			});
 		});

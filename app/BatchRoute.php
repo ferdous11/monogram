@@ -15,7 +15,8 @@ class BatchRoute extends Model
 						DB::raw('products.id as product_table_id'),
 						'products.store_id',
 						'products.batch_route_id',
-						'products.id_catalog'
+						'products.id_catalog',
+						'products.product_model',
 					]);
 	}
 
