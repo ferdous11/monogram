@@ -96,6 +96,11 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 	resource('templates', 'TemplateController', [
 		'except' => [ 'create' ],
 	]);
+
+	put('rules/bulk_update/{id}', 'RuleController@bulk_update');
+	resource('rules', 'RuleController', [
+		'except' => [ 'create' ],
+	]);
 });
 
 // guest middleware enabled controller
