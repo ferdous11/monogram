@@ -1,0 +1,1 @@
+<?php echo Form::select('signature_confirmation',$signature_confirmation, $value, ['class' => 'form-control']); ?>

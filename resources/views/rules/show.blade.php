@@ -43,9 +43,10 @@
 								<span class = "text-danger delete-row" data-toggle = "tooltip" data-placement = "top"
 								      title = "Delete trigger"><i class = "fa fa-times"></i> </span>
 							</td>
-							<td>{!! Form::select('trigger_type[]', $trigger_parameters, $trigger->rule_trigger_parameter, ['class' => 'form-control']) !!}</td>
+							<td>{!! Form::select('trigger_type[]', $trigger_parameters, $trigger->rule_trigger_parameter, ['class' => 'form-control changable-rule-trigger-parameter', 'disabled' => 'disabled']) !!}</td>
 							<td>{!! Form::select('trigger_relation[]', $trigger_relations, $trigger->rule_trigger_relation, ['class' => 'form-control']) !!}</td>
-							<td>{!! Form::text('trigger_value[]', $trigger->rule_trigger_value, ['class' => 'form-control']) !!}</td>
+							{{--<td>{!! Form::text('trigger_value[]', $trigger->rule_trigger_value, ['class' => 'form-control']) !!}</td>--}}
+							<td>{!! $that->get_view_for_trigger_option($trigger->rule_trigger_parameter, $trigger->rule_trigger_value) !!}</td>
 						</tr>
 					@endforeach
 				@endif
@@ -76,8 +77,9 @@
 								<span class = "text-danger delete-row" data-toggle = "tooltip" data-placement = "top"
 								      title = "Delete action"><i class = "fa fa-times"></i> </span>
 							</td>
-							<td>{!! Form::select('action_type[]', $action_parameters, $action->rule_action_parameter, ['class' => 'form-control']) !!}</td>
-							<td>{!! Form::text('action_value[]', $action->rule_action_value, ['class' => 'form-control']) !!}</td>
+							<td>{!! Form::select('action_type[]', $action_parameters, $action->rule_action_parameter, ['class' => 'form-control changable-rule-action']) !!}</td>
+							{{--<td>{!! Form::text('action_value[]', $action->rule_action_value, ['class' => 'form-control']) !!}</td>--}}
+							<td>{!! $that->get_view_for_action($action->rule_action_parameter, $action->rule_action_value) !!}</td>
 						</tr>
 					@endforeach
 				@endif
@@ -109,6 +111,59 @@
 			$("body").tooltip({selector: '[data-toggle="tooltip"]'});
 		});
 
+		$("body").on('change', 'select.changable-rule-trigger-parameter', function ()
+		{
+			var value = $(this).val();
+			if ( value == "null" ) {
+				alert("Not a valid Parameter");
+				return;
+			}
+			var id = $(this).closest('tr').attr('data-id');
+			var formUrl = '{{url('rules/parameter')}}';
+			var that = $(this);
+
+			$.ajax({
+				method: 'GET', url: formUrl, data: {
+					option: value
+				}, success: function (data, textStatus, xhr)
+				{
+					var td = $(that).closest('tr').find('td:eq(3)');
+					$(td).empty();
+					$(td).html(data);
+				}, error: function (xhr, textStatus, errorThrown)
+				{
+					alert('Could not update product route');
+				}
+			});
+		});
+
+		$("body").on('change', 'select.changable-rule-action', function ()
+		{
+			var value = $(this).val();
+			if ( value == "null" ) {
+				alert("Not a valid Parameter");
+				return;
+			}
+			var id = $(this).closest('tr').attr('data-id');
+			var formUrl = '{{url('rules/actions')}}';
+			var that = $(this);
+
+			$.ajax({
+				method: 'GET', url: formUrl, data: {
+					option: value
+				}, success: function (data, textStatus, xhr)
+				{
+					var td = $(that).closest('tr').find('td:eq(2)');
+					$(td).empty();
+					$(td).html(data);
+
+				}, error: function (xhr, textStatus, errorThrown)
+				{
+					alert('Could not update product route');
+				}
+			});
+		});
+
 		$("body").on('click', "span.delete-row", function (event)
 		{
 			event.preventDefault();
@@ -125,7 +180,7 @@
 								<span class="text-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete trigger"><i class="fa fa-times"></i> </span>\
 							</td>\
 						<td>\
-							<select class="form-control" name="trigger_type[]">\
+							<select class="form-control changable-rule-trigger-parameter" name="trigger_type[]">\
 								<option value="">Select Parameter</option>\
 								<option value="VAL">Items Value ($)</option>\
 								<option value="OT">Order total ($)</option>\
@@ -175,7 +230,7 @@
 								<span class="text-danger delete-row" data-toggle="tooltip" data-placement="top" title="Delete action"><i class="fa fa-times"></i> </span>\
 							</td>\
 							<td>\
-								<select class="form-control" name="action_type[]">\
+								<select class="form-control changable-rule-action" name="action_type[]">\
 									<option value="">Select Parameter</option>\
 									<option value="CAR">Carrier</option>\
 									<option value="CLS">Shipping class</option>\
@@ -204,93 +259,11 @@
 			add_new_action_row(tbody);
 		});
 
+		$("form#rule-update").on('submit', function ()
+		{
+			$("select.changable-rule-trigger-parameter").prop('disabled', false);
+		});
 
 	</script>
-	{{--<script type = "text/javascript">
-		var message = {
-			delete: 'Are you sure you want to delete?',
-		};
-
-
-		$(function ()
-		{
-			$("body").tooltip({selector: '[data-toggle="tooltip"]'});
-			table_row_repositioning_method();
-		});
-		$("body").on('mousedown', 'table#draggable-table tbody', function (event)
-		{
-			$('html,body').css('cursor', 'move');
-		});
-		$("body").on('mouseup', 'table#draggable-table tbody', function (event)
-		{
-			$('html,body').css('cursor', 'default');
-		});
-		$("body").on('click', 'button#add-new-row', function (event)
-		{
-			var tr = $("tbody#draggable-table-rows tr:last");
-			if ( !tr ) {
-				tr = $("tbody#draggable-table-rows");
-			}
-			add_new_row(tr);
-		});
-		$("body").on('click', 'span.new-row', function (event)
-		{
-			var tr = $(this).closest('tr');
-			add_new_row(tr);
-		});
-		$("body").on('click', 'span.delete-row', function (event)
-		{
-			var answer = confirm(message.delete);
-			if ( answer ) {
-				var tr = $(this).closest('tr');
-				$(tr).remove();
-			}
-		});
-		$("body").on('click', 'span.move-up', function (event)
-		{
-			var current_row = $(this).closest('tr');
-			var previous_row = current_row.prev();
-			if ( previous_row.length ) {
-				previous_row.before(current_row);
-			}
-			table_row_repositioning_method();
-		});
-		$("body").on('click', 'span.move-down', function (event)
-		{
-			var current_row = $(this).closest('tr');
-			var next_row = current_row.next();
-			if ( next_row.length ) {
-				next_row.after(current_row);
-			}
-			table_row_repositioning_method();
-		});
-		$("form#rule-update").on('submit', function (event)
-		{
-			//event.preventDefault();
-			var i = 1;
-			var left_blnak = false;
-			$("table#draggable-table tbody#draggable-table-rows tr").each(function ()
-			{
-				var tr = $(this);
-				var textbox_value = $(tr).find('input[type="text"]').eq(0).val();
-				if ( !textbox_value ) {
-					left_blnak = true;
-				}
-				var hidden_rule_order = $(tr).find('input.hidden-rule-order');
-				$(hidden_rule_order).val(i);
-
-				var is_selected = $(tr).find('td:eq(0) input').is(':checked') ? 1 : 0;
-				var hidden_line_item_field = $(tr).find('input.hidden-line-item-field');
-				$(hidden_line_item_field).val(is_selected);
-
-				++i;
-			});
-
-			if ( left_blnak ) {
-				alert('rule name field is left blank. Please correct!');
-				return false;
-			}
-		});
-	</script>--}}
 </body>
 </html>

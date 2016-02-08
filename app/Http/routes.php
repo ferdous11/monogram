@@ -97,6 +97,9 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
 		'except' => [ 'create' ],
 	]);
 
+	get('rules/parameter', 'RuleController@parameter_option');
+	get('rules/actions', 'RuleController@rule_action');
+
 	put('rules/bulk_update/{id}', 'RuleController@bulk_update');
 	resource('rules', 'RuleController', [
 		'except' => [ 'create' ],

@@ -1,0 +1,1 @@
+<?php echo Form::select('store',$store, null, ['class' => 'form-control']); ?>
