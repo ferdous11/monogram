@@ -101,7 +101,7 @@
 						<td class = "text-center">{{ $product->product_model ? $product->product_model : '-' }}</td>
 						<td>{{ $product->product_name }}</td>
 						<td><img src = "{{ $product->product_thumb }}" width = "50" height = "50" /></td>
-						<td>{!! Form::select('batch_route_id', $batch_routes, $product->batch_route_id, ['class' => 'form-control']) !!}</td>
+						<td>{!! Form::select('batch_route_id', $batch_routes, $product->batch_route_id, ['class' => 'form-control changable']) !!}</td>
 						<td>
 							<a href = "#" data-toggle = "tooltip" class = "update"
 							   data-placement = "top"
@@ -167,6 +167,35 @@
 				form.submit();
 			}
 		});
+		
+		$("select.changable").on('change', function ()
+		{
+			var value = $(this).val();
+			if ( value == "null" ) {
+				alert("Not a valid batch");
+				return;
+			}
+			var id = $(this).closest('tr').attr('data-id');
+
+			var form = $("form#update-product");
+			var formUrl = form.attr('action');
+			formUrl = formUrl.replace('id', id);
+
+			var token = $(form).find('input[name="_token"]').val();
+			console.log(token);
+			$.ajax({
+				method: 'PUT', url: formUrl, data: {
+					_token: token, batch_route_id: value,
+				}, success: function (data, textStatus, xhr)
+				{
+
+				}, error: function (xhr, textStatus, errorThrown)
+				{
+					alert('Could not update product route');
+				}
+			});
+		});
+
 		$("a.delete").on('click', function (event)
 		{
 			event.preventDefault();
