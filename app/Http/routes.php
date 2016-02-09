@@ -31,6 +31,28 @@ get('test/batch', function () {
 	return sprintf("%d seconds passed to add routes to %d products", ( $end - $start ), $x);
 });
 
+get('set_route', function(){
+	$stations = [
+		"R-GGR",
+		"R-GLP",
+		"R-GRD",
+		"R-Red",
+		"R-BM1",
+		"R-BM2",
+		"R-BM3",
+		"R-BM4",
+		"R-BM5",
+		"R-PEDD",
+		"R-PNAF",
+		"R-TBF",
+		"R-QCD",
+		"R-SHP",
+		"R-REC",
+		"R-BO",
+	];
+	return \App\Station::whereIn('station_name', $stations)->orderBy(\DB::raw(sprintf("field(station_name, '%s')", implode("','", $stations))))->lists('id');
+});
+
 get('set/{id}', function ($id) {
 	\Session::put('station_id', $id);
 

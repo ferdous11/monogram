@@ -91,7 +91,7 @@
 					<th>SKU</th>
 					<th>Product name</th>
 					<th>Image</th>
-					<th>Batch code</th>
+					<th>Route code</th>
 					<th>Action</th>
 				</tr>
 				@foreach($products as $product)
