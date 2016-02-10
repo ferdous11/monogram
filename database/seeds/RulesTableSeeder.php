@@ -13,22 +13,17 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"VAL",
-					">=",
-					"200",
-				],
 			],
 			[
 				[
 					"INS",
-					"ON",
+					"ON"
 				],
 				[
 					"SIG",
-					"ON",
+					"ON"
 				],
-			],
+			]
 		],
 		[
 			"MS-4MEM009",
@@ -38,35 +33,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-4MEM009S,MS-4MEM002,MS-4MEM004",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-1",
+					"-1"
 				],
-			],
+			]
 		],
 		[
 			"International ",
@@ -80,13 +65,13 @@ class RulesTableSeeder extends Seeder
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"FirstClassPackageInternationalService",
+					"FirstClassPackageInternationalService"
 				],
-			],
+			]
 		],
 		[
 			"USPS with out tracking",
@@ -96,35 +81,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SHIP",
-					"=",
-					"USPS",
-				],
-				[
-					"WGT",
-					"<=",
-					".2",
-				],
 			],
 			[
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"",
+					""
 				],
-			],
+			]
 		],
 		[
 			"MS-GFT506M",
@@ -134,35 +109,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-GFT506M",
-				],
-				[
-					"WGT",
-					"=",
-					"0.69",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-9",
+					"-9"
 				],
-			],
+			]
 		],
 		[
 			"MS-GFT172",
@@ -172,35 +137,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-GFT172",
-				],
-				[
-					"WGT",
-					"=",
-					"0.86",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-.6",
+					"-.6"
 				],
-			],
+			]
 		],
 		[
 			"DM-G5000-GD",
@@ -210,35 +165,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"DM-G5000-GD,DM-G5000-BD,DM-G5000-FD,DM-G5000-TG,DM-G5000-TG,DM-G5000-TD,DM-G5000-G,DM-G5000,DM-G5000-BG",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"4",
+					"4"
 				],
-			],
+			]
 		],
 		[
 			"MS-WTL03",
@@ -248,35 +193,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-WTL03",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"15",
+					"15"
 				],
-			],
+			]
 		],
 		[
 			"MS-SM11BK",
@@ -286,35 +221,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-SM11BK-GD,MS-SM11BK-DG,",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					".7",
+					".7"
 				],
-			],
+			]
 		],
 		[
 			"DM-53331-FR",
@@ -324,35 +249,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"DM-53331-FR",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"28",
+					"28"
 				],
-			],
+			]
 		],
 		[
 			"N-30-4668",
@@ -362,35 +277,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"N-30-4668",
-				],
-				[
-					"WGT",
-					"=",
-					"0.69",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-5",
+					"-5"
 				],
-			],
+			]
 		],
 		[
 			"FC-A1168-C",
@@ -400,27 +305,17 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"FC-A1168-C",
-				],
-				[
-					"WGT",
-					"=",
-					"1",
-				],
 			],
 			[
 				[
 					"ADW",
-					"16",
+					"16"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
-			],
+			]
 		],
 		[
 			"JB-101-M",
@@ -430,35 +325,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"JB-101-M",
-				],
-				[
-					"WGT",
-					"=",
-					"1.49",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"",
+					""
 				],
-			],
+			]
 		],
 		[
 			"MS-BBQ01",
@@ -468,35 +353,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-BBQ01",
-				],
-				[
-					"WGT",
-					"=",
-					"1",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-.5",
+					"-.5"
 				],
-			],
+			]
 		],
 		[
 			"CGD-069461-F",
@@ -506,35 +381,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"CGD-069461-F",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"6",
+					"6"
 				],
-			],
+			]
 		],
 		[
 			"JD-GC1041",
@@ -544,27 +409,17 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"JD-GC1041",
-				],
-				[
-					"WGT",
-					"=",
-					"0.1",
-				],
 			],
 			[
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"1",
+					"1"
 				],
-			],
+			]
 		],
 		[
 			"DM-53331-N-1",
@@ -574,35 +429,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"DM-53331-N-1",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"17",
+					"17"
 				],
-			],
+			]
 		],
 		[
 			"FC-J40014-2",
@@ -612,35 +457,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"FC-J40014-2",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"27",
+					"27"
 				],
-			],
+			]
 		],
 		[
 			"DM-53331-MN",
@@ -650,35 +485,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"DM-53331-MN",
-				],
-				[
-					"WGT",
-					"=",
-					"0.05",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"30",
+					"30"
 				],
-			],
+			]
 		],
 		[
 			"watch cases",
@@ -688,26 +513,21 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"JC277-NP,JC276-NP,JD-GC1082,JC270,WC301-NP,JB-102-W,JC278-NP,CB293-NN,CB292-NN",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
-			],
+			]
 		],
 		[
 			"DM-G1351-N-1,DM-G1351-I-1,DM-G1349-I-1,DM-G1349-N-1,G1349-1",
@@ -717,30 +537,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"DM-G1351-N-1,DM-G1351-I-1,DM-G1349-I-1,DM-G1349-N-1,G1349-1",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"0",
+					"0"
 				],
-			],
+			]
 		],
 		[
 			"DM-G1351-I-4,DM-G1351-I2-4,DM-G1349-I-4,DM-G1349-I2-4",
@@ -750,30 +565,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"DM-G1351-I-4,DM-G1351-I2-4,DM-G1349-I-4,DM-G1349-I2-4",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"18",
+					"18"
 				],
-			],
+			]
 		],
 		[
 			"G1351-1-4,G1349-4",
@@ -783,26 +593,21 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"G1351-1-4,G1349-4",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
-			],
+			]
 		],
 		[
 			"MS-SBL030",
@@ -812,35 +617,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-SBL030",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-0.4",
+					"-0.4"
 				],
-			],
+			]
 		],
 		[
 			"MS-GFT173",
@@ -850,35 +645,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-GFT173",
-				],
-				[
-					"WGT",
-					"IN",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusGround",
+					"DHLGMSMParcelPlusGround"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"25",
+					"25"
 				],
-			],
+			]
 		],
 		[
 			"CGD-003236",
@@ -888,35 +673,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"CGD-003236",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-1.8",
+					"-1.8"
 				],
-			],
+			]
 		],
 		[
 			"DM-G5000-GL",
@@ -926,35 +701,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"DM-G5000",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-1.8",
+					"-1.8"
 				],
-			],
+			]
 		],
 		[
 			"MS-CST01",
@@ -964,35 +729,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-CST01",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"11",
+					"11"
 				],
-			],
+			]
 		],
 		[
 			"MS-BBQ123-SET",
@@ -1002,35 +757,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-BBQ123-SET",
-				],
-				[
-					"WGT",
-					"IN",
-					"0.05",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"45",
+					"45"
 				],
-			],
+			]
 		],
 		[
 			"MS-BBQ12",
@@ -1040,35 +785,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-BBQ12",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"11",
+					"11"
 				],
-			],
+			]
 		],
 		[
 			"MS-BBQ11",
@@ -1078,35 +813,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-BBQ11",
-				],
-				[
-					"WGT",
-					"=",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"C1",
+					"C1"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"3.1",
+					"3.1"
 				],
-			],
+			]
 		],
 		[
 			"MS-BBQ13",
@@ -1116,35 +841,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-BBQ13",
-				],
-				[
-					"WGT",
-					"IN",
-					"0.24",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"19",
+					"19"
 				],
-			],
+			]
 		],
 		[
 			"MS-GFT506M-2",
@@ -1154,35 +869,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-GFT506M",
-				],
-				[
-					"WGT",
-					"=",
-					"0.7",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"ADW",
-					"-9",
+					"-9"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
-			],
+			]
 		],
 		[
 			"MS-GFT506M-2",
@@ -1196,9 +901,9 @@ class RulesTableSeeder extends Seeder
 			[
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
-			],
+			]
 		],
 		[
 			"od-5",
@@ -1208,31 +913,21 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"OD-5",
-				],
-				[
-					"WGT",
-					"=",
-					"0.98",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"ADW",
-					"-13",
+					"-13"
 				],
-			],
+			]
 		],
 		[
 			"MS-LL21",
@@ -1242,31 +937,21 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"MS-LL21",
-				],
-				[
-					"WGT",
-					"=",
-					".2",
-				],
 			],
 			[
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"ADW",
-					"-1",
+					"-1"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
-			],
+			]
 		],
 		[
 			"AP-CU901",
@@ -1276,31 +961,21 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"AP-CU901",
-				],
-				[
-					"WGT",
-					"=",
-					"0.1",
-				],
 			],
 			[
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"1",
+					"1"
 				],
-			],
+			]
 		],
 		[
 			"Priority mail",
@@ -1310,26 +985,21 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SHIP",
-					"=",
-					"USPS",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"Priority",
+					"Priority"
 				],
 				[
 					"PKG",
-					"FlatRateEnvelope",
+					"FlatRateEnvelope"
 				],
-			],
+			]
 		],
 		[
 			"Express mail",
@@ -1339,26 +1009,21 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SHIP",
-					"=",
-					"USPS",
-				],
 			],
 			[
 				[
 					"CAR",
-					"EXP1",
+					"EXP1"
 				],
 				[
 					"CLS",
-					"Express",
+					"Express"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
-			],
+			]
 		],
 		[
 			"FC-J40014-1",
@@ -1368,35 +1033,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"FC-J40014-1,FC-J40014-1N",
-				],
-				[
-					"WGT",
-					"=",
-					"0.98",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"0",
+					"0"
 				],
-			],
+			]
 		],
 		[
 			"deco pillow",
@@ -1406,35 +1061,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"SBPC-628,SBPC-627,SBPC-629,SBPC-596,SBPC-597,SBPC-598,SBPC-599,SBPC-607,SBPC-615,SBPC-616,SBPC-617,SBPC-630,SBPC-719,SBPC-720,SBPC-721,SBPC-722,SBPC-876,SBPC-763,SBPC-764",
-				],
-				[
-					"WGT",
-					">=",
-					"1",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"ADW",
-					"-14",
+					"-14"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
-			],
+			]
 		],
 		[
 			"2 deco pillows",
@@ -1444,40 +1089,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"NUM",
-					"=",
-					"2",
-				],
-				[
-					"WGT",
-					">=",
-					"1",
-				],
-				[
-					"SKU",
-					"IN",
-					"SBPC-628,SBPC-627,SBPC-629,SBPC-596,SBPC-597,SBPC-598,SBPC-599,SBPC-607,SBPC-615,SBPC-616,SBPC-617,SBPC-630,SBPC-719,SBPC-720,SBPC-721,SBPC-722,SBPC-876,SBPC-763,SBPC-764",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"ADW",
-					"-28",
+					"-28"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
-			],
+			]
 		],
 		[
 			"sleeping pillows",
@@ -1487,35 +1117,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"WGT",
-					">=",
-					"1",
-				],
-				[
-					"SKU",
-					"IN",
-					"AP-T220-19,AP-T220-20,AP-T220-15,AP-T220-10,AP-T220-12,AP-T220-9,AP-T220-16,AP-T220-18,AP-T220-21,AP-T220-14,AP-T220-11,AP-T220-2,AP-T220-13,AP-T220-6,AP-T220-8,AP-T220-7,AP-T220-1,AP-T220-3,AP-T220-4,AP-T220-5",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-14",
+					"-14"
 				],
-			],
+			]
 		],
 		[
 			"shoponlinedeals",
@@ -1525,30 +1145,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"MKT",
-					"=",
-					"yhst-128796189915726",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-30",
+					"-30"
 				],
-			],
+			]
 		],
 		[
 			"2 sleeping pillows",
@@ -1558,40 +1173,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"SKU",
-					"IN",
-					"AP-T220-19,AP-T220-20,AP-T220-15,AP-T220-10,AP-T220-12,AP-T220-9,AP-T220-16,AP-T220-18,AP-T220-21,AP-T220-14,AP-T220-11,AP-T220-2,AP-T220-13,AP-T220-6,AP-T220-8,AP-T220-7,AP-T220-1,AP-T220-3,AP-T220-4,AP-T220-5",
-				],
-				[
-					"NUM",
-					">=",
-					"1",
-				],
-				[
-					"WGT",
-					">=",
-					"1",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-28",
+					"-28"
 				],
-			],
+			]
 		],
 		[
 			"openers ",
@@ -1601,35 +1201,25 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"WGT",
-					">=",
-					"0.69",
-				],
-				[
-					"SKU",
-					"IN",
-					"RLBO-498,RLBO-499,RLBO-497,RLBO-496",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
 				[
 					"ADW",
-					"-9",
+					"-9"
 				],
-			],
+			]
 		],
 		[
 			"under 1 lbs with tracking",
@@ -1639,31 +1229,21 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"WGT",
-					"<",
-					"1",
-				],
-				[
-					"MKT",
-					"=",
-					"yhst-128796189915726",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelsExpedited",
+					"DHLGMSMParcelsExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
-			],
+			]
 		],
 		[
 			"over 1 lbs",
@@ -1673,31 +1253,21 @@ class RulesTableSeeder extends Seeder
 					"=",
 					"YES",
 				],
-				[
-					"WGT",
-					">=",
-					"1",
-				],
-				[
-					"MKT",
-					"=",
-					"y-hc",
-				],
 			],
 			[
 				[
 					"CAR",
-					"USPS",
+					"USPS"
 				],
 				[
 					"CLS",
-					"DHLGMSMParcelPlusExpedited",
+					"DHLGMSMParcelPlusExpedited"
 				],
 				[
 					"PKG",
-					"Parcel",
+					"Parcel"
 				],
-			],
+			]
 		],
 	];
 
