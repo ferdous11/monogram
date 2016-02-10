@@ -1399,6 +1399,44 @@ class RulesTableSeeder extends Seeder
 			],
 		],
 		[
+			"deco pillow",
+			[
+				[
+					"DOM",
+					"=",
+					"YES",
+				],
+				[
+					"SKU",
+					"IN",
+					"SBPC-628,SBPC-627,SBPC-629,SBPC-596,SBPC-597,SBPC-598,SBPC-599,SBPC-607,SBPC-615,SBPC-616,SBPC-617,SBPC-630,SBPC-719,SBPC-720,SBPC-721,SBPC-722,SBPC-876,SBPC-763,SBPC-764",
+				],
+				[
+					"WGT",
+					">=",
+					"1",
+				],
+			],
+			[
+				[
+					"CAR",
+					"USPS",
+				],
+				[
+					"CLS",
+					"DHLGMSMParcelsExpedited",
+				],
+				[
+					"ADW",
+					"-14",
+				],
+				[
+					"PKG",
+					"Parcel",
+				],
+			],
+		],
+		[
 			"2 deco pillows",
 			[
 				[
@@ -1490,7 +1528,7 @@ class RulesTableSeeder extends Seeder
 				[
 					"MKT",
 					"=",
-					"yhst-132060549835833",
+					"yhst-128796189915726",
 				],
 			],
 			[
@@ -1643,7 +1681,7 @@ class RulesTableSeeder extends Seeder
 				[
 					"MKT",
 					"=",
-					"yhst-128796189915726",
+					"y-hc",
 				],
 			],
 			[
@@ -1665,8 +1703,32 @@ class RulesTableSeeder extends Seeder
 
 	public function run ()
 	{
+		$index = 1;
 		foreach ( $this->rules_list as $list ) {
-			
+			$rule = new \App\Rule();
+			$rule->rule_name = $list[0];
+			$rule->rule_display_order = $index;
+			$rule->save();
+
+			foreach ( $list[1] as $triggers_required ) {
+				$trigger = new \App\RuleTrigger();
+				$trigger->rule_id = $rule->id;
+				$trigger->rule_trigger_parameter = $triggers_required[0];
+				$trigger->rule_trigger_relation = $triggers_required[1];
+				$trigger->rule_trigger_value = $triggers_required[2];
+				$trigger->save();
+			}
+
+			foreach ( $list[2] as $actions_required ) {
+				$action = new \App\RuleAction();
+				$action->rule_id = $rule->id;
+				$action->rule_action_parameter = $actions_required[0];
+				$action->rule_action_value = $actions_required[1];
+				$action->save();
+			}
+
+
+			$index++;
 		}
 	}
 }

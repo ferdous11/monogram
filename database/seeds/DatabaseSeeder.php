@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
 		StoresTableSeeder::class,
 		StatusesTableSeeder::class,
 		SettingsTableSeeder::class,
+		RulesTableSeeder::class,
 	];
 
 	public function run ()
