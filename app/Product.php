@@ -7,6 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
 	protected $fillable = [ '*' ];
+	protected $hidden = [
+		'updated_at',
+		'created_at',
+	];
+
+	private function tableColumns ()
+	{
+		$columns = $this->getConnection()
+						->getSchemaBuilder()
+						->getColumnListing($this->getTable());
+
+		return array_slice($columns, 1, -2);
+	}
+
+	public static function getTableColumns ()
+	{
+		return (new static())->tableColumns();
+	}
 
 	public function batch_route ()
 	{

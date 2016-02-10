@@ -40,20 +40,27 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->string('store_id');
             $table->string('id_catalog');
-            $table->string('product_name')->nullable();
-            $table->string('product_model')->nullable();
-            $table->text('product_keywords')->nullable();
-            $table->text('product_description')->nullable();
-            $table->integer('product_category')->nullable();
+			$table->string('vendor_id')->nullable();
+			$table->string('product_model')->nullable();
+			$table->string('product_url')->nullable();
+			$table->string('product_name')->nullable();
+			$table->string('ship_weight')->nullable();
+			$table->integer('product_master_category')->nullable();
+			$table->integer('product_category')->nullable();
 			$table->integer('product_sub_category')->nullable();
-            $table->double('product_price')->default(0);
-            $table->string('product_url')->nullable();
-            $table->string('product_thumb')->nullable();
-            $table->integer('batch_route_id')->nullable();
-            $table->enum('is_taxable', array(0, 1))->default(1);
+			$table->double('product_price')->default(0);
+			$table->double('product_sale_price')->default(0);
+			$table->string('product_thumb')->nullable();
+			$table->integer('batch_route_id')->nullable();
+			$table->text('product_keywords')->nullable();
+			$table->text('product_description')->nullable();
+			$table->double('height')->default(0.0);
+			$table->double('width')->default(0.0);
+			$table->enum('is_taxable', array(0, 1))->default(1);
             $table->enum('is_deleted', array(0, 1))->default(0);
             $table->timestamps();
         });
+
     }
 
     /**

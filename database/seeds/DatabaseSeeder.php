@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
 		StationsTableSeeder::class,
 		#CustomersTableSeeder::class,
 		#OrdersTableSeeder::class,
-		ProductsTableSeeder::class,
+		#ProductsTableSeeder::class,
 		TemplatesTableSeeder::class,
 		BatchRoutesTableSeeder::class,
 		CategoriesTableSeeder::class,
